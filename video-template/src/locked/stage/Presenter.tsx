@@ -3,7 +3,10 @@ import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
 import { Advisor, ADVISOR_POSES, type ArmSet } from './Advisor'
 import { lineIndexAt, type AdvisorPose, type SpokenLine } from './speech'
 
-/** LOCKED. The presenter walks in, then gestures, blinks, breathes and talks along with the narration. */
+/**
+ * LOCKED. The presenter walks in, then gestures, blinks, breathes, shifts his weight and talks along
+ * with the narration (Video 4.0 motion).
+ */
 
 const WIDTH = 470
 const STAND = { x: 70, y: 222 } as const
@@ -19,6 +22,12 @@ const blendArms = (a: ArmSet, b: ArmSet, t: number): ArmSet => ({
   lh: lerpPoint(a.lh, b.lh, t),
   re: lerpPoint(a.re, b.re, t),
   rh: lerpPoint(a.rh, b.rh, t),
+})
+/** The elbows drift a little even at rest, so the presenter never freezes. */
+const idleElbows = (arms: ArmSet, frame: number): ArmSet => ({
+  ...arms,
+  le: [arms.le[0], arms.le[1] + Math.sin(frame / 31) * 1.5],
+  re: [arms.re[0], arms.re[1] + Math.sin(frame / 29 + 1) * 1.5],
 })
 const leanOf = (pose: AdvisorPose): number => (pose === 'point' || pose === 'present' ? 3 : pose === 'think' ? -2 : 0)
 
@@ -48,23 +57,24 @@ export const Presenter: FC<{ readonly lines: readonly SpokenLine[] }> = ({ lines
   const previousPose: AdvisorPose = index > 0 ? lines[index - 1].pose : 'idle'
   const pose: AdvisorPose = line?.pose ?? 'idle'
   const lineStartFrame = line ? Math.round(line.startSec * fps) : 0
-  const blend = line ? spring({ frame: frame - lineStartFrame, fps, config: { damping: 14, stiffness: 170 } }) : 1
+  const blend = line ? spring({ frame: frame - lineStartFrame, fps, config: { damping: 12, stiffness: 150 } }) : 1
 
   const speaking = line !== undefined && timeSec >= line.startSec && timeSec < line.endSec - MOUTH_TAIL_SEC
   const baseArms = blendArms(ADVISOR_POSES[previousPose], ADVISOR_POSES[pose], blend)
-  const arms = speaking ? gesture(baseArms, pose, frame) : baseArms
+  const arms = idleElbows(speaking ? gesture(baseArms, pose, frame) : baseArms, frame)
   const mouth = speaking ? Math.max(0, Math.sin(frame * 0.9) * 0.6 + Math.sin(frame * 0.33 + 1) * 0.4) : 0
 
-  const enter = spring({ frame, fps, config: { damping: 18, stiffness: 80 } })
+  const enter = spring({ frame, fps, config: { damping: 16, stiffness: 80 } })
   const x = interpolate(enter, [0, 1], [ENTER_FROM_X, STAND.x])
   const walkBob = enter < 0.98 ? -Math.abs(Math.sin(frame / 3)) * 10 : 0
   const hop =
     line && pose === 'thumbsUp'
       ? -Math.max(0, Math.sin(Math.min(1, (frame - lineStartFrame) / 12) * Math.PI)) * 22
       : 0
+  const weightShift = Math.sin(frame / 61) * 6
 
   return (
-    <div style={{ position: 'absolute', left: x, top: STAND.y + walkBob + hop }}>
+    <div style={{ position: 'absolute', left: x + weightShift, top: STAND.y + walkBob + hop }}>
       <Advisor
         arms={arms}
         handStyle={blend > 0.5 ? pose : previousPose}

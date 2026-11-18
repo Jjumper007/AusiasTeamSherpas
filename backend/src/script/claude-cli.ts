@@ -14,6 +14,8 @@ export interface ClaudeCallOptions {
   readonly allowedTools?: readonly string[]
   /** Working directory of the CLI; also the only folder Claude may write in. A temp folder by default. */
   readonly cwd?: string
+  /** Folders outside `cwd` Claude may also read, e.g. the check frames of the visual review (#10). */
+  readonly addDirs?: readonly string[]
   readonly timeoutMs?: number
 }
 
@@ -37,6 +39,7 @@ export const cliArgs = (systemPrompt: string, options: ClaudeCallOptions = {}): 
   '--tools',
   (options.tools ?? []).join(','),
   ...(options.allowedTools && options.allowedTools.length > 0 ? ['--allowedTools', options.allowedTools.join(',')] : []),
+  ...(options.addDirs ?? []).flatMap((dir) => ['--add-dir', dir]),
   '--system-prompt',
   systemPrompt,
 ]

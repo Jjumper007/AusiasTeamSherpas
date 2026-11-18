@@ -7,11 +7,12 @@ import { COLORS, FONT } from './tokens'
 
 /**
  * LOCKED. Plays the scene's narration (silent when there is no audio yet) and shows its captions
- * as karaoke, as in the base video: words light up as they are said, and figures stand out.
+ * as karaoke, as in the base video (Video 4.0): Inter on a navy surface, words light up and rise as they are
+ * said, and figures take the sky accent.
  */
 
 const CAPTION_MAX_WIDTH = 1560
-const CAPTION_BOTTOM = 40
+const CAPTION_BOTTOM = 56
 const FADE_FRAMES = 4
 /** Words are spread over the cue minus this tail, so the last word lights before the cue ends. */
 const KARAOKE_TAIL_SEC = 0.4
@@ -20,6 +21,8 @@ const WORD_POP_SEC = [0, 0.12, 0.25] as const
 const WORD_POP_SCALE = 1.06
 const WORD_GAP_PX = 7
 const UNSAID_OPACITY = 0.4
+/** Words not yet said sit this far below the line. */
+const UNSAID_DROP_PX = 4
 const FIGURE_PATTERN = /[$%0-9]/
 const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const
 
@@ -62,17 +65,19 @@ export const AudioCaptionLayer: FC<AudioCaptionLayerProps> = ({ narration, timin
       <div
         style={{
           maxWidth: CAPTION_MAX_WIDTH,
-          padding: '14px 34px',
-          borderRadius: 18,
-          background: 'rgba(22, 24, 39, 0.88)',
+          padding: '16px 38px',
+          borderRadius: 24,
+          background: 'rgba(28, 33, 64, 0.94)',
+          border: `2px solid ${COLORS.navyLine}`,
+          boxShadow: '0 20px 44px rgba(10, 12, 30, 0.45)',
           fontFamily: FONT.body,
           fontSize: 42,
           fontWeight: 600,
           lineHeight: 1.3,
           textAlign: 'center',
           opacity: shown,
-          translate: `0px ${(1 - shown) * 14}px`,
-          scale: String(interpolate(shown, [0, 1], [0.96, 1])),
+          translate: `0px ${(1 - shown) * 18}px`,
+          scale: String(interpolate(shown, [0, 1], [0.95, 1])),
         }}
       >
         {words.map((word, index) => {
@@ -87,6 +92,7 @@ export const AudioCaptionLayer: FC<AudioCaptionLayerProps> = ({ narration, timin
                 color: FIGURE_PATTERN.test(word.text) ? COLORS.sky : COLORS.white,
                 opacity: said ? 1 : UNSAID_OPACITY,
                 scale: String(pop),
+                translate: `0px ${said ? 0 : UNSAID_DROP_PX}px`,
               }}
             >
               {word.text}

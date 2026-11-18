@@ -12,8 +12,9 @@ import { createScenesWriter, TARGET_PARTS } from './write-scenes'
  * Runs only the scenes step (#9) on a finished run, to iterate on prompts/scenes.md without
  * paying for a new script or voice:
  *
- *   npm run scenes -w backend -- ../runs/daniel-emily-johnson/daniel/<timestamp> [--parts what_matters,hook]
+ *   npm run scenes -w backend -- ../runs/daniel-emily-johnson/daniel/<timestamp> [--parts what_matters,hook] [--no-review]
  *
+ * The visual review (#10) runs after the attempt that passes, unless `--no-review`.
  * Reads its video-props.json; output (sandbox, attempts, check frames) in runs/scenes/<caseId>/<member>/<timestamp>/.
  */
 
@@ -28,17 +29,31 @@ const parseParts = (value: string | undefined): readonly Part[] => {
   return parts as Part[]
 }
 
+const USAGE = 'Usage: npm run scenes -w backend -- <run folder> [--parts a,b] [--no-review]'
+
+const flagValue = (argv: readonly string[], flag: string): string | undefined => {
+  const at = argv.indexOf(flag)
+  return at >= 0 ? argv[at + 1] : undefined
+}
+
 const run = async (argv: readonly string[]): Promise<void> => {
-  const [runDir, flag, value] = argv
-  if (!runDir) throw new Error('Usage: npm run scenes -w backend -- <run folder> [--parts a,b]')
-  const parts = parseParts(flag === '--parts' ? value : undefined)
+  const [runDir] = argv
+  if (!runDir || runDir.startsWith('--')) throw new Error(USAGE)
+  const parts = parseParts(flagValue(argv, '--parts'))
+  const review = !argv.includes('--no-review')
   const props = VideoPropsSchema.parse(JSON.parse(readFileSync(join(resolve(runDir), 'video-props.json'), 'utf8')))
   const member = props.brief.member.firstName.toLowerCase()
   const folder = createRunFolder(join(RUNS_DIR, 'scenes'), props.brief.caseId, member, new Date())
   const started = Date.now()
-  const writeScenes = createScenesWriter({ runClaude: runClaudeCli, checkFrames: renderCheckFrames, parts })
-  const outcome = await writeScenes(props, folder, (attempt, max) => console.log(`attempt ${attempt}/${max}…`))
-  console.log(`${outcome.source} after ${outcome.attempts} attempt(s), ${((Date.now() - started) / 1000).toFixed(0)} s`)
+  const writeScenes = createScenesWriter({ runClaude: runClaudeCli, checkFrames: renderCheckFrames, parts, review })
+  const outcome = await writeScenes(
+    props,
+    folder,
+    (attempt, max) => console.log(`attempt ${attempt}/${max}…`),
+    () => console.log(`visual review (${((Date.now() - started) / 1000).toFixed(0)} s so far)…`),
+  )
+  const reviewed = outcome.source === 'claude' && outcome.review ? `, visual review: ${outcome.review}` : ''
+  console.log(`${outcome.source} after ${outcome.attempts} attempt(s)${reviewed}, ${((Date.now() - started) / 1000).toFixed(0)} s`)
   console.log(`output: ${folder.dir}`)
 }
 

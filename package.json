@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "demo": "DEMO=1 npm run dev",
     "start": "npm run start -w backend",
     "build": "npm run build -w frontend",
     "typecheck": "npm run typecheck --workspaces --if-present",

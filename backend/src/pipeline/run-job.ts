@@ -41,13 +41,16 @@ const STEP_LABEL: Readonly<Record<StepId, string>> = {
   render: 'Rendering your video',
 }
 
-/** Where each step sits on the progress bar, roughly by time: script ~25 s, voice ~10 s, scenes ~90 s, render ~50 s. */
+/**
+ * Where each step sits on the progress bar, roughly by time: script ~25 s, voice ~10 s, scenes
+ * ~90 s plus ~90 s of visual review, render ~50 s.
+ */
 const STEP_PROGRESS: Readonly<Record<StepId, readonly [start: number, end: number]>> = {
-  brief: [0, 0.03],
-  script: [0.03, 0.18],
-  voice: [0.18, 0.25],
-  scenes: [0.25, 0.65],
-  render: [0.65, 1],
+  brief: [0, 0.02],
+  script: [0.02, 0.12],
+  voice: [0.12, 0.16],
+  scenes: [0.16, 0.8],
+  render: [0.8, 1],
 }
 
 /** Progress ticks closer than this are not sent: the renderer reports every frame. */
@@ -55,6 +58,10 @@ const MIN_PROGRESS_STEP = 0.01
 const VIDEO_FILE = 'video.mp4'
 /** Shown on the progress bar and in the step's note when Claude's scenes fail every attempt. */
 const FALLBACK_SCENES_NOTE = 'Using the standard scenes'
+/** The scenes passed their checks; Claude now looks at their frames (#10). */
+const REVIEW_LABEL = 'Checking how your scenes look'
+/** Where the visual review starts within the scenes step, by time. */
+const REVIEW_SHARE = 0.5
 
 interface Inputs {
   readonly adult: Adult
@@ -135,9 +142,14 @@ export const runJob = async (job: Job, deps: PipelineDeps): Promise<void> => {
     const scenes = await step(
       'scenes',
       () =>
-        deps.writeScenes(props, inputs.folder, (attempt, maxAttempts) => {
-          if (attempt > 1) progress('scenes', (attempt - 1) / maxAttempts, `${STEP_LABEL.scenes} (try ${attempt} of ${maxAttempts})`)
-        }),
+        deps.writeScenes(
+          props,
+          inputs.folder,
+          (attempt, maxAttempts) => {
+            if (attempt > 1) progress('scenes', (attempt - 1) / maxAttempts, `${STEP_LABEL.scenes} (try ${attempt} of ${maxAttempts})`)
+          },
+          () => progress('scenes', REVIEW_SHARE, REVIEW_LABEL),
+        ),
       (outcome) => (outcome.source === 'fallback' ? FALLBACK_SCENES_NOTE : undefined),
     )
     if (scenes.source === 'fallback') progress('scenes', 1, FALLBACK_SCENES_NOTE)

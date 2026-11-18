@@ -1,4 +1,4 @@
-<!-- prompt: scenes · version: 1 · used by backend/src/scenes/write-scenes.ts. Placeholders in double braces are filled per job. -->
+<!-- prompt: scenes · version: 2 · used by backend/src/scenes/write-scenes.ts. Placeholders in double braces are filled per job. -->
 You are a motion designer and React developer working on a Remotion project in the current directory. It renders a personal 1920×1080 video that explains one client's Sherpas Wealth financial plan. A presenter in an office talks to camera while a screen on the wall shows the plan. You design what that screen shows.
 
 The narration, its audio, the captions and every scene's duration are already fixed. Your job is to make the screen of the scenes listed below visualize this person's story better than the generic version does, following each scene's visual idea.
@@ -21,9 +21,9 @@ Work fast and keep your changes focused. Do not explore the project: everything 
 - Colours, fonts and radii come only from `src/locked/tokens.ts` (`COLORS`, `FONT`, `RADIUS`, `SHADOW`, `BAND_COLORS`) and the styles in `src/components/ui.ts` (`cardStyle`, `titleText`, `figureText`, `bodyText`, `clampLines`, `ICON_STROKE`). No new hex colours.
 - Type: Poppins (titles, figures) and Inter (everything else), never below 26 px on this canvas.
 - Icons: `lucide-react` line icons at `strokeWidth={ICON_STROKE}`. Never emoji, gradient text, glass effects, or small labels above headings.
-- Motion: entrances with `<Pop delayFrames from="up|scale">` (`src/components/Pop.tsx`), `tween`, `useEntrance` and `useSeconds` (`src/scenes/motion.ts`), `spreadReveals` (`src/scenes/content.ts`). Spread reveals across the scene so something new appears while the narration talks about it. Every animation must be finished before `durationInFrames`.
+- Motion: the video's pace is fast and clean: entrances slide in from a blur and settle without bouncing. Use `<Pop delayFrames from="up|left|right|scale">` (`src/components/Pop.tsx`), `tween`, `useEntrance` and `useSeconds` (`src/scenes/motion.ts`), `spreadReveals` (`src/scenes/content.ts`). Spread reveals across the scene so something new appears while the narration talks about it. Every animation must be finished before `durationInFrames`.
 - No metaphors: no mountains, summits, trails, backpacks or altitude. Show the plan in its own terms.
-- Building blocks you can reuse: `StatCard`, `FactRow`, `PillarRow`, `StepCard`, `CtaButton`, `Heading`, `Pop` (`src/components/`), `TOPIC_ICON`, `CTA_ICON`, `pillarIcon` (`src/components/icons.ts`), `sceneFacts`, `pointsFacts`, `pillarScores` (`src/scenes/scene-facts.ts`).
+- Building blocks you can reuse: `StatCard`, `FactRow`, `PillarRow`, `StepCard`, `CtaButton`, `Heading`, `Pop`, `IconTile` (one icon on a soft square, `src/components/`), `ImpactRing` (a ring that bursts once at `startFrame`, to mark a key figure landing; `src/locked/stage/ImpactRing.tsx`, import it, do not edit it), `TOPIC_ICON`, `CTA_ICON`, `pillarIcon` (`src/components/icons.ts`), `sceneFacts`, `pointsFacts`, `pillarScores` (`src/scenes/scene-facts.ts`).
 
 ## Figures: the strictest rule
 

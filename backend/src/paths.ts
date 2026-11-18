@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 /** Repository root, resolved from this file so the server can start from any working directory. */
@@ -13,3 +14,11 @@ export const PROMPTS_DIR = fileURLToPath(new URL('../../prompts/', import.meta.u
 export const SPEECH_CACHE_DIR = fileURLToPath(new URL('../../runs/.speech-cache/', import.meta.url))
 /** Local settings and secrets (LLM proxy key, brand voice), never committed. */
 export const ENV_FILE = fileURLToPath(new URL('../../.env', import.meta.url))
+/**
+ * Default demo folder (#11): a sibling of the repository, so the demo videos stay outside Git and are
+ * shared by every checkout. Layout: <caseId>/<member>/result.json + video.mp4.
+ */
+export const DEFAULT_DEMO_DIR = join(ROOT_DIR, '..', 'sherpass-demo')
+
+/** The demo folder: `DEMO_DIR` from the environment (or `.env`), else the default. Read when needed, after `.env` loads. */
+export const demoDir = (env: NodeJS.ProcessEnv = process.env): string => resolve(env.DEMO_DIR?.trim() || DEFAULT_DEMO_DIR)

@@ -3,6 +3,7 @@ import { execFile } from 'node:child_process'
 import { join } from 'node:path'
 import { validateTsx, type Facts, type VideoProps } from '@sherpas/shared'
 import { ROOT_DIR } from '../paths'
+import { FPS, SCENES_START_SEC } from '../pipeline/video-timeline'
 
 /**
  * The deterministic validators of Claude's scenes (SPEC §5.5): TypeScript, the number guard and the
@@ -12,8 +13,7 @@ import { ROOT_DIR } from '../paths'
 
 export const MIN_VIDEO_SEC = 60
 export const MAX_VIDEO_SEC = 120
-/** The video's frame rate (`VIDEO.fps` in `video-template/src/locked/tokens.ts`). */
-export const FPS = 30
+export { FPS }
 /** Check frames sit this far into each scene, once its entrances have played. */
 const CHECK_FRAME_SHARE = 0.6
 const TSC_TIMEOUT_MS = 60_000
@@ -21,10 +21,10 @@ const MAX_TSC_LINES = 20
 /** The repo's TypeScript, so the sandbox never resolves (or downloads) another one. */
 const TSC_BIN = join(ROOT_DIR, 'node_modules', '.bin', 'tsc')
 
-/** One frame per scene, 60% into it: what the five check stills show. */
+/** One frame per scene, 60% into it: what the five check stills show (after the logo opening). */
 export const checkFrames = (timings: VideoProps['scenes'], fps = FPS): number[] =>
   timings.map((timing, index) => {
-    const start = timings.slice(0, index).reduce((sum, previous) => sum + previous.durationSec, 0)
+    const start = SCENES_START_SEC + timings.slice(0, index).reduce((sum, previous) => sum + previous.durationSec, 0)
     return Math.round((start + timing.durationSec * CHECK_FRAME_SHARE) * fps)
   })
 

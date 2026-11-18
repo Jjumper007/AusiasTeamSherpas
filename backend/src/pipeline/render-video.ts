@@ -28,9 +28,17 @@ const COMPOSITION_ID = 'SherpasVideo'
 /** Share of the progress bar spent bundling the template (only the first job of the server bundles it). */
 const BUNDLE_SHARE = 0.25
 
+const PUBLIC_DIR = 'public'
+
 /** Bundles a Remotion project (the template or a run's copy of it) and resolves with its serve URL. */
 export const bundleTemplate = (templateDir: string, onPercent?: (percent: number) => void): Promise<string> =>
-  bundle({ entryPoint: join(templateDir, 'src', 'index.ts'), rootDir: templateDir, onProgress: onPercent })
+  bundle({
+    entryPoint: join(templateDir, 'src', 'index.ts'),
+    rootDir: templateDir,
+    // The music and sound effects stay in the shared template; a run's copy has only its sources.
+    publicDir: join(VIDEO_TEMPLATE_DIR, PUBLIC_DIR),
+    onProgress: onPercent,
+  })
 
 let bundled: Promise<string> | undefined
 

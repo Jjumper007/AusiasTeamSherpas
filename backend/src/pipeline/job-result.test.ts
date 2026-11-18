@@ -4,7 +4,8 @@ import { generateCaseOutputs } from '../brief/generate'
 import { buildFallbackScript } from '../script/fallback-script'
 import { estimateSceneTimings } from '../script/scene-timing'
 import { adultsOf } from '../survey/members'
-import { buildJobResult } from './job-result'
+import { buildJobResult, sceneStarts } from './job-result'
+import { SCENES_START_SEC, videoDurationSec } from './video-timeline'
 
 /** The JobResult of every adult, built without Claude, the voice or the renderer. */
 const results = listCaseIds()
@@ -59,5 +60,25 @@ describe('buildJobResult: first-step figures from facts', () => {
   it('has no gap figure for Samantha, whose first step (homeowners insurance) has no fact', () => {
     expect(byMember.samantha.firstStep.title).toBe('Close a coverage gap')
     expect(byMember.samantha.waitGap).toBeNull()
+  })
+})
+
+describe('sceneStarts and durationSec: the logo opening and closing', () => {
+  const timings = [{ durationSec: 6 }, { durationSec: 18 }, { durationSec: 15 }, { durationSec: 12 }, { durationSec: 14 }] as const
+
+  it('starts the first chapter after the opening and each next one after the previous scene', () => {
+    const starts = sceneStarts([...timings] as never)
+
+    expect(starts[0]).toBeCloseTo(SCENES_START_SEC, 1)
+    expect(starts[1]).toBeCloseTo(SCENES_START_SEC + 6, 1)
+    expect(starts[4]).toBeCloseTo(SCENES_START_SEC + 51, 1)
+  })
+
+  it('reports the length of the whole MP4, longer than the narration', () => {
+    const daniel = byMember.daniel
+    const narration = daniel.chapters.at(-1)!.startSec - SCENES_START_SEC
+
+    expect(daniel.durationSec).toBeGreaterThan(narration + SCENES_START_SEC)
+    expect(videoDurationSec([...timings] as never)).toBeGreaterThan(65 + SCENES_START_SEC)
   })
 })

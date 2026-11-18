@@ -1,8 +1,13 @@
 import type { FC } from 'react'
 import { useCurrentFrame } from 'remotion'
-import { OFFICE } from '../tokens'
+import { Wordmark } from '../brand/Brand'
+import { COLORS, OFFICE } from '../tokens'
 
-/** LOCKED. The office of the base video: wall, window over the city, wooden floor and a plant. */
+/**
+ * LOCKED. The office of the base video (Video 4.0): wall with a framed chart, a clock and the
+ * Sherpas sign, a window over the city, a wooden floor and a plant.
+ * Video 4.0's window looks onto mountains; this one keeps the city (no mountain metaphor).
+ */
 
 const WINDOW = { x: 50, y: 90, width: 500, height: 640 } as const
 const BUILDING_COUNT = 9
@@ -47,6 +52,66 @@ const Wall: FC = () => (
   </>
 )
 
+/** A framed line chart on the wall, going up. */
+const WallChart: FC = () => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 120,
+      top: -10,
+      width: 150,
+      height: 84,
+      borderRadius: 8,
+      background: COLORS.white,
+      boxShadow: '0 8px 16px rgba(30,40,70,0.15)',
+      border: `6px solid ${COLORS.navySurface}`,
+    }}
+  >
+    <svg width={138} height={72} viewBox="0 0 138 72">
+      <polyline
+        points="10,60 34,48 56,52 80,34 104,30 128,14"
+        fill="none"
+        stroke={COLORS.brandBlue}
+        strokeWidth={5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </div>
+)
+
+/** A wall clock whose hands follow the video's clock. */
+const Clock: FC = () => {
+  const frame = useCurrentFrame()
+  const hourAngle = Math.floor(frame / 30) * 0.5 + 60
+  const minuteAngle = (frame / 30) * 6
+  return (
+    <svg width={90} height={90} viewBox="0 0 90 90" style={{ position: 'absolute', left: 345, top: -4 }}>
+      <circle cx={45} cy={45} r={40} fill={COLORS.white} stroke={COLORS.navySurface} strokeWidth={6} />
+      <line x1={45} y1={45} x2={45} y2={18} stroke={COLORS.navySurface} strokeWidth={4} strokeLinecap="round" transform={`rotate(${hourAngle} 45 45)`} />
+      <line x1={45} y1={45} x2={45} y2={10} stroke={COLORS.brandBlue} strokeWidth={2.5} strokeLinecap="round" transform={`rotate(${minuteAngle} 45 45)`} />
+      <circle cx={45} cy={45} r={4} fill={COLORS.navySurface} />
+    </svg>
+  )
+}
+
+/** The Sherpas sign on the wall, above the screen. */
+const BrandSign: FC = () => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 760,
+      top: 14,
+      padding: '10px 26px',
+      borderRadius: 12,
+      background: 'rgba(255,255,255,0.8)',
+      boxShadow: '0 6px 14px rgba(30,40,70,0.12)',
+    }}
+  >
+    <Wordmark width={190} color="#0E1C29" style={{ opacity: 0.8 }} />
+  </div>
+)
+
 const CityWindow: FC = () => {
   const frame = useCurrentFrame()
   const cloudX = (frame * CLOUD_SPEED) % CLOUD_LOOP
@@ -61,9 +126,10 @@ const CityWindow: FC = () => {
         borderRadius: 10,
         overflow: 'hidden',
         background: OFFICE.windowSky,
-        boxShadow: 'inset 0 0 0 14px #FFFFFF, 0 6px 18px rgba(30,40,70,0.12)',
+        boxShadow: 'inset 0 0 0 14px #FFFFFF, 0 10px 26px rgba(30,40,70,0.16)',
       }}
     >
+      <div style={{ position: 'absolute', left: 350, top: 60, width: 90, height: 90, borderRadius: '50%', background: OFFICE.sun }} />
       {[0, 1].map((cloud) => (
         <div
           key={cloud}
@@ -106,6 +172,17 @@ const CityWindow: FC = () => {
       </svg>
       <div style={{ position: 'absolute', left: 243, top: 0, width: 14, height: WINDOW.height, background: '#FFFFFF' }} />
       <div style={{ position: 'absolute', left: 0, top: 300, width: WINDOW.width, height: 12, background: '#FFFFFF' }} />
+      <div
+        style={{
+          position: 'absolute',
+          left: -40,
+          top: -60,
+          width: 300,
+          height: 900,
+          rotate: '24deg',
+          background: 'linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.22), rgba(255,255,255,0))',
+        }}
+      />
     </div>
   )
 }
@@ -124,7 +201,7 @@ const Floor: FC = () => (
     />
     <svg width={2520} height={400} style={{ position: 'absolute', left: -300, top: FLOOR_Y }}>
       {Array.from({ length: 22 }, (_, index) => (
-        <line key={index} x1={index * 130} y1={0} x2={index * 130 - 120} y2={400} stroke={OFFICE.floorLine} strokeWidth={2} opacity={0.5} />
+        <line key={index} x1={index * 130} y1={0} x2={index * 130 - 120} y2={400} stroke={OFFICE.floorLine} strokeWidth={2} opacity={0.45} />
       ))}
     </svg>
     <div style={{ position: 'absolute', left: -300, top: FLOOR_Y - 8, width: 2520, height: 12, background: OFFICE.skirting }} />
@@ -143,10 +220,11 @@ const Plant: FC = () => {
           rx={18}
           ry={70}
           fill={index % 2 ? OFFICE.leafA : OFFICE.leafB}
-          transform={`rotate(${angle + Math.sin(frame / 40 + index) * 2} 80 160)`}
+          transform={`rotate(${angle + Math.sin(frame / 40 + index) * 2.5} 80 160)`}
         />
       ))}
       <path d="M44 160 L116 160 L106 250 L54 250 Z" fill={OFFICE.pot} />
+      <path d="M44 160 L116 160 L114 176 L46 176 Z" fill={OFFICE.potRim} />
     </svg>
   )
 }
@@ -154,6 +232,9 @@ const Plant: FC = () => {
 export const Office: FC = () => (
   <>
     <Wall />
+    <WallChart />
+    <Clock />
+    <BrandSign />
     <CityWindow />
     <Floor />
     <Plant />

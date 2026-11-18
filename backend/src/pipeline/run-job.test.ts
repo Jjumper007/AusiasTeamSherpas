@@ -12,6 +12,7 @@ import type { WriteScenes } from '../scenes/write-scenes'
 import type { Narrate } from '../voice/narrate'
 import type { RenderVideo } from './render-video'
 import { runJob } from './run-job'
+import { SCENES_START_SEC } from './video-timeline'
 
 const FIXED_NOW = new Date('2026-11-18T16:05:03.123Z')
 const dirs: string[] = []
@@ -119,10 +120,10 @@ describe('runJob', () => {
     expect(job?.result?.videoUrl).toBe('/runs/daniel-emily-johnson/emily/2026-11-18T16-05-03-123Z/video.mp4')
   })
 
-  it('returns what the player page needs: chapters on the video clock, CTA, first step', async () => {
+  it('returns what the player page needs: chapters on the video clock (after the logo opening), CTA, first step', async () => {
     const { job } = await run(emily)
     const result = job?.result as JobResult
-    expect(result.chapters.map((chapter) => chapter.startSec)[0]).toBe(0)
+    expect(result.chapters.map((chapter) => chapter.startSec)[0]).toBeCloseTo(SCENES_START_SEC, 1)
     expect(result.chapters.at(-1)?.startSec).toBeLessThan(result.durationSec)
     expect(result.cta).toEqual({ type: 'ask_trusted', text: 'Send this to Daniel and decide together.' })
     expect(result.firstStep.title).toBe('Raise mortality coverage')

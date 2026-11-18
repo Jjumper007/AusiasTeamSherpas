@@ -15,6 +15,7 @@ export default defineConfig({
     proxy: {
       "/api": api,
       "/runs": api,
+      "/demo": api,
     },
   },
 });

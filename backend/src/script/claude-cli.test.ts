@@ -29,5 +29,13 @@ describe('cliArgs', () => {
     const args = cliArgs('system', { tools: ['Read', 'Edit', 'Bash'], allowedTools: ['Read', 'Edit', 'Bash(npx tsc:*)'] })
     expect(args[args.indexOf('--tools') + 1]).toBe('Read,Edit,Bash')
     expect(args[args.indexOf('--allowedTools') + 1]).toBe('Read,Edit,Bash(npx tsc:*)')
+    expect(args).not.toContain('--add-dir')
+  })
+
+  it('opens extra folders one --add-dir each, followed by another flag', () => {
+    const args = cliArgs('system', { tools: ['Read'], addDirs: ['/run/scenes-check/attempt-1', '/other'] })
+    const at = args.indexOf('--add-dir')
+    expect(args.slice(at, at + 4)).toEqual(['--add-dir', '/run/scenes-check/attempt-1', '--add-dir', '/other'])
+    expect(args[at + 4]).toMatch(/^--/)
   })
 })

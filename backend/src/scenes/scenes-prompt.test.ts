@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { PROMPTS_DIR } from '../paths'
 import { promptVersion } from '../script/prompt-template'
-import { fillScenesPrompt, scenesRetryPrompt } from './scenes-prompt'
+import { fillReviewPrompt, fillScenesPrompt, scenesRetryPrompt } from './scenes-prompt'
 
 const template = readFileSync(join(PROMPTS_DIR, 'scenes.md'), 'utf8')
 
@@ -12,7 +12,7 @@ describe('fillScenesPrompt', () => {
   const prompt = fillScenesPrompt(template, videoPropsFixture, ['what_matters', 'what_changes'])
 
   it('fills every placeholder of prompts/scenes.md', () => {
-    expect(promptVersion(template)).toBe('1')
+    expect(promptVersion(template)).toBe('2')
     expect(prompt).not.toMatch(/\{\{[A-Z_]+\}\}/)
   })
 
@@ -43,5 +43,25 @@ describe('scenesRetryPrompt', () => {
     expect(retry.startsWith('base')).toBe(true)
     expect(retry).toContain('- Problem one.')
     expect(retry).toContain('- Problem two.')
+  })
+})
+
+describe('fillReviewPrompt', () => {
+  const reviewTemplate = readFileSync(join(PROMPTS_DIR, 'visual-review.md'), 'utf8')
+  const images = [
+    { part: 'what_matters', moment: 'middle', image: '/run/scenes-check/attempt-1/frame-700.png' },
+    { part: 'what_matters', moment: 'end', image: '/run/scenes-check/attempt-1/frame-900.png' },
+  ] as const
+  const prompt = fillReviewPrompt(reviewTemplate, videoPropsFixture, ['what_matters'], images)
+
+  it('fills every placeholder of prompts/visual-review.md (version 1)', () => {
+    expect(promptVersion(reviewTemplate)).toBe('1')
+    expect(prompt).not.toMatch(/\{\{[A-Z_]+\}\}/)
+  })
+
+  it('lists each frame with its part, scene file, moment and image path, and the scene it shows', () => {
+    expect(prompt).toContain('| what_matters | `src/scenes/WhatMattersScene.tsx` | end | /run/scenes-check/attempt-1/frame-900.png |')
+    expect(prompt).toContain('### Part 3, `what_matters`')
+    expect(prompt).not.toContain('`what_changes`')
   })
 })

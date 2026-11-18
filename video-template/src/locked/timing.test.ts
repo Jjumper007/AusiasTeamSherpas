@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { sceneFrameRanges, totalFrames } from './timing'
+import { BRAND, outroFromFrame, sceneFrameRanges, totalFrames, videoFrames } from './timing'
 
 const FPS = 30
 
@@ -37,5 +37,14 @@ describe('totalFrames', () => {
     const scenes = [{ durationSec: 8 }, { durationSec: 14 }, { durationSec: 2.5 }]
 
     expect(totalFrames(scenes, FPS)).toBe(735)
+  })
+})
+
+describe('videoFrames', () => {
+  test('adds the opening before the scenes and the closing over their last frames', () => {
+    const scenes = [{ durationSec: 8 }, { durationSec: 14 }, { durationSec: 2.5 }]
+
+    expect(outroFromFrame(scenes, FPS)).toBe(BRAND.contentFromFrame + 735 - BRAND.outroOverlapFrames)
+    expect(videoFrames(scenes, FPS)).toBe(BRAND.contentFromFrame + 735 - BRAND.outroOverlapFrames + BRAND.outroFrames)
   })
 })

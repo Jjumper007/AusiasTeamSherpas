@@ -10,7 +10,9 @@
     "brief": "tsx src/brief/cli.ts",
     "script": "tsx src/script/cli.ts",
     "voice:audition": "tsx src/voice/audition.ts",
-    "scenes": "tsx src/scenes/cli.ts"
+    "scenes": "tsx src/scenes/cli.ts",
+    "demo:check": "tsx src/demo/cli.ts check",
+    "demo:add": "tsx src/demo/cli.ts add"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.545",

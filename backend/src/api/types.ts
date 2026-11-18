@@ -31,6 +31,18 @@ export interface SurveyInfo {
   readonly defaults: Survey
 }
 
+/** An adult with a demo video, made earlier and copied to the demo folder. */
+export interface DemoPerson {
+  readonly caseId: string
+  readonly member: string
+}
+
+/** `GET /api/demo`. In demo mode the app only plays videos made earlier; `people` is empty outside it. */
+export interface DemoInfo {
+  readonly demo: boolean
+  readonly people: ReadonlyArray<DemoPerson>
+}
+
 /** Body of `POST /api/jobs`. */
 export interface JobRequest {
   readonly caseId: string

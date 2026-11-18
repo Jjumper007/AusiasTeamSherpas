@@ -12,23 +12,31 @@ export interface Burst {
   readonly atShare: number
   readonly text: string
   readonly color: string
+  /** Good news gets a check and an impact ring; bad news shakes. */
+  readonly good: boolean
 }
 
 const BAND_AT_SHARE = 0.3
 const GAIN_AT_SHARE = 0.35
+
+/** Bands that read as bad news: their callout shakes instead of celebrating. */
+const WORRYING_BANDS: ReadonlySet<string> = new Set(['critical', 'vulnerable'])
 
 const capitalize = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1)
 
 export const burstsFor = ({ brief, facts, script }: Pick<VideoProps, 'brief' | 'facts' | 'script'>): Burst[] =>
   script.scenes.flatMap((scene, sceneIndex): Burst[] => {
     if (scene.part === 'where_you_are') {
-      const color = BAND_COLORS[brief.score.band.toLowerCase()]
-      return color ? [{ sceneIndex, atShare: BAND_AT_SHARE, text: capitalize(brief.score.band), color }] : []
+      const band = brief.score.band.toLowerCase()
+      const color = BAND_COLORS[band]
+      return color
+        ? [{ sceneIndex, atShare: BAND_AT_SHARE, text: capitalize(brief.score.band), color, good: !WORRYING_BANDS.has(band) }]
+        : []
     }
     if (scene.part === 'what_changes') {
       const [before, after] = pointsFacts(scene, facts)
       const gain = before && after ? Math.round(after.value - before.value) : 0
-      return gain > 0 ? [{ sceneIndex, atShare: GAIN_AT_SHARE, text: `+${gain} points`, color: COLORS.success }] : []
+      return gain > 0 ? [{ sceneIndex, atShare: GAIN_AT_SHARE, text: `+${gain} points`, color: COLORS.success, good: true }] : []
     }
     return []
   })

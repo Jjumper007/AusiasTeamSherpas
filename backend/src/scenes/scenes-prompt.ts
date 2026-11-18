@@ -64,6 +64,30 @@ export const fillScenesPrompt = (template: string, props: VideoProps, parts: rea
     'prompts/scenes.md',
   )
 
+/** One still the visual review (#10) looks at: which part, when in it, and the PNG's absolute path. */
+export interface ReviewImage {
+  readonly part: Part
+  readonly moment: string
+  readonly image: string
+}
+
+/** Fills `prompts/visual-review.md`: the target files, the frames to look at and the scenes they show. */
+export const fillReviewPrompt = (
+  template: string,
+  props: VideoProps,
+  parts: readonly Part[],
+  images: readonly ReviewImage[],
+): string =>
+  fillPlaceholders(
+    template,
+    {
+      TARGET_FILES: parts.map((part) => `\`${SCENE_FILE[part]}\``).join(', '),
+      FRAMES: images.map(({ part, moment, image }) => `| ${part} | \`${SCENE_FILE[part]}\` | ${moment} | ${image} |`).join('\n'),
+      SCENES: scenesSection(props, parts),
+    },
+    'prompts/visual-review.md',
+  )
+
 /** The prompt for a retry: the files keep the previous attempt's changes, so Claude fixes them in place. */
 export const scenesRetryPrompt = (prompt: string, problems: readonly string[]): string =>
   [

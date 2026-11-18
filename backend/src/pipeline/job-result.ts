@@ -1,6 +1,7 @@
 import { fmt, type Brief, type Facts, type Part, type Script, type VideoProps } from '@sherpas/shared'
 import type { ChapterMark, FactDetail, JobResult } from '../api/types'
 import { firstStepScore, waitGap } from './first-step-figures'
+import { SCENES_START_SEC, videoDurationSec } from './video-timeline'
 
 export interface JobResultInput {
   readonly runId: string
@@ -17,9 +18,11 @@ export interface JobResultInput {
 const TENTHS = 10
 const roundToTenth = (seconds: number): number => Math.round(seconds * TENTHS) / TENTHS
 
-/** Start of each scene, in seconds from the start of the video. */
+/** Start of each scene, in seconds from the start of the MP4 (after the logo opening). */
 export const sceneStarts = (timings: VideoProps['scenes']): number[] =>
-  timings.map((_, index) => roundToTenth(timings.slice(0, index).reduce((sum, timing) => sum + timing.durationSec, 0)))
+  timings.map((_, index) =>
+    roundToTenth(SCENES_START_SEC + timings.slice(0, index).reduce((sum, timing) => sum + timing.durationSec, 0)),
+  )
 
 /** Parts whose figures back the first step. The pillar points of part 2 are context, not the why. */
 const DETAIL_PARTS: ReadonlySet<Part> = new Set(['what_matters', 'first_step', 'what_changes'])
@@ -43,7 +46,7 @@ export const buildJobResult = (input: JobResultInput): JobResult => {
     partner: input.partner,
     survey: brief.survey,
     videoUrl: input.videoUrl,
-    durationSec: roundToTenth(timings.reduce((sum, timing) => sum + timing.durationSec, 0)),
+    durationSec: roundToTenth(videoDurationSec(timings)),
     chapters,
     cta: script.cta,
     firstStep: move,

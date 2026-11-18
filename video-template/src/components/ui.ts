@@ -5,7 +5,7 @@ import { COLORS, FONT, RADIUS, SHADOW } from '../locked/tokens'
 
 export const cardStyle: CSSProperties = {
   background: COLORS.raised,
-  border: `1px solid ${COLORS.hairline}`,
+  border: `1.5px solid ${COLORS.hairline}`,
   borderRadius: RADIUS.card,
   boxShadow: SHADOW.card,
   boxSizing: 'border-box',

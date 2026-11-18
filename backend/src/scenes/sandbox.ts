@@ -116,3 +116,26 @@ export const editableSources = (sandboxDir: string, isEditable: (key: string) =>
       .filter((key) => isEditable(key) && SOURCE_FILE.test(key))
       .map((key) => [key, readFileSync(join(sandboxDir, key), 'utf8')] as const),
   )
+
+/** Editable source files that differ between two `editableSources` readings: changed, added or deleted. */
+export const changedSources = (before: ReadonlyMap<string, string>, after: ReadonlyMap<string, string>): string[] =>
+  [...new Set([...before.keys(), ...after.keys()])].filter((key) => before.get(key) !== after.get(key)).sort()
+
+/**
+ * Puts the editable sources back to a saved `editableSources` reading (#10: a visual fix that broke
+ * a validator): rewrites the saved files and removes editable sources created since.
+ */
+export const restoreEditableSources = (
+  sandboxDir: string,
+  isEditable: (key: string) => boolean,
+  saved: ReadonlyMap<string, string>,
+): void => {
+  editableSources(sandboxDir, isEditable).forEach((_, key) => {
+    if (!saved.has(key)) rmSync(join(sandboxDir, key), { force: true })
+  })
+  saved.forEach((content, key) => {
+    const path = join(sandboxDir, key)
+    mkdirSync(dirname(path), { recursive: true })
+    writeFileSync(path, content)
+  })
+}

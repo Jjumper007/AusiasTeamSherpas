@@ -4,6 +4,7 @@ import type { SurveyAnswers } from '@sherpas/backend/src/api/types'
 export type {
   CaseSummary,
   ChapterMark,
+  DemoInfo,
   FactDetail,
   JobEvent,
   JobResult,

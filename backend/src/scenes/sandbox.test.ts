@@ -6,11 +6,13 @@ import { videoPropsFixture } from '@sherpas/shared'
 import { afterEach, describe, expect, it } from 'vitest'
 import { VIDEO_TEMPLATE_DIR } from '../paths'
 import {
+  changedSources,
   createSandbox,
   editablePredicate,
   editableSources,
   listFiles,
   lockedProblems,
+  restoreEditableSources,
   restoreLocked,
   snapshotLocked,
 } from './sandbox'
@@ -84,5 +86,21 @@ describe('locked files', () => {
     const sources = editableSources(dir, editablePredicate([TARGET]))
     expect(sources.get(TARGET)).toContain('WhatMattersScene')
     expect([...sources.keys()].every((key) => key === TARGET || key.startsWith('src/components/'))).toBe(true)
+  })
+
+  it('puts the editable sources back as saved, removing new ones and keeping locked files', () => {
+    const dir = newSandbox()
+    const isEditable = editablePredicate([TARGET])
+    const saved = editableSources(dir, isEditable)
+    const tokens = readFileSync(join(dir, 'src/locked/tokens.ts'), 'utf8')
+    writeFileSync(join(dir, TARGET), 'export const WhatMattersScene = () => null\n')
+    writeFileSync(join(dir, 'src/components/Extra.tsx'), 'export const Extra = () => null\n')
+
+    expect(changedSources(saved, editableSources(dir, isEditable))).toEqual(['src/components/Extra.tsx', TARGET])
+    restoreEditableSources(dir, isEditable, saved)
+
+    expect(changedSources(saved, editableSources(dir, isEditable))).toEqual([])
+    expect(existsSync(join(dir, 'src/components/Extra.tsx'))).toBe(false)
+    expect(readFileSync(join(dir, 'src/locked/tokens.ts'), 'utf8')).toBe(tokens)
   })
 })

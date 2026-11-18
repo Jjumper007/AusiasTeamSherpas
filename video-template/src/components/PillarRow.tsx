@@ -4,9 +4,10 @@ import { COLORS, RADIUS } from '../locked/tokens'
 import { pillarTone, type PillarTone } from '../scenes/content'
 import { tween } from '../scenes/motion'
 import type { PillarScore } from '../scenes/scene-facts'
+import { IconTile } from './IconTile'
 import { pillarIcon } from './icons'
 import { Pop } from './Pop'
-import { bodyText, cardStyle, clampLines, ICON_STROKE, titleText } from './ui'
+import { bodyText, cardStyle, clampLines, titleText } from './ui'
 
 const TONE_COLOR: Readonly<Record<PillarTone, string>> = {
   strong: COLORS.success,
@@ -30,7 +31,6 @@ interface PillarRowProps {
 /** One area of the score: its icon and name, and, if declared, a bar with "points of maximum". */
 export const PillarRow: FC<PillarRowProps> = ({ name, score, left, top, width, delayFrames }) => {
   const frame = useCurrentFrame()
-  const Icon = pillarIcon(name)
   const share = score && score.maxPoints.value > 0 ? score.points.value / score.maxPoints.value : 0
   const grow = tween(frame, delayFrames + 6, delayFrames + 6 + BAR_GROW_FRAMES, 0, 1)
   const color = score ? TONE_COLOR[pillarTone(score.points.value, score.maxPoints.value)] : COLORS.hairline
@@ -53,20 +53,7 @@ export const PillarRow: FC<PillarRowProps> = ({ name, score, left, top, width, d
         opacity: score ? undefined : 0.85,
       }}
     >
-      <div
-        style={{
-          width: 60,
-          height: 60,
-          flexShrink: 0,
-          borderRadius: RADIUS.control,
-          background: COLORS.blueWash,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Icon size={34} color={COLORS.brandBlue} strokeWidth={ICON_STROKE} />
-      </div>
+      <IconTile icon={pillarIcon(name)} size={60} />
       <div style={{ ...titleText, fontSize: 30, flex: 1, ...clampLines(2) }}>{name}</div>
       {score ? (
         <>

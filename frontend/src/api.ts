@@ -1,4 +1,4 @@
-import type { Answers, CaseSummary, JobEvent, JobResult, Progress, SurveyAnswers, SurveyInfo } from './types'
+import type { Answers, CaseSummary, DemoInfo, JobEvent, JobResult, Progress, SurveyAnswers, SurveyInfo } from './types'
 
 /** Reads a JSON response, turning an API error ({ error }) into an Error with its message. */
 async function json<T>(res: Response): Promise<T> {
@@ -16,6 +16,13 @@ export const getCases = (): Promise<CaseSummary[]> =>
 
 export const getSurvey = (caseId: string, member: string): Promise<SurveyInfo> =>
   fetch(`/api/cases/${encodeURIComponent(caseId)}/${encodeURIComponent(member)}/survey`).then((r) => json<SurveyInfo>(r))
+
+/** Whether the app is the demo (npm run demo) and who has a video made earlier. */
+export const getDemo = (): Promise<DemoInfo> => fetch('/api/demo').then((r) => json<DemoInfo>(r))
+
+/** A demo video's result; its videoUrl points at the demo folder. */
+export const getDemoResult = (caseId: string, member: string): Promise<JobResult> =>
+  fetch(`/api/demo/${encodeURIComponent(caseId)}/${encodeURIComponent(member)}`).then((r) => json<JobResult>(r))
 
 /** Only the four answers are sent; a skipped one is left out and the backend uses its default. */
 const toSurveyAnswers = ({ nickname, explainLevel, topOfMind, decisionStyle }: Answers): SurveyAnswers => ({
