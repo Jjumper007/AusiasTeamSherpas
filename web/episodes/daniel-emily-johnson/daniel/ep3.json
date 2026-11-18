@@ -1,0 +1,156 @@
+{
+  "caseId": "daniel-emily-johnson",
+  "person": "daniel",
+  "personName": "Daniel",
+  "episode": 3,
+  "title": "Did it work?",
+  "day": 30,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.522Z",
+  "family": {
+    "adults": [
+      {
+        "id": "daniel",
+        "name": "Daniel",
+        "role": "client"
+      },
+      {
+        "id": "emily",
+        "name": "Emily",
+        "role": "co-client"
+      }
+    ],
+    "location": "Denver, CO",
+    "score": 52,
+    "band": "vulnerable"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "A month ago, your score was 52.",
+      "caption": "Daniel, a month ago your score was 52. You picked one move: raise mortality coverage.",
+      "voice": "Daniel, a month ago your score was 52. You picked one move: raise mortality coverage.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "check-in",
+      "figure": {
+        "key": "score",
+        "value": 52,
+        "display": "52",
+        "exact": "52",
+        "label": "Financial health score, 0 to 100"
+      }
+    },
+    {
+      "type": "action",
+      "headline": "Did you take your step?",
+      "caption": "So, did you take your step?",
+      "voice": "So, did you take your step?",
+      "keys": [
+        "move.0.before",
+        "move.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "checkin",
+      "cta": [
+        "Yes, done",
+        "Not yet"
+      ],
+      "options": [
+        {
+          "i": 0,
+          "title": "Raise mortality coverage",
+          "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+          "effort": "low",
+          "before": 52,
+          "after": 57,
+          "beforeKey": "move.0.before",
+          "afterKey": "move.0.after"
+        }
+      ]
+    },
+    {
+      "type": "move",
+      "headline": "Raise mortality coverage",
+      "caption": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+      "voice": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+      "keys": [
+        "move.0.before",
+        "move.0.after",
+        "combo.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 0,
+        "title": "Raise mortality coverage",
+        "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+        "effort": "low",
+        "before": 52,
+        "after": 57,
+        "beforeKey": "move.0.before",
+        "afterKey": "move.0.after"
+      },
+      "combo": {
+        "after": 60,
+        "moves": [
+          "Raise mortality coverage",
+          "Add umbrella cover"
+        ],
+        "key": "combo.0.after"
+      }
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Daniel",
+      "Dan"
+    ],
+    "household": [
+      "Emily",
+      "Oliver",
+      "Sophia"
+    ],
+    "d6": "PROTECTION",
+    "d6Text": "PROTECTION.",
+    "worries": []
+  },
+  "audio": {},
+  "explain": {
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "52",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 52. Straight from the Sherpas plan."
+    },
+    "move.0.before": {
+      "label": "Score today, before \"Raise mortality coverage\"",
+      "value": "52",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Raise mortality coverage\": 52. Straight from the Sherpas plan."
+    },
+    "move.0.after": {
+      "label": "Score after \"Raise mortality coverage\"",
+      "value": "57",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Raise mortality coverage\": 57. Straight from the Sherpas plan."
+    },
+    "combo.0.after": {
+      "label": "Score after doing together: Raise mortality coverage + Add umbrella cover",
+      "value": "60",
+      "simple": "Score after doing together: Raise mortality coverage + Add umbrella cover.",
+      "expert": "Score after doing together: Raise mortality coverage + Add umbrella cover: 60. Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}

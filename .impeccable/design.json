@@ -1,0 +1,696 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T09:54:09.694Z",
+  "title": "Design System: Sherpas · Plan in Motion",
+  "extensions": {
+    "colorMeta": {
+      "frame": {
+        "role": "neutral",
+        "displayName": "Frame",
+        "canonical": "#F8FAFD"
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "Raised White",
+        "canonical": "#FFFFFF"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#E2E5EB",
+        "tonalRamp": [
+          "#15161A",
+          "#2F323E",
+          "#434759",
+          "#4A4E65",
+          "#5F6480",
+          "#7F8399",
+          "#A1A4B3",
+          "#D1D4DA",
+          "#E2E5EB",
+          "#EFF1F5",
+          "#F3F3F3"
+        ]
+      },
+      "chip-track": {
+        "role": "neutral",
+        "displayName": "Chip Track",
+        "canonical": "#EFF1F5",
+        "tonalRamp": [
+          "#15161A",
+          "#2F323E",
+          "#434759",
+          "#4A4E65",
+          "#5F6480",
+          "#7F8399",
+          "#A1A4B3",
+          "#D1D4DA",
+          "#E2E5EB",
+          "#EFF1F5",
+          "#F3F3F3"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#141419",
+        "tonalRamp": [
+          "#15161A",
+          "#2F323E",
+          "#434759",
+          "#4A4E65",
+          "#5F6480",
+          "#7F8399",
+          "#A1A4B3",
+          "#D1D4DA",
+          "#E2E5EB",
+          "#EFF1F5",
+          "#F3F3F3"
+        ]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "#5F6480",
+        "tonalRamp": [
+          "#15161A",
+          "#2F323E",
+          "#434759",
+          "#4A4E65",
+          "#5F6480",
+          "#7F8399",
+          "#A1A4B3",
+          "#D1D4DA",
+          "#E2E5EB",
+          "#EFF1F5",
+          "#F3F3F3"
+        ]
+      },
+      "ink-tertiary": {
+        "role": "neutral",
+        "displayName": "Ink Tertiary (placeholders, hints only)",
+        "canonical": "#7F8399",
+        "tonalRamp": [
+          "#15161A",
+          "#2F323E",
+          "#434759",
+          "#4A4E65",
+          "#5F6480",
+          "#7F8399",
+          "#A1A4B3",
+          "#D1D4DA",
+          "#E2E5EB",
+          "#EFF1F5",
+          "#F3F3F3"
+        ]
+      },
+      "wordmark-ink": {
+        "role": "neutral",
+        "displayName": "Wordmark Ink",
+        "canonical": "#0E1C29"
+      },
+      "brand-blue": {
+        "role": "primary",
+        "displayName": "Sherpas Blue",
+        "canonical": "#4565D6",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0F2267",
+          "#112980",
+          "#1738B1",
+          "#1C45D7",
+          "#4666D7",
+          "#6485FB",
+          "#A4B7FD",
+          "#C6D2FD",
+          "#E0E7FF",
+          "#EFF5FF",
+          "#F5F8FF"
+        ]
+      },
+      "brand-blue-press": {
+        "role": "primary",
+        "displayName": "Deep Sherpas Blue",
+        "canonical": "#1C45D7",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0F2267",
+          "#112980",
+          "#1738B1",
+          "#1C45D7",
+          "#4666D7",
+          "#6485FB",
+          "#A4B7FD",
+          "#C6D2FD",
+          "#E0E7FF",
+          "#EFF5FF",
+          "#F5F8FF"
+        ]
+      },
+      "blue-wash": {
+        "role": "primary",
+        "displayName": "Blue Wash",
+        "canonical": "#EFF5FF",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0F2267",
+          "#112980",
+          "#1738B1",
+          "#1C45D7",
+          "#4666D7",
+          "#6485FB",
+          "#A4B7FD",
+          "#C6D2FD",
+          "#E0E7FF",
+          "#EFF5FF",
+          "#F5F8FF"
+        ]
+      },
+      "blue-line": {
+        "role": "primary",
+        "displayName": "Blue Line",
+        "canonical": "#C6D2FD",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0F2267",
+          "#112980",
+          "#1738B1",
+          "#1C45D7",
+          "#4666D7",
+          "#6485FB",
+          "#A4B7FD",
+          "#C6D2FD",
+          "#E0E7FF",
+          "#EFF5FF",
+          "#F5F8FF"
+        ]
+      },
+      "navy": {
+        "role": "neutral",
+        "displayName": "Navy",
+        "canonical": "#161827",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0E1233",
+          "#161827",
+          "#1B2146",
+          "#1C2140",
+          "#222852",
+          "#262C52",
+          "#283063",
+          "#2F365E",
+          "#4A5285"
+        ]
+      },
+      "navy-deep": {
+        "role": "neutral",
+        "displayName": "Navy Deep",
+        "canonical": "#0B0F2E",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0E1233",
+          "#161827",
+          "#1B2146",
+          "#1C2140",
+          "#222852",
+          "#262C52",
+          "#283063",
+          "#2F365E",
+          "#4A5285"
+        ]
+      },
+      "navy-glow": {
+        "role": "neutral",
+        "displayName": "Navy Glow",
+        "canonical": "#222852",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0E1233",
+          "#161827",
+          "#1B2146",
+          "#1C2140",
+          "#222852",
+          "#262C52",
+          "#283063",
+          "#2F365E",
+          "#4A5285"
+        ]
+      },
+      "navy-surface": {
+        "role": "neutral",
+        "displayName": "Navy Surface",
+        "canonical": "#1C2140",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0E1233",
+          "#161827",
+          "#1B2146",
+          "#1C2140",
+          "#222852",
+          "#262C52",
+          "#283063",
+          "#2F365E",
+          "#4A5285"
+        ]
+      },
+      "navy-surface-raised": {
+        "role": "neutral",
+        "displayName": "Navy Surface Raised",
+        "canonical": "#262C52",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0E1233",
+          "#161827",
+          "#1B2146",
+          "#1C2140",
+          "#222852",
+          "#262C52",
+          "#283063",
+          "#2F365E",
+          "#4A5285"
+        ]
+      },
+      "navy-line": {
+        "role": "neutral",
+        "displayName": "Navy Line",
+        "canonical": "#2F365E",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0E1233",
+          "#161827",
+          "#1B2146",
+          "#1C2140",
+          "#222852",
+          "#262C52",
+          "#283063",
+          "#2F365E",
+          "#4A5285"
+        ]
+      },
+      "ice": {
+        "role": "neutral",
+        "displayName": "Ice",
+        "canonical": "#E0EEFF"
+      },
+      "navy-muted": {
+        "role": "neutral",
+        "displayName": "Navy Muted",
+        "canonical": "#9EA6C4"
+      },
+      "blue-bright": {
+        "role": "secondary",
+        "displayName": "Blue Bright (default accent, anchor: security)",
+        "canonical": "#6586FC",
+        "tonalRamp": [
+          "#0B0F2E",
+          "#0F2267",
+          "#112980",
+          "#1738B1",
+          "#1C45D7",
+          "#4666D7",
+          "#6485FB",
+          "#A4B7FD",
+          "#C6D2FD",
+          "#E0E7FF",
+          "#EFF5FF",
+          "#F5F8FF"
+        ]
+      },
+      "sky": {
+        "role": "tertiary",
+        "displayName": "Sky (anchor: freedom)",
+        "canonical": "#61A9FA"
+      },
+      "lavender": {
+        "role": "secondary",
+        "displayName": "Lavender (CTA start, anchor: family)",
+        "canonical": "#948DF7"
+      },
+      "lagoon": {
+        "role": "tertiary",
+        "displayName": "Lagoon (anchor: experiences)",
+        "canonical": "#2EC4C6"
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Strong / Success",
+        "canonical": "#1DAE53"
+      },
+      "warning": {
+        "role": "status",
+        "displayName": "Vulnerable / Warning / Risk Amber",
+        "canonical": "#E38F10"
+      },
+      "error": {
+        "role": "status",
+        "displayName": "Critical / Error",
+        "canonical": "#F04545"
+      },
+      "stable-gold": {
+        "role": "status",
+        "displayName": "Stable Gold",
+        "canonical": "#DBAE3A"
+      },
+      "gain-green": {
+        "role": "status",
+        "displayName": "Gain Green (positive deltas on navy)",
+        "canonical": "#3FD27A"
+      },
+      "cta-inset": {
+        "role": "secondary",
+        "displayName": "CTA Inset Highlight",
+        "canonical": "#B8C1E6"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Onboarding questions on the light world."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Scene headlines on navy, white, accent highlights."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "The plan's numbers, sized per scene; also the wait game's distance counter."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles: episode card, wait panel, advisor view."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Explanations, advisor rows, captions."
+      },
+      "body-strong": {
+        "displayName": "Body strong",
+        "purpose": "Option-row labels."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Chips, counters, picker labels, meta. Sentence case."
+      }
+    },
+    "gradients": [
+      {
+        "name": "cta",
+        "value": "linear-gradient(127deg, #948DF7 11%, #4565D6 119%)",
+        "purpose": "The one primary action per screen (pill, white text >=19px/600) and the start play disc."
+      },
+      {
+        "name": "stage",
+        "value": "radial-gradient(110% 90% at 18% 0%, #222852 0%, #161827 48%, #0B0F2E 100%)",
+        "purpose": "Navy hero stage background."
+      },
+      {
+        "name": "start-veil",
+        "value": "radial-gradient(80% 80% at 50% 42%, rgba(148,141,247,.16), rgba(11,15,46,.94) 72%)",
+        "purpose": "Overlay behind the start button on the stage."
+      }
+    ],
+    "anchors": [
+      {
+        "name": "freedom",
+        "value": "#61A9FA"
+      },
+      {
+        "name": "security",
+        "value": "#6586FC"
+      },
+      {
+        "name": "family",
+        "value": "#948DF7"
+      },
+      {
+        "name": "experiences",
+        "value": "#2EC4C6"
+      }
+    ],
+    "scoreBands": [
+      {
+        "name": "critical",
+        "value": "#F04545"
+      },
+      {
+        "name": "vulnerable",
+        "value": "#E38F10"
+      },
+      {
+        "name": "stable",
+        "value": "#DBAE3A"
+      },
+      {
+        "name": "strong",
+        "value": "#1DAE53"
+      }
+    ],
+    "gameColors": {
+      "skyTop": "#161827",
+      "skyBottom": "#0B0F2E",
+      "far": "#283063",
+      "near": "#1B2146",
+      "snow": "rgba(224,238,255,.5)",
+      "star": "rgba(224,238,255,.55)",
+      "ground": "#0E1233",
+      "groundLine": "#3A4372",
+      "pebble": "#2A3160",
+      "rock": "#46519A",
+      "rockLit": "#5F6CB8",
+      "text": "#E0EEFF",
+      "muted": "#9EA6C4"
+    },
+    "shadows": [
+      {
+        "name": "row",
+        "value": "0 6px 2px -4px #1414190A, inset 0 -1px 0 #14141933",
+        "purpose": "Resting rows, selects, selected chips, round controls."
+      },
+      {
+        "name": "pop",
+        "value": "0 1px 2px #0000000D, 0 8px 10px #0000001A",
+        "purpose": "Hovered rows and the episode card."
+      },
+      {
+        "name": "stage",
+        "value": "0 0 0 1px rgba(20,20,25,.06), 0 1px 2px #0000000D, 0 24px 48px -12px rgba(22,24,39,.35)",
+        "purpose": "The stage on the frame."
+      },
+      {
+        "name": "panel",
+        "value": "0 1px 2px #0000000D, 0 16px 40px rgba(20,20,25,.12)",
+        "purpose": "Floating light panels (advisor view)."
+      },
+      {
+        "name": "dialog-navy",
+        "value": "0 24px 48px rgba(0,0,0,.35)",
+        "purpose": "Explain dialog over a rgba(11,15,46,.78) scrim."
+      },
+      {
+        "name": "cta-inset",
+        "value": "inset 0 1px 2px 0 #B8C1E6",
+        "purpose": "Highlight on the CTA gradient pill."
+      },
+      {
+        "name": "focus",
+        "value": "outline: 2px solid #4565D6; outline-offset: 2px",
+        "purpose": "Focus ring on light; on navy the outline takes the accent."
+      },
+      {
+        "name": "input-halo",
+        "value": "0 0 0 3px #EFF5FF",
+        "purpose": "Active text input."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Exponential ease-out for lifts, scales and transitions; one orchestrated moment per transition."
+      },
+      {
+        "name": "ease-panel",
+        "value": "cubic-bezier(.32, .72, 0, 1)",
+        "purpose": "App panel easing from the Sherpas app tokens."
+      },
+      {
+        "name": "duration-hover",
+        "value": "0.12s",
+        "purpose": "Colour and border hover changes."
+      },
+      {
+        "name": "duration-lift",
+        "value": "0.3s",
+        "purpose": "Row lift, shadow and step-state transitions."
+      },
+      {
+        "name": "pulse",
+        "value": "1.2s ease-in-out infinite",
+        "purpose": "Current wait step ring."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: reduce)",
+        "purpose": "Durations collapse to 0.01ms; the yak waits for the first jump."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stage-landscape",
+        "value": "@container (min-aspect-ratio: 1/1)"
+      },
+      {
+        "name": "stage-portrait",
+        "value": "@container (max-aspect-ratio: 1/1)"
+      },
+      {
+        "name": "page-mobile",
+        "value": "max-width: 640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "CTA Pill",
+      "kind": "button",
+      "refersTo": "button-cta",
+      "description": "The one primary action per screen.",
+      "html": "<button class=\"ds-cta\">Pick this step</button>",
+      "css": ".ds-cta { background: linear-gradient(127deg, #948DF7 11%, #4565D6 119%); color: #FFFFFF; border: 0; border-radius: 80px; padding: 12px 28px; font: 600 19px/1.2 Inter, system-ui, sans-serif; box-shadow: inset 0 1px 2px 0 #B8C1E6; cursor: pointer; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-cta:hover { transform: translateY(-1px); } .ds-cta:focus-visible { outline: 2px solid #4565D6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Every other affirmative action, light or navy.",
+      "html": "<button class=\"ds-solid\">Start now</button>",
+      "css": ".ds-solid { background: #4565D6; color: #FFFFFF; border: 0; border-radius: 80px; padding: 10px 18px; font: 600 14px/1.2 Inter, system-ui, sans-serif; cursor: pointer; transition: background 0.12s; } .ds-solid:hover { background: #1C45D7; } .ds-solid:focus-visible { outline: 2px solid #4565D6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button (navy)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action on navy.",
+      "html": "<div class=\"ds-navy\"><button class=\"ds-ghost\">Close</button></div>",
+      "css": ".ds-navy { background: #1C2140; padding: 16px; border-radius: 16px; } .ds-ghost { background: transparent; color: #E0EEFF; border: 1px solid #2F365E; border-radius: 80px; padding: 10px 18px; font: 600 14px/1.2 Inter, system-ui, sans-serif; cursor: pointer; } .ds-ghost:hover { border-color: #9EA6C4; } .ds-ghost:focus-visible { outline: 2px solid #6586FC; outline-offset: 2px; }"
+    },
+    {
+      "name": "Segmented Chips",
+      "kind": "chip",
+      "refersTo": "chip-segment",
+      "description": "Format and mode pickers in the top bar.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">16:9</button><button class=\"ds-chip\" aria-pressed=\"false\">9:16</button></div>",
+      "css": ".ds-chips { display: inline-flex; gap: 2px; background: #EFF1F5; border-radius: 10px; padding: 3px; } .ds-chip { border: 0; background: transparent; border-radius: 8px; padding: 8px 14px; font: 500 13px Inter, system-ui, sans-serif; color: #5F6480; cursor: pointer; transition: color 0.12s; } .ds-chip:hover { color: #141419; } .ds-chip[aria-pressed=\"true\"] { background: #FFFFFF; color: #141419; box-shadow: 0 6px 2px -4px #1414190A, inset 0 -1px 0 #14141933; } .ds-chip:focus-visible { outline: 2px solid #4565D6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Option Row",
+      "kind": "custom",
+      "refersTo": "option-row",
+      "description": "One-tap onboarding answer: icon tile, label, sub-label, key hint. Always one full-width column.",
+      "html": "<button class=\"ds-opt\"><span class=\"ds-opt-ic\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/></svg></span><span class=\"ds-opt-l\">Security<small>Knowing we are covered</small></span><span class=\"ds-opt-k\">2</span></button>",
+      "css": ".ds-opt { display: flex; width: 100%; align-items: center; gap: 14px; text-align: left; color: #141419; background: #FFFFFF; border: 1px solid #E2E5EB; border-radius: 16px; box-shadow: 0 6px 2px -4px #1414190A, inset 0 -1px 0 #14141933; padding: 10px 14px; font: 500 15px/1.25 Inter, system-ui, sans-serif; cursor: pointer; transition: border-color 0.12s, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-opt:hover { border-color: #C6D2FD; transform: translateY(-1px); box-shadow: 0 1px 2px #0000000D, 0 8px 10px #0000001A; } .ds-opt:focus-visible { outline: 2px solid #4565D6; outline-offset: 2px; } .ds-opt-ic { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: #EFF5FF; color: #4565D6; } .ds-opt-l { flex: 1; } .ds-opt-l small { display: block; margin-top: 0.3em; color: #5F6480; font-weight: 400; font-size: 0.8em; } .ds-opt-k { font: 500 11px/1 Inter, system-ui, sans-serif; color: #7F8399; border: 1px solid #E2E5EB; border-radius: 6px; padding: 0.35em 0.55em; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "text-input",
+      "description": "Free-text answer (Something else).",
+      "html": "<input class=\"ds-input\" placeholder=\"In your own words\" />",
+      "css": ".ds-input { background: #FFFFFF; color: #141419; border: 1px solid #E2E5EB; border-radius: 10px; padding: 10px 14px; font: 15px Inter, system-ui, sans-serif; outline: none; transition: border-color 0.12s, box-shadow 0.12s; } .ds-input::placeholder { color: #7F8399; } .ds-input:focus { border-color: #4565D6; box-shadow: 0 0 0 3px #EFF5FF; }"
+    },
+    {
+      "name": "Top Bar",
+      "kind": "nav",
+      "refersTo": "light-card",
+      "description": "Wordmark (masked PNG in the build), feature name after a hairline, pickers right.",
+      "html": "<header class=\"ds-top\"><span class=\"ds-word\">sherpas</span><span class=\"ds-feat\">Plan in Motion</span></header>",
+      "css": ".ds-top { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #FFFFFF; border-bottom: 1px solid #E2E5EB; } .ds-word { font: 600 20px Poppins, system-ui, sans-serif; letter-spacing: -0.02em; color: #0E1C29; } .ds-feat { font: 500 15px Poppins, system-ui, sans-serif; letter-spacing: -0.01em; color: #5F6480; padding-left: 12px; border-left: 1px solid #E2E5EB; }"
+    },
+    {
+      "name": "Navy Tile",
+      "kind": "card",
+      "refersTo": "navy-card",
+      "description": "A plan figure on the navy stage; accent from the anchor. Figure shown is a placeholder, real ones come from the plan.",
+      "html": "<div class=\"ds-stage\"><div class=\"ds-tile\"><div class=\"ds-big\">{figure}</div><p>{what it means}</p></div></div>",
+      "css": ".ds-stage { --accent: #6586FC; background: radial-gradient(110% 90% at 18% 0%, #222852 0%, #161827 48%, #0B0F2E 100%); padding: 24px; border-radius: 26px; } .ds-tile { background: #1C2140; border: 1px solid #2F365E; border-radius: 16px; padding: 16px; color: #E0EEFF; } .ds-big { font: 600 40px/0.92 Poppins, system-ui, sans-serif; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; color: var(--accent); } .ds-tile p { margin: 10px 0 0; color: #9EA6C4; font: 13px/1.35 Inter, system-ui, sans-serif; }"
+    },
+    {
+      "name": "Wait Steps Panel",
+      "kind": "custom",
+      "refersTo": "navy-card",
+      "description": "Real preparation steps; current pulses, done fills with the anchor accent.",
+      "html": "<div class=\"ds-wait\"><p class=\"ds-wait-t\">Your episode</p><ul><li class=\"done\"><i>&#10003;</i>Reading the plan</li><li class=\"now\"><i></i>Picking the opening</li><li><i></i>Preparing the voice</li></ul></div>",
+      "css": ".ds-wait { --accent: #61A9FA; background: #1C2140; border: 1px solid #2F365E; border-radius: 16px; padding: 16px 18px; color: #E0EEFF; width: 300px; } .ds-wait-t { margin: 0 0 12px; font: 600 17px Poppins, system-ui, sans-serif; letter-spacing: -0.02em; color: #FFFFFF; } .ds-wait ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 13px Inter, system-ui, sans-serif; } .ds-wait li { display: flex; align-items: center; gap: 10px; color: #9EA6C4; } .ds-wait li i { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #4A5285; font-style: normal; font-size: 11px; color: transparent; } .ds-wait li.now, .ds-wait li.done { color: #E0EEFF; } .ds-wait li.now i { border-color: var(--accent); } .ds-wait li.done i { background: var(--accent); border-color: var(--accent); color: #0B0F2E; }"
+    },
+    {
+      "name": "Score Band",
+      "kind": "chip",
+      "refersTo": "score-band",
+      "description": "Financial health band, solid status fill with navy-deep text.",
+      "html": "<span class=\"ds-band\">Stable</span>",
+      "css": ".ds-band { display: inline-block; padding: 5px 14px; border-radius: 6px; background: #DBAE3A; color: #0B0F2E; font: 600 14px Inter, system-ui, sans-serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "From the app to the summit",
+    "overview": "Plan in Motion is a Sherpas feature, not a brand of its own. The \"sherpas\" wordmark and the yak lead every surface; \"Plan in Motion\" is only the feature name, set quietly beside the wordmark. The system is Sherpas Wealth's own: palette, type, radii and shadows were extracted from sherpaswealth.com and app.sherpaswealth.com into `design/sherpas-tokens.css`, and the shipped player (`web/styles.css`) is the reference implementation.\n\nThere are two worlds, and every new surface lives in exactly one of them. The **light app world** is where people answer, choose and configure: a cool near-white frame, white raised rows with hairline borders and the app's soft offset shadow, ink text, brand blue for selection, focus and icons. It is quiet, exact and dense in the way a good form is. The **navy hero world** is where the plan is shown: the episode, the wait screen, video frames, slides. Navy deepening to midnight, ice-blue text, one bright accent, big Poppins figures, and the white yak. Moving from the first to the second is the system's one theatrical moment: the curtain drops to navy and the yak runs.\n\nRejected outright: a dark video player with one neon accent, a generic stepper form in a card, glassmorphism, gradient text.",
+    "keyCharacteristics": [
+      "Two worlds: light app (asking) and navy hero (showing); never a muddy middle.",
+      "Poppins 600 at -0.02em for anything the eye should land on; Inter for everything else.",
+      "One accent colour at a time on navy, chosen by the viewer's answer.",
+      "One primary action per screen, as the lavender-to-blue pill.",
+      "Every figure comes from the plan; the design never decorates with fake numbers.",
+      "One Lucide line-icon family at 1.75 stroke."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "On navy, exactly one accent is live at a time, and it is the anchor colour. Status colours appear only where they carry meaning (bands, risk figures, best/worst bars).",
+        "section": "colors"
+      },
+      {
+        "name": "The Blue Means Act Rule",
+        "body": "On light, Sherpas Blue marks what is selected, focused or tappable. Do not use it for decoration or body text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Faces Rule",
+        "body": "Poppins for what you read first, Inter for what you read next. No third family, no Poppins below 14px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Floor Rule",
+        "body": "Stage type scales with `cqmin` but always has a px floor (`max(13px, …)`), so 9:16 on a small phone stays legible.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lift On Intent Rule",
+        "body": "Rows rest at Row and rise to Pop with a 1px lift only on hover. Nothing floats at rest except the stage and the episode card.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do lead with the Sherpas wordmark and the yak; name the feature beside it, never instead of it.",
+      "Do link `design/sherpas-tokens.css` and reuse the role variables from `web/styles.css` (`--ink`, `--blue`, `--surface`, `--accent` …) instead of new hex values.",
+      "Do put asking in the light app world and showing in the navy hero world.",
+      "Do set titles, questions and figures in Poppins 600 at -0.02em (figures -0.035em, tabular) and everything else in Inter 400/500.",
+      "Do use the CTA gradient pill for one primary action per screen, white text at 19px+ weight 600; use the Sherpas Blue Solid pill (#4565D6) for every other action.",
+      "Do let the anchor answer drive `--accent` on navy through `data-anchor`.",
+      "Do use Lucide line icons at stroke 1.75 via `icon()` and `npm run icons`, in brand blue on light.",
+      "Do tint the yak and wordmark PNGs with `mask-image` and `currentColor`.",
+      "Do keep body contrast at 4.5:1 or better, give every stage size a px floor, and make every interaction work by keyboard and touch.",
+      "Do respect `prefers-reduced-motion`: transitions collapse, the yak waits for input. Motion uses `cubic-bezier(0.16, 1, 0.3, 1)` with one orchestrated moment per transition."
+    ],
+    "donts": [
+      "Don't use emoji as icons.",
+      "Don't put kicker or eyebrow labels above headings.",
+      "Don't use gradient text, including the `--sw-gradient-stat-text` token in the tokens file.",
+      "Don't use glassmorphism; the `--sw-glass-*` tokens in the tokens file are recorded from the website, not for use.",
+      "Don't put the gradient on small buttons, on more than one action, or with text under 19px.",
+      "Don't invent or round figures, customers, prices or claims; every number shown comes from the plan.",
+      "Don't mix worlds: no white cards on navy scenes, no navy panels in light app screens.",
+      "Don't make motion the only carrier of meaning.",
+      "Don't add assets outside `web/` and `design/`; `npm run serve` and GitHub Pages serve only those."
+    ]
+  }
+}

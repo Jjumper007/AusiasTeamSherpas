@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Plan in Motion · Sherpas</title>
+  <meta name="description" content="Your Sherpas plan, as one short interactive video." />
+  <meta name="theme-color" content="#F8FAFD" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../design/assets/sherpas-favicon-32.png" />
+  <link rel="apple-touch-icon" href="../design/assets/sherpas-favicon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../design/sherpas-tokens.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="wordmark" role="img" aria-label="Sherpas"></span>
+      <span class="feature">Plan in Motion</span>
+    </div>
+    <div class="pickers">
+      <label class="pick">
+        <span>Watching</span>
+        <select id="pick-case" aria-label="Who is watching"></select>
+      </label>
+      <div class="chips" role="group" aria-label="Personalization">
+        <button class="chip" id="personalize-btn" data-icon="user-pen" title="Answer the four questions again">Personalize</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="theatre">
+    <div class="stage landscape" id="stage">
+      <div class="progress" id="progress"></div>
+      <div class="scene-layer" id="scene"></div>
+      <p class="caption" id="caption" aria-live="polite"></p>
+
+      <button class="start" id="start">
+        <span class="start-play" aria-hidden="true"></span>
+        <span class="start-title" id="start-title">Your plan in 60 seconds</span>
+        <span class="start-sub" id="start-sub">Tap to play · tap any number to learn what it means</span>
+      </button>
+
+      <div class="explain" id="explain" hidden>
+        <div class="explain-card" role="dialog" aria-modal="true" aria-labelledby="explain-value">
+          <p class="explain-label" id="explain-label"></p>
+          <p class="explain-value" id="explain-value"></p>
+          <p class="explain-simple" id="explain-simple"></p>
+          <p class="explain-expert" id="explain-expert" hidden></p>
+          <div class="explain-actions">
+            <button class="ghost" id="explain-more">More detail</button>
+            <button class="solid" id="explain-close">Got it</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="controls" aria-label="Playback">
+      <button class="ctl" id="prev" data-icon="chevron-left" aria-label="Previous scene"></button>
+      <button class="ctl ctl-main" id="toggle" data-icon="play" aria-label="Play or pause"></button>
+      <button class="ctl" id="next" data-icon="chevron-right" aria-label="Next scene"></button>
+      <label class="voice-toggle"><input type="checkbox" id="browser-voice" checked /> Browser voice when no audio</label>
+    </nav>
+  </main>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script type="module" src="player.js"></script>
+</body>
+</html>

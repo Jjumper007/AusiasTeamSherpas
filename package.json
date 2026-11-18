@@ -1,0 +1,33 @@
+{
+  "name": "plan-in-motion",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Sherpas Plan in Motion: one personalised video per adult that explains their financial plan",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "build": "npm run build -w frontend",
+    "test": "npm run test -w backend",
+    "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend",
+    "legacy:serve": "node scripts/serve.mjs",
+    "legacy:generate": "node pipeline/generate.mjs",
+    "legacy:mcp": "node mcp-server/server.mjs",
+    "legacy:icons": "node scripts/build-icons.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "gsap": "^3.15.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5",
+    "lucide-static": "^0.554.0"
+  }
+}

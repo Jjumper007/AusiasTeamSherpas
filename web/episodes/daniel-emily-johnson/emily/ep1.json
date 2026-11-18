@@ -1,0 +1,1132 @@
+{
+  "caseId": "daniel-emily-johnson",
+  "person": "emily",
+  "personName": "Emily",
+  "episode": 1,
+  "title": "Your plan in 60 seconds",
+  "day": 0,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.506Z",
+  "family": {
+    "adults": [
+      {
+        "id": "daniel",
+        "name": "Daniel",
+        "role": "client"
+      },
+      {
+        "id": "emily",
+        "name": "Emily",
+        "role": "co-client"
+      }
+    ],
+    "location": "Denver, CO",
+    "score": 52,
+    "band": "vulnerable"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "If something happened tomorrow, who's covered? Protection: 0 of 20.",
+      "caption": "Emily, if something happened tomorrow, how protected is your family? Your protection score is 0 out of 20.",
+      "voice": "Emily, if something happened tomorrow, how protected is your family? Your protection score is 0 out of 20.",
+      "keys": [
+        "pillar.4.points",
+        "pillar.4.max"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "protection",
+      "figure": {
+        "key": "pillar.4.points",
+        "value": 0,
+        "display": "0",
+        "exact": "0",
+        "label": "Insurance and protection: points earned"
+      }
+    },
+    {
+      "type": "score",
+      "headline": "52",
+      "caption": "Your score is 52. Vulnerable: a few gaps are doing most of the damage.",
+      "voice": "Your score is 52. Vulnerable: a few gaps are doing most of the damage.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "score": 52,
+      "band": "vulnerable",
+      "colour": "red"
+    },
+    {
+      "type": "pillars",
+      "headline": "Where your score comes from",
+      "caption": "Five areas make up that score. Your strongest is liquidity and emergency fund. Your weakest is insurance and protection.",
+      "voice": "Five areas make up that score. Your strongest is liquidity and emergency fund. Your weakest is insurance and protection.",
+      "keys": [
+        "pillar.0.points",
+        "pillar.1.points",
+        "pillar.2.points",
+        "pillar.3.points",
+        "pillar.4.points"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "modes": [
+        "straight",
+        "nerd"
+      ],
+      "items": [
+        {
+          "label": "Savings and cash flow",
+          "points": 16,
+          "max": 30,
+          "key": "pillar.0.points"
+        },
+        {
+          "label": "Debt",
+          "points": 15,
+          "max": 20,
+          "key": "pillar.1.points"
+        },
+        {
+          "label": "Investments",
+          "points": 8,
+          "max": 15,
+          "key": "pillar.2.points"
+        },
+        {
+          "label": "Liquidity and emergency fund",
+          "points": 13,
+          "max": 15,
+          "key": "pillar.3.points"
+        },
+        {
+          "label": "Insurance and protection",
+          "points": 0,
+          "max": 20,
+          "key": "pillar.4.points"
+        }
+      ],
+      "best": 3,
+      "worst": 4
+    },
+    {
+      "type": "metrics",
+      "headline": "The numbers behind it",
+      "caption": "For the detail-minded: the numbers behind your score. Tap any of them for the exact figure and where it comes from.",
+      "voice": "For the detail-minded: the numbers behind your score. Tap any of them for the exact figure and where it comes from.",
+      "keys": [
+        "retirement.withdrawalRateAverage",
+        "retirement.incomeShareOfNeed",
+        "retirement.spendingGap",
+        "cash.monthsCovered",
+        "education.fundingGap",
+        "life.shortfall.coClient"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "modes": [
+        "nerd"
+      ],
+      "tiles": [
+        {
+          "key": "retirement.withdrawalRateAverage",
+          "value": 5.5,
+          "display": "5.5%",
+          "exact": "5.5%",
+          "label": "Average withdrawal rate in retirement"
+        },
+        {
+          "key": "retirement.incomeShareOfNeed",
+          "value": 49,
+          "display": "49%",
+          "exact": "49%",
+          "label": "Retirement spending covered by income"
+        },
+        {
+          "key": "retirement.spendingGap",
+          "value": 62932.2,
+          "display": "$63K/yr",
+          "exact": "$62,932 a year",
+          "label": "Yearly gap your savings must fill"
+        },
+        {
+          "key": "cash.monthsCovered",
+          "value": 1.4,
+          "display": "1.4 mo",
+          "exact": "1.4 months",
+          "label": "Months of expenses in cash"
+        },
+        {
+          "key": "education.fundingGap",
+          "value": 106552.38,
+          "display": "$107K",
+          "exact": "$106,552",
+          "label": "College still to fund"
+        },
+        {
+          "key": "life.shortfall.coClient",
+          "value": 1000000,
+          "display": "$1M",
+          "exact": "$1,000,000",
+          "label": "Life cover shortfall"
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "headline": "Your savings, year by year",
+      "caption": "This line is your savings, one point per year of your life. You stop working at 60, and the line keeps you going all the way.",
+      "voice": "This line is your savings, one point per year of your life. You stop working at 60, and the line keeps you going all the way.",
+      "keys": [
+        "coClient.retirementAge"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "series": [
+        {
+          "year": 2026,
+          "age": 42,
+          "value": 350354
+        },
+        {
+          "year": 2027,
+          "age": 43,
+          "value": 399708
+        },
+        {
+          "year": 2028,
+          "age": 44,
+          "value": 453403
+        },
+        {
+          "year": 2029,
+          "age": 45,
+          "value": 511766
+        },
+        {
+          "year": 2030,
+          "age": 46,
+          "value": 575155
+        },
+        {
+          "year": 2031,
+          "age": 47,
+          "value": 643949
+        },
+        {
+          "year": 2032,
+          "age": 48,
+          "value": 719432
+        },
+        {
+          "year": 2033,
+          "age": 49,
+          "value": 783116
+        },
+        {
+          "year": 2034,
+          "age": 50,
+          "value": 853392
+        },
+        {
+          "year": 2035,
+          "age": 51,
+          "value": 905977
+        },
+        {
+          "year": 2036,
+          "age": 52,
+          "value": 961789
+        },
+        {
+          "year": 2037,
+          "age": 53,
+          "value": 1047054
+        },
+        {
+          "year": 2038,
+          "age": 54,
+          "value": 1138687
+        },
+        {
+          "year": 2039,
+          "age": 55,
+          "value": 1261157
+        },
+        {
+          "year": 2040,
+          "age": 56,
+          "value": 1393434
+        },
+        {
+          "year": 2041,
+          "age": 57,
+          "value": 1536258
+        },
+        {
+          "year": 2042,
+          "age": 58,
+          "value": 1690421
+        },
+        {
+          "year": 2043,
+          "age": 59,
+          "value": 1856776
+        },
+        {
+          "year": 2044,
+          "age": 60,
+          "value": 1934173
+        },
+        {
+          "year": 2045,
+          "age": 61,
+          "value": 1835576
+        },
+        {
+          "year": 2046,
+          "age": 62,
+          "value": 1723787
+        },
+        {
+          "year": 2047,
+          "age": 63,
+          "value": 1614522
+        },
+        {
+          "year": 2048,
+          "age": 64,
+          "value": 1500305
+        },
+        {
+          "year": 2049,
+          "age": 65,
+          "value": 1375646
+        },
+        {
+          "year": 2050,
+          "age": 66,
+          "value": 1284987
+        },
+        {
+          "year": 2051,
+          "age": 67,
+          "value": 1235189
+        },
+        {
+          "year": 2052,
+          "age": 68,
+          "value": 1207545
+        },
+        {
+          "year": 2053,
+          "age": 69,
+          "value": 1175881
+        },
+        {
+          "year": 2054,
+          "age": 70,
+          "value": 1137222
+        },
+        {
+          "year": 2055,
+          "age": 71,
+          "value": 1090196
+        },
+        {
+          "year": 2056,
+          "age": 72,
+          "value": 1035474
+        },
+        {
+          "year": 2057,
+          "age": 73,
+          "value": 996992
+        },
+        {
+          "year": 2058,
+          "age": 74,
+          "value": 972892
+        },
+        {
+          "year": 2059,
+          "age": 75,
+          "value": 950404
+        },
+        {
+          "year": 2060,
+          "age": 76,
+          "value": 929780
+        },
+        {
+          "year": 2061,
+          "age": 77,
+          "value": 911295
+        },
+        {
+          "year": 2062,
+          "age": 78,
+          "value": 895251
+        },
+        {
+          "year": 2063,
+          "age": 79,
+          "value": 881977
+        },
+        {
+          "year": 2064,
+          "age": 80,
+          "value": 871834
+        },
+        {
+          "year": 2065,
+          "age": 81,
+          "value": 865214
+        },
+        {
+          "year": 2066,
+          "age": 82,
+          "value": 862546
+        },
+        {
+          "year": 2067,
+          "age": 83,
+          "value": 864297
+        },
+        {
+          "year": 2068,
+          "age": 84,
+          "value": 870975
+        },
+        {
+          "year": 2069,
+          "age": 85,
+          "value": 883135
+        },
+        {
+          "year": 2070,
+          "age": 86,
+          "value": 901378
+        },
+        {
+          "year": 2071,
+          "age": 87,
+          "value": 926360
+        },
+        {
+          "year": 2072,
+          "age": 88,
+          "value": 958792
+        },
+        {
+          "year": 2073,
+          "age": 89,
+          "value": 1005098
+        },
+        {
+          "year": 2074,
+          "age": 90,
+          "value": 1079052
+        },
+        {
+          "year": 2075,
+          "age": 91,
+          "value": 1113108
+        }
+      ],
+      "seriesLabel": "Savings and investments",
+      "markers": [
+        {
+          "key": "coClient.retirementAge",
+          "value": 60,
+          "display": "60",
+          "exact": "age 60",
+          "label": "Retire"
+        }
+      ]
+    },
+    {
+      "type": "compare",
+      "headline": "Emily's life cover vs. what the plan recommends",
+      "caption": "Emily's life cover today is $200K. The plan recommends at least $1.2M.",
+      "voice": "Emily's life cover today is 200 thousand dollars. The plan recommends at least 1.2 million dollars.",
+      "keys": [
+        "life.cover.coClient",
+        "life.recommendedMin.coClient"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "left": {
+        "key": "life.cover.coClient",
+        "value": 200000,
+        "display": "$200K",
+        "exact": "$200,000",
+        "label": "Life cover today"
+      },
+      "right": {
+        "key": "life.recommendedMin.coClient",
+        "value": 1200000,
+        "display": "$1.2M",
+        "exact": "$1,200,000",
+        "label": "Recommended minimum"
+      }
+    },
+    {
+      "type": "move",
+      "headline": "Raise mortality coverage",
+      "caption": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+      "voice": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+      "keys": [
+        "move.0.before",
+        "move.0.after",
+        "combo.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 0,
+        "title": "Raise mortality coverage",
+        "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+        "effort": "low",
+        "before": 52,
+        "after": 57,
+        "beforeKey": "move.0.before",
+        "afterKey": "move.0.after"
+      },
+      "combo": {
+        "after": 60,
+        "moves": [
+          "Raise mortality coverage",
+          "Add umbrella cover"
+        ],
+        "key": "combo.0.after"
+      }
+    },
+    {
+      "type": "action",
+      "headline": "Your turn. Pick your first step.",
+      "caption": "Your turn. Pick your first step. Just one.",
+      "voice": "Your turn. Pick your first step. Just one.",
+      "keys": [
+        "move.0.before",
+        "move.0.after",
+        "move.1.before",
+        "move.1.after",
+        "move.2.before",
+        "move.2.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "choose",
+      "cta": [
+        "I'll do this one",
+        "Talk to my advisor"
+      ],
+      "options": [
+        {
+          "i": 0,
+          "title": "Raise mortality coverage",
+          "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+          "effort": "low",
+          "before": 52,
+          "after": 57,
+          "beforeKey": "move.0.before",
+          "afterKey": "move.0.after"
+        },
+        {
+          "i": 1,
+          "title": "Add umbrella cover",
+          "action": "Add $1M of umbrella to raise the liability shield",
+          "effort": "low",
+          "before": 52,
+          "after": 56,
+          "beforeKey": "move.1.before",
+          "afterKey": "move.1.after"
+        },
+        {
+          "i": 2,
+          "title": "Raise annual savings",
+          "action": "Redirect $15,032/year of free cash flow into savings to raise retirement-directed savings toward the next band",
+          "effort": "medium",
+          "before": 52,
+          "after": 55,
+          "beforeKey": "move.2.before",
+          "afterKey": "move.2.after"
+        }
+      ]
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Emily",
+      "Em"
+    ],
+    "household": [
+      "Daniel",
+      "Oliver",
+      "Sophia"
+    ],
+    "d6": "PROTECTION",
+    "d6Text": "PROTECTION.",
+    "worries": [
+      {
+        "id": "cushion",
+        "emoji": "🛟",
+        "move": 2,
+        "label": "A cushion if things go wrong",
+        "short": "your safety cushion",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "If your income stopped, your cash would last 1.4 mo.",
+            "caption": "Emily, if your income stopped tomorrow, your cash would last 1.4 mo. The plan recommends keeping $107K to $120K aside.",
+            "voice": "Emily, if your income stopped tomorrow, your cash would last 1.4 months. The plan recommends keeping 107 thousand dollars to 120 thousand dollars aside.",
+            "keys": [
+              "cash.monthsCovered",
+              "cash.emergencyReserve.min",
+              "cash.emergencyReserve.max"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "cushion",
+            "figure": {
+              "key": "cash.monthsCovered",
+              "value": 1.4,
+              "display": "1.4 mo",
+              "exact": "1.4 months",
+              "label": "Months of essential expenses accessible cash covers"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Your cash vs. the cushion the plan recommends",
+            "caption": "You can reach $19K in cash. The plan's recommended cushion starts at $107K.",
+            "voice": "You can reach 19 thousand dollars in cash. The plan's recommended cushion starts at 107 thousand dollars.",
+            "keys": [
+              "cash.accessibleCash",
+              "cash.emergencyReserve.min"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "cash.accessibleCash",
+              "value": 19000,
+              "display": "$19K",
+              "exact": "$19,000",
+              "label": "Accessible cash today"
+            },
+            "right": {
+              "key": "cash.emergencyReserve.min",
+              "value": 106860,
+              "display": "$107K",
+              "exact": "$106,860",
+              "label": "Recommended cushion (low end)"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Raise annual savings",
+            "caption": "One move changes the picture: raise annual savings. Your score goes from 52 to 55. Pair it with raise mortality coverage, and it reaches 60.",
+            "voice": "One move changes the picture: raise annual savings. Your score goes from 52 to 55. Pair it with raise mortality coverage, and it reaches 60.",
+            "keys": [
+              "move.2.before",
+              "move.2.after",
+              "combo.1.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 2,
+              "title": "Raise annual savings",
+              "action": "Redirect $15,032/year of free cash flow into savings to raise retirement-directed savings toward the next band",
+              "effort": "medium",
+              "before": 52,
+              "after": 55,
+              "beforeKey": "move.2.before",
+              "afterKey": "move.2.after"
+            },
+            "combo": {
+              "after": 60,
+              "moves": [
+                "Raise mortality coverage",
+                "Raise annual savings"
+              ],
+              "key": "combo.1.after"
+            }
+          }
+        }
+      },
+      {
+        "id": "protection",
+        "emoji": "🛡️",
+        "move": 0,
+        "label": "The family, if something happens",
+        "short": "protecting the family",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "If something happened tomorrow, who's covered? Protection: 0 of 20.",
+            "caption": "Emily, if something happened tomorrow, how protected is your family? Your protection score is 0 out of 20.",
+            "voice": "Emily, if something happened tomorrow, how protected is your family? Your protection score is 0 out of 20.",
+            "keys": [
+              "pillar.4.points",
+              "pillar.4.max"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "protection",
+            "figure": {
+              "key": "pillar.4.points",
+              "value": 0,
+              "display": "0",
+              "exact": "0",
+              "label": "Insurance and protection: points earned"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Life cover today vs. what the plan recommends",
+            "caption": "Your life cover today is $200K. The plan recommends at least $1.2M.",
+            "voice": "Your life cover today is 200 thousand dollars. The plan recommends at least 1.2 million dollars.",
+            "keys": [
+              "life.cover.coClient",
+              "life.recommendedMin.coClient"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "life.cover.coClient",
+              "value": 200000,
+              "display": "$200K",
+              "exact": "$200,000",
+              "label": "Life cover today"
+            },
+            "right": {
+              "key": "life.recommendedMin.coClient",
+              "value": 1200000,
+              "display": "$1.2M",
+              "exact": "$1,200,000",
+              "label": "Recommended minimum"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Raise mortality coverage",
+            "caption": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+            "voice": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+            "keys": [
+              "move.0.before",
+              "move.0.after",
+              "combo.0.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 0,
+              "title": "Raise mortality coverage",
+              "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+              "effort": "low",
+              "before": 52,
+              "after": 57,
+              "beforeKey": "move.0.before",
+              "afterKey": "move.0.after"
+            },
+            "combo": {
+              "after": 60,
+              "moves": [
+                "Raise mortality coverage",
+                "Add umbrella cover"
+              ],
+              "key": "combo.0.after"
+            }
+          }
+        }
+      },
+      {
+        "id": "card",
+        "emoji": "💳",
+        "move": 0,
+        "label": "The card balance",
+        "short": "the card",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "$18K on the card at 24.9%: $4,482/yr in interest.",
+            "caption": "Emily, there's $18K on your card at 24.9%. That costs you about $4,482/yr in interest.",
+            "voice": "Emily, there's 18 thousand dollars on your card at 24.9 percent. That costs you about 4,482 dollars a year in interest.",
+            "keys": [
+              "card.balance",
+              "card.rate",
+              "card.yearlyInterest"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "idle-cash",
+            "figure": {
+              "key": "card.yearlyInterest",
+              "value": 4482,
+              "display": "$4,482/yr",
+              "exact": "$4,482 a year",
+              "label": "Yearly interest on the Chase Sapphire balance (balance x rate)"
+            }
+          },
+          "compare": null,
+          "move": {
+            "type": "move",
+            "headline": "Raise mortality coverage",
+            "caption": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+            "voice": "One move changes the picture: raise mortality coverage. Your score goes from 52 to 57. Pair it with add umbrella cover, and it reaches 60.",
+            "keys": [
+              "move.0.before",
+              "move.0.after",
+              "combo.0.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 0,
+              "title": "Raise mortality coverage",
+              "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+              "effort": "low",
+              "before": 52,
+              "after": 57,
+              "beforeKey": "move.0.before",
+              "afterKey": "move.0.after"
+            },
+            "combo": {
+              "after": 60,
+              "moves": [
+                "Raise mortality coverage",
+                "Add umbrella cover"
+              ],
+              "key": "combo.0.after"
+            }
+          }
+        }
+      },
+      {
+        "id": "retire",
+        "emoji": "🏖️",
+        "move": 2,
+        "label": "Retiring at 60",
+        "short": "retiring at 60",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "Retire at 60? Income covers 49% of what you'll spend.",
+            "caption": "Emily, you want to retire at 60. Income will cover 49% of what you'll spend. Your savings pay the rest.",
+            "voice": "Emily, you want to retire at 60. Income will cover 49 percent of what you'll spend. Your savings pay the rest.",
+            "keys": [
+              "coClient.retirementAge",
+              "retirement.incomeShareOfNeed"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "retirement",
+            "figure": {
+              "key": "retirement.incomeShareOfNeed",
+              "value": 49,
+              "display": "49%",
+              "exact": "49%",
+              "label": "Share of the yearly retirement spending need that income covers (guaranteed and other income)"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Retirement: what you'll spend vs. what's guaranteed",
+            "caption": "In retirement you'll spend about $124K/yr. Guaranteed income covers $59K/yr. Your savings have to fill the rest.",
+            "voice": "In retirement you'll spend about 124 thousand dollars a year. Guaranteed income covers 59 thousand dollars a year. Your savings have to fill the rest.",
+            "keys": [
+              "retirement.spendingNeed",
+              "retirement.guaranteedIncome"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "retirement.spendingNeed",
+              "value": 124070.59,
+              "display": "$124K/yr",
+              "exact": "$124,071 a year",
+              "label": "Yearly spending need"
+            },
+            "right": {
+              "key": "retirement.guaranteedIncome",
+              "value": 59465.61,
+              "display": "$59K/yr",
+              "exact": "$59,466 a year",
+              "label": "Guaranteed income"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Raise annual savings",
+            "caption": "One move changes the picture: raise annual savings. Your score goes from 52 to 55. Pair it with raise mortality coverage, and it reaches 60.",
+            "voice": "One move changes the picture: raise annual savings. Your score goes from 52 to 55. Pair it with raise mortality coverage, and it reaches 60.",
+            "keys": [
+              "move.2.before",
+              "move.2.after",
+              "combo.1.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 2,
+              "title": "Raise annual savings",
+              "action": "Redirect $15,032/year of free cash flow into savings to raise retirement-directed savings toward the next band",
+              "effort": "medium",
+              "before": 52,
+              "after": 55,
+              "beforeKey": "move.2.before",
+              "afterKey": "move.2.after"
+            },
+            "combo": {
+              "after": 60,
+              "moves": [
+                "Raise mortality coverage",
+                "Raise annual savings"
+              ],
+              "key": "combo.1.after"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "audio": {},
+  "explain": {
+    "pillar.4.points": {
+      "label": "Insurance and protection: points earned",
+      "value": "0",
+      "simple": "Points this area adds to your score.",
+      "expert": "Insurance and protection: points earned: 0. Straight from the Sherpas plan."
+    },
+    "pillar.4.max": {
+      "label": "Insurance and protection: maximum points",
+      "value": "20",
+      "simple": "Points this area adds to your score.",
+      "expert": "Insurance and protection: maximum points: 20. Straight from the Sherpas plan."
+    },
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "52",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 52. Straight from the Sherpas plan."
+    },
+    "pillar.0.points": {
+      "label": "Savings and cash flow: points earned",
+      "value": "16",
+      "simple": "Points this area adds to your score.",
+      "expert": "Savings and cash flow: points earned: 16. Straight from the Sherpas plan."
+    },
+    "pillar.1.points": {
+      "label": "Debt: points earned",
+      "value": "15",
+      "simple": "Points this area adds to your score.",
+      "expert": "Debt: points earned: 15. Straight from the Sherpas plan."
+    },
+    "pillar.2.points": {
+      "label": "Investments: points earned",
+      "value": "8",
+      "simple": "Points this area adds to your score.",
+      "expert": "Investments: points earned: 8. Straight from the Sherpas plan."
+    },
+    "pillar.3.points": {
+      "label": "Liquidity and emergency fund: points earned",
+      "value": "13",
+      "simple": "Points this area adds to your score.",
+      "expert": "Liquidity and emergency fund: points earned: 13. Straight from the Sherpas plan."
+    },
+    "retirement.withdrawalRateAverage": {
+      "label": "Average yearly draw as a share of savings at the start of retirement",
+      "value": "5.5%",
+      "simple": "Average yearly draw as a share of savings at the start of retirement.",
+      "expert": "Average yearly draw as a share of savings at the start of retirement: 5.5% (average over the 31 years of retirement). Straight from the Sherpas plan. A lifetime average. Do not compare it with the 4% sustainable rate."
+    },
+    "retirement.incomeShareOfNeed": {
+      "label": "Share of the yearly retirement spending need that income covers (guaranteed and other income)",
+      "value": "49%",
+      "simple": "Share of the yearly retirement spending need that income covers (guaranteed and other income).",
+      "expert": "Share of the yearly retirement spending need that income covers (guaranteed and other income): 49% (average over the 31 years of retirement). Straight from the Sherpas plan."
+    },
+    "retirement.spendingGap": {
+      "label": "Yearly retirement spending that income does not cover, paid from savings",
+      "value": "$62,932 a year",
+      "simple": "Yearly retirement spending that income does not cover, paid from savings.",
+      "expert": "Yearly retirement spending that income does not cover, paid from savings: $62,932 a year (average over the 31 years of retirement). Straight from the Sherpas plan. Savings, cash and required IRA withdrawals included, pay this each year on average. It is what the plan asks of savings."
+    },
+    "cash.monthsCovered": {
+      "label": "Months of essential expenses accessible cash covers",
+      "value": "1.4 months",
+      "simple": "Months of essential expenses accessible cash covers.",
+      "expert": "Months of essential expenses accessible cash covers: 1.4 months (today, before near-term goals). Straight from the Sherpas plan."
+    },
+    "education.fundingGap": {
+      "label": "College funding still needed beyond current 529 balances",
+      "value": "$106,552",
+      "simple": "College funding still needed beyond current 529 balances.",
+      "expert": "College funding still needed beyond current 529 balances: $106,552 (one lump sum for all college years). Straight from the Sherpas plan. Not the amount to invest today and not the goal. It is larger than the total cost because college costs are inflated to the years they are paid."
+    },
+    "life.shortfall.coClient": {
+      "label": "Emily's life cover shortfall vs the recommended minimum",
+      "value": "$1,000,000",
+      "simple": "Emily's life cover shortfall vs the recommended minimum.",
+      "expert": "Emily's life cover shortfall vs the recommended minimum: $1,000,000. Straight from the Sherpas plan."
+    },
+    "coClient.retirementAge": {
+      "label": "Emily's target retirement age",
+      "value": "age 60",
+      "simple": "Emily's target retirement age.",
+      "expert": "Emily's target retirement age: age 60. Straight from the Sherpas plan."
+    },
+    "life.cover.coClient": {
+      "label": "Emily's life cover today",
+      "value": "$200,000",
+      "simple": "Emily's life cover today.",
+      "expert": "Emily's life cover today: $200,000. Straight from the Sherpas plan."
+    },
+    "life.recommendedMin.coClient": {
+      "label": "Recommended minimum life cover for Emily",
+      "value": "$1,200,000",
+      "simple": "Recommended minimum life cover for Emily.",
+      "expert": "Recommended minimum life cover for Emily: $1,200,000. Straight from the Sherpas plan."
+    },
+    "move.0.before": {
+      "label": "Score today, before \"Raise mortality coverage\"",
+      "value": "52",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Raise mortality coverage\": 52. Straight from the Sherpas plan."
+    },
+    "move.0.after": {
+      "label": "Score after \"Raise mortality coverage\"",
+      "value": "57",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Raise mortality coverage\": 57. Straight from the Sherpas plan."
+    },
+    "combo.0.after": {
+      "label": "Score after doing together: Raise mortality coverage + Add umbrella cover",
+      "value": "60",
+      "simple": "Score after doing together: Raise mortality coverage + Add umbrella cover.",
+      "expert": "Score after doing together: Raise mortality coverage + Add umbrella cover: 60. Straight from the Sherpas plan."
+    },
+    "move.1.before": {
+      "label": "Score today, before \"Add umbrella cover\"",
+      "value": "52",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Add umbrella cover\": 52. Straight from the Sherpas plan."
+    },
+    "move.1.after": {
+      "label": "Score after \"Add umbrella cover\"",
+      "value": "56",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Add umbrella cover\": 56. Straight from the Sherpas plan."
+    },
+    "move.2.before": {
+      "label": "Score today, before \"Raise annual savings\"",
+      "value": "52",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Raise annual savings\": 52. Straight from the Sherpas plan."
+    },
+    "move.2.after": {
+      "label": "Score after \"Raise annual savings\"",
+      "value": "55",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Raise annual savings\": 55. Straight from the Sherpas plan."
+    },
+    "cash.emergencyReserve.min": {
+      "label": "Recommended emergency reserve (8–9 months of essential expenses) (low end)",
+      "value": "$106,860",
+      "simple": "Recommended emergency reserve (8–9 months of essential expenses) (low end).",
+      "expert": "Recommended emergency reserve (8–9 months of essential expenses) (low end): $106,860 (target balance today). Straight from the Sherpas plan."
+    },
+    "cash.emergencyReserve.max": {
+      "label": "Recommended emergency reserve (8–9 months of essential expenses) (high end)",
+      "value": "$120,218",
+      "simple": "Recommended emergency reserve (8–9 months of essential expenses) (high end).",
+      "expert": "Recommended emergency reserve (8–9 months of essential expenses) (high end): $120,218 (target balance today). Straight from the Sherpas plan."
+    },
+    "cash.accessibleCash": {
+      "label": "Accessible cash (bank accounts plus taxable money market)",
+      "value": "$19,000",
+      "simple": "Accessible cash (bank accounts plus taxable money market).",
+      "expert": "Accessible cash (bank accounts plus taxable money market): $19,000 (balance today). Straight from the Sherpas plan."
+    },
+    "combo.1.after": {
+      "label": "Score after doing together: Raise mortality coverage + Raise annual savings",
+      "value": "60",
+      "simple": "Score after doing together: Raise mortality coverage + Raise annual savings.",
+      "expert": "Score after doing together: Raise mortality coverage + Raise annual savings: 60. Straight from the Sherpas plan."
+    },
+    "card.balance": {
+      "label": "Chase Sapphire balance",
+      "value": "$18,000",
+      "simple": "Chase Sapphire balance.",
+      "expert": "Chase Sapphire balance: $18,000. Straight from the Sherpas plan."
+    },
+    "card.rate": {
+      "label": "Chase Sapphire interest rate",
+      "value": "24.9%",
+      "simple": "Chase Sapphire interest rate.",
+      "expert": "Chase Sapphire interest rate: 24.9%. Straight from the Sherpas plan."
+    },
+    "card.yearlyInterest": {
+      "label": "Yearly interest on the Chase Sapphire balance (balance x rate)",
+      "value": "$4,482 a year",
+      "simple": "What the card balance costs you each year just in interest.",
+      "expert": "Yearly interest on the Chase Sapphire balance (balance x rate): $4,482 a year. Calculated from figures in the plan."
+    },
+    "retirement.spendingNeed": {
+      "label": "Yearly retirement spending need (excluding estimated long-term care)",
+      "value": "$124,071 a year",
+      "simple": "What you're expected to spend each year once you stop working, in today's money.",
+      "expert": "Yearly retirement spending need (excluding estimated long-term care): $124,071 a year (average over the 31 years of retirement). Straight from the Sherpas plan. Includes taxes, debt payments and goals after retirement; do not add those on top. annualTotalIncomeNeeded adds an estimated long-term care cost: do not quote it."
+    },
+    "retirement.guaranteedIncome": {
+      "label": "Guaranteed income in retirement (Social Security, annuities, pensions)",
+      "value": "$59,466 a year",
+      "simple": "Money that keeps arriving in retirement no matter what markets do, like Social Security.",
+      "expert": "Guaranteed income in retirement (Social Security, annuities, pensions): $59,466 a year (average over the 31 years of retirement; years before a benefit starts count as zero). Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}

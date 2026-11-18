@@ -1,0 +1,157 @@
+{
+  "caseId": "timothy-melanie-weah",
+  "person": "melanie",
+  "personName": "Melanie",
+  "episode": 3,
+  "title": "Did it work?",
+  "day": 30,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.590Z",
+  "family": {
+    "adults": [
+      {
+        "id": "timothy",
+        "name": "Timothy",
+        "role": "client"
+      },
+      {
+        "id": "melanie",
+        "name": "Melanie",
+        "role": "co-client"
+      }
+    ],
+    "location": "San Francisco, CA",
+    "score": 60,
+    "band": "stable"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "A month ago, your score was 60.",
+      "caption": "Melanie, a month ago your score was 60. You picked one move: pay down revolving card.",
+      "voice": "Melanie, a month ago your score was 60. You picked one move: pay down revolving card.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "check-in",
+      "figure": {
+        "key": "score",
+        "value": 60,
+        "display": "60",
+        "exact": "60",
+        "label": "Financial health score, 0 to 100"
+      }
+    },
+    {
+      "type": "action",
+      "headline": "Did you take your step?",
+      "caption": "So, did you take your step?",
+      "voice": "So, did you take your step?",
+      "keys": [
+        "move.0.before",
+        "move.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "checkin",
+      "cta": [
+        "Yes, done",
+        "Not yet"
+      ],
+      "options": [
+        {
+          "i": 0,
+          "title": "Pay down revolving card",
+          "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+          "effort": "medium",
+          "before": 60,
+          "after": 62,
+          "beforeKey": "move.0.before",
+          "afterKey": "move.0.after"
+        }
+      ]
+    },
+    {
+      "type": "move",
+      "headline": "Pay down revolving card",
+      "caption": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+      "voice": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+      "keys": [
+        "move.0.before",
+        "move.0.after",
+        "combo.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 0,
+        "title": "Pay down revolving card",
+        "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+        "effort": "medium",
+        "before": 60,
+        "after": 62,
+        "beforeKey": "move.0.before",
+        "afterKey": "move.0.after"
+      },
+      "combo": {
+        "after": 78,
+        "moves": [
+          "Pay down revolving card",
+          "Add life cover",
+          "Add umbrella cover"
+        ],
+        "key": "combo.0.after"
+      }
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Melanie",
+      "Mel"
+    ],
+    "household": [
+      "Timothy",
+      "Liam",
+      "Josh"
+    ],
+    "d6": "PROTECTION",
+    "d6Text": "PROTECTION, with low confidence and provisional.",
+    "worries": []
+  },
+  "audio": {},
+  "explain": {
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "60",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 60. Straight from the Sherpas plan."
+    },
+    "move.0.before": {
+      "label": "Score today, before \"Pay down revolving card\"",
+      "value": "60",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Pay down revolving card\": 60. Straight from the Sherpas plan."
+    },
+    "move.0.after": {
+      "label": "Score after \"Pay down revolving card\"",
+      "value": "62",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Pay down revolving card\": 62. Straight from the Sherpas plan."
+    },
+    "combo.0.after": {
+      "label": "Score after doing together: Pay down revolving card + Add life cover + Add umbrella cover",
+      "value": "78",
+      "simple": "Score after doing together: Pay down revolving card + Add life cover + Add umbrella cover.",
+      "expert": "Score after doing together: Pay down revolving card + Add life cover + Add umbrella cover: 78. Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}

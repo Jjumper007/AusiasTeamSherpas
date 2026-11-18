@@ -1,0 +1,1105 @@
+{
+  "caseId": "timothy-melanie-weah",
+  "person": "timothy",
+  "personName": "Timothy",
+  "episode": 1,
+  "title": "Your plan in 60 seconds",
+  "day": 0,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.572Z",
+  "family": {
+    "adults": [
+      {
+        "id": "timothy",
+        "name": "Timothy",
+        "role": "client"
+      },
+      {
+        "id": "melanie",
+        "name": "Melanie",
+        "role": "co-client"
+      }
+    ],
+    "location": "San Francisco, CA",
+    "score": 60,
+    "band": "stable"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "$3,240/yr in card interest. $66K of extra cash, sitting still.",
+      "caption": "Timothy, you pay about $3,240/yr in card interest, while $66K sits above your safety cushion.",
+      "voice": "Timothy, you pay about 3,240 dollars a year in card interest, while 66 thousand dollars sits above your safety cushion.",
+      "keys": [
+        "card.yearlyInterest",
+        "cash.cashAboveReserve"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "idle-cash",
+      "figure": {
+        "key": "card.yearlyInterest",
+        "value": 3240,
+        "display": "$3,240/yr",
+        "exact": "$3,240 a year",
+        "label": "Yearly interest on the Chase CC balance (balance x rate)"
+      }
+    },
+    {
+      "type": "score",
+      "headline": "60",
+      "caption": "Your score is 60. Stable. The base is solid, and a couple of moves would lift it fast.",
+      "voice": "Your score is 60. Stable. The base is solid, and a couple of moves would lift it fast.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "score": 60,
+      "band": "stable",
+      "colour": "yellow"
+    },
+    {
+      "type": "pillars",
+      "headline": "Where your score comes from",
+      "caption": "Five areas make up that score. Your strongest is liquidity and emergency fund. Your weakest is insurance and protection.",
+      "voice": "Five areas make up that score. Your strongest is liquidity and emergency fund. Your weakest is insurance and protection.",
+      "keys": [
+        "pillar.0.points",
+        "pillar.1.points",
+        "pillar.2.points",
+        "pillar.3.points",
+        "pillar.4.points"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "modes": [
+        "straight",
+        "nerd"
+      ],
+      "items": [
+        {
+          "label": "Savings and cash flow",
+          "points": 26,
+          "max": 30,
+          "key": "pillar.0.points"
+        },
+        {
+          "label": "Debt",
+          "points": 12,
+          "max": 20,
+          "key": "pillar.1.points"
+        },
+        {
+          "label": "Investments",
+          "points": 8,
+          "max": 15,
+          "key": "pillar.2.points"
+        },
+        {
+          "label": "Liquidity and emergency fund",
+          "points": 15,
+          "max": 15,
+          "key": "pillar.3.points"
+        },
+        {
+          "label": "Insurance and protection",
+          "points": 7,
+          "max": 20,
+          "key": "pillar.4.points"
+        }
+      ],
+      "best": 3,
+      "worst": 4
+    },
+    {
+      "type": "metrics",
+      "headline": "The numbers behind it",
+      "caption": "For the detail-minded: the numbers behind your score. Tap any of them for the exact figure and where it comes from.",
+      "voice": "For the detail-minded: the numbers behind your score. Tap any of them for the exact figure and where it comes from.",
+      "keys": [
+        "retirement.withdrawalRateAverage",
+        "retirement.incomeShareOfNeed",
+        "retirement.spendingGap",
+        "cash.monthsCovered",
+        "education.fundingGap",
+        "life.shortfall.client"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "modes": [
+        "nerd"
+      ],
+      "tiles": [
+        {
+          "key": "retirement.withdrawalRateAverage",
+          "value": 1,
+          "display": "1%",
+          "exact": "1%",
+          "label": "Average withdrawal rate in retirement"
+        },
+        {
+          "key": "retirement.incomeShareOfNeed",
+          "value": 93,
+          "display": "93%",
+          "exact": "93%",
+          "label": "Retirement spending covered by income"
+        },
+        {
+          "key": "retirement.spendingGap",
+          "value": 12852.82,
+          "display": "$13K/yr",
+          "exact": "$12,853 a year",
+          "label": "Yearly gap your savings must fill"
+        },
+        {
+          "key": "cash.monthsCovered",
+          "value": 16,
+          "display": "16 mo",
+          "exact": "16 months",
+          "label": "Months of expenses in cash"
+        },
+        {
+          "key": "education.fundingGap",
+          "value": 113508.6,
+          "display": "$114K",
+          "exact": "$113,509",
+          "label": "College still to fund"
+        },
+        {
+          "key": "life.shortfall.client",
+          "value": 610000,
+          "display": "$610K",
+          "exact": "$610,000",
+          "label": "Life cover shortfall"
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "headline": "Your savings, year by year",
+      "caption": "This line is your savings, one point per year of your life. You stop working at 62, and the line keeps you going all the way.",
+      "voice": "This line is your savings, one point per year of your life. You stop working at 62, and the line keeps you going all the way.",
+      "keys": [
+        "client.retirementAge"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "series": [
+        {
+          "year": 2026,
+          "age": 40,
+          "value": 371588
+        },
+        {
+          "year": 2027,
+          "age": 41,
+          "value": 449278
+        },
+        {
+          "year": 2028,
+          "age": 42,
+          "value": 524488
+        },
+        {
+          "year": 2029,
+          "age": 43,
+          "value": 614300
+        },
+        {
+          "year": 2030,
+          "age": 44,
+          "value": 561863
+        },
+        {
+          "year": 2031,
+          "age": 45,
+          "value": 663135
+        },
+        {
+          "year": 2032,
+          "age": 46,
+          "value": 772423
+        },
+        {
+          "year": 2033,
+          "age": 47,
+          "value": 890605
+        },
+        {
+          "year": 2034,
+          "age": 48,
+          "value": 1018840
+        },
+        {
+          "year": 2035,
+          "age": 49,
+          "value": 1157086
+        },
+        {
+          "year": 2036,
+          "age": 50,
+          "value": 1306111
+        },
+        {
+          "year": 2037,
+          "age": 51,
+          "value": 1466740
+        },
+        {
+          "year": 2038,
+          "age": 52,
+          "value": 1622749
+        },
+        {
+          "year": 2039,
+          "age": 53,
+          "value": 1791106
+        },
+        {
+          "year": 2040,
+          "age": 54,
+          "value": 1972706
+        },
+        {
+          "year": 2041,
+          "age": 55,
+          "value": 2143579
+        },
+        {
+          "year": 2042,
+          "age": 56,
+          "value": 2351109
+        },
+        {
+          "year": 2043,
+          "age": 57,
+          "value": 2573911
+        },
+        {
+          "year": 2044,
+          "age": 58,
+          "value": 2813143
+        },
+        {
+          "year": 2045,
+          "age": 59,
+          "value": 3094139
+        },
+        {
+          "year": 2046,
+          "age": 60,
+          "value": 3396816
+        },
+        {
+          "year": 2047,
+          "age": 61,
+          "value": 3722822
+        },
+        {
+          "year": 2048,
+          "age": 62,
+          "value": 3849106
+        },
+        {
+          "year": 2049,
+          "age": 63,
+          "value": 3881366
+        },
+        {
+          "year": 2050,
+          "age": 64,
+          "value": 3909846
+        },
+        {
+          "year": 2051,
+          "age": 65,
+          "value": 3926498
+        },
+        {
+          "year": 2052,
+          "age": 66,
+          "value": 3934690
+        },
+        {
+          "year": 2053,
+          "age": 67,
+          "value": 4146811
+        },
+        {
+          "year": 2054,
+          "age": 68,
+          "value": 4437961
+        },
+        {
+          "year": 2055,
+          "age": 69,
+          "value": 4773543
+        },
+        {
+          "year": 2056,
+          "age": 70,
+          "value": 5134524
+        },
+        {
+          "year": 2057,
+          "age": 71,
+          "value": 5522827
+        },
+        {
+          "year": 2058,
+          "age": 72,
+          "value": 5940523
+        },
+        {
+          "year": 2059,
+          "age": 73,
+          "value": 6389838
+        },
+        {
+          "year": 2060,
+          "age": 74,
+          "value": 6873168
+        },
+        {
+          "year": 2061,
+          "age": 75,
+          "value": 7239265
+        },
+        {
+          "year": 2062,
+          "age": 76,
+          "value": 7621320
+        },
+        {
+          "year": 2063,
+          "age": 77,
+          "value": 7889132
+        },
+        {
+          "year": 2064,
+          "age": 78,
+          "value": 8154877
+        },
+        {
+          "year": 2065,
+          "age": 79,
+          "value": 8417479
+        },
+        {
+          "year": 2066,
+          "age": 80,
+          "value": 8674407
+        },
+        {
+          "year": 2067,
+          "age": 81,
+          "value": 8924657
+        },
+        {
+          "year": 2068,
+          "age": 82,
+          "value": 9164697
+        },
+        {
+          "year": 2069,
+          "age": 83,
+          "value": 9394271
+        },
+        {
+          "year": 2070,
+          "age": 84,
+          "value": 9608081
+        },
+        {
+          "year": 2071,
+          "age": 85,
+          "value": 9805864
+        },
+        {
+          "year": 2072,
+          "age": 86,
+          "value": 9983203
+        },
+        {
+          "year": 2073,
+          "age": 87,
+          "value": 10138033
+        },
+        {
+          "year": 2074,
+          "age": 88,
+          "value": 10269474
+        },
+        {
+          "year": 2075,
+          "age": 89,
+          "value": 10371279
+        },
+        {
+          "year": 2076,
+          "age": 90,
+          "value": 10444903
+        },
+        {
+          "year": 2077,
+          "age": 91,
+          "value": 10771100
+        },
+        {
+          "year": 2078,
+          "age": 92,
+          "value": 11255558
+        },
+        {
+          "year": 2079,
+          "age": 93,
+          "value": 11378578
+        }
+      ],
+      "seriesLabel": "Savings and investments",
+      "markers": [
+        {
+          "key": "client.retirementAge",
+          "value": 62,
+          "display": "62",
+          "exact": "age 62",
+          "label": "Retire"
+        }
+      ]
+    },
+    {
+      "type": "compare",
+      "headline": "Two numbers that don't fit together",
+      "caption": "Same household, two numbers that don't fit together. The card costs you $3,240/yr. The extra cash could clear it.",
+      "voice": "Same household, two numbers that don't fit together. The card costs you 3,240 dollars a year. The extra cash could clear it.",
+      "keys": [
+        "card.yearlyInterest",
+        "cash.cashAboveReserve"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "left": {
+        "key": "card.yearlyInterest",
+        "value": 3240,
+        "display": "$3,240/yr",
+        "exact": "$3,240 a year",
+        "label": "Card interest you pay"
+      },
+      "right": {
+        "key": "cash.cashAboveReserve",
+        "value": 66222.5,
+        "display": "$66K",
+        "exact": "$66,223",
+        "label": "Cash above your safety cushion"
+      }
+    },
+    {
+      "type": "move",
+      "headline": "Pay down revolving card",
+      "caption": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+      "voice": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+      "keys": [
+        "move.0.before",
+        "move.0.after",
+        "combo.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 0,
+        "title": "Pay down revolving card",
+        "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+        "effort": "medium",
+        "before": 60,
+        "after": 62,
+        "beforeKey": "move.0.before",
+        "afterKey": "move.0.after"
+      },
+      "combo": {
+        "after": 78,
+        "moves": [
+          "Pay down revolving card",
+          "Add life cover",
+          "Add umbrella cover"
+        ],
+        "key": "combo.0.after"
+      }
+    },
+    {
+      "type": "action",
+      "headline": "Your turn. Pick your first step.",
+      "caption": "Your turn. Pick your first step. Just one.",
+      "voice": "Your turn. Pick your first step. Just one.",
+      "keys": [
+        "move.0.before",
+        "move.0.after",
+        "move.1.before",
+        "move.1.after",
+        "move.2.before",
+        "move.2.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "choose",
+      "cta": [
+        "I'll do this one",
+        "Talk to my advisor"
+      ],
+      "options": [
+        {
+          "i": 0,
+          "title": "Pay down revolving card",
+          "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+          "effort": "medium",
+          "before": 60,
+          "after": 62,
+          "beforeKey": "move.0.before",
+          "afterKey": "move.0.after"
+        },
+        {
+          "i": 1,
+          "title": "Add life cover",
+          "action": "Add $235,000 of life cover to raise the mortality ratio and clear the gate",
+          "effort": "low",
+          "before": 60,
+          "after": 60,
+          "beforeKey": "move.1.before",
+          "afterKey": "move.1.after"
+        },
+        {
+          "i": 2,
+          "title": "Add umbrella cover",
+          "action": "Add $1M of umbrella to raise the liability shield",
+          "effort": "low",
+          "before": 60,
+          "after": 60,
+          "beforeKey": "move.2.before",
+          "afterKey": "move.2.after"
+        }
+      ]
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Timothy",
+      "Tim"
+    ],
+    "household": [
+      "Melanie",
+      "Liam",
+      "Josh"
+    ],
+    "d6": "PROTECTION",
+    "d6Text": "PROTECTION, with low confidence and provisional.",
+    "worries": [
+      {
+        "id": "card",
+        "emoji": "💳",
+        "move": 0,
+        "label": "The card balance",
+        "short": "the card",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "$3,240/yr in card interest. $66K of extra cash, sitting still.",
+            "caption": "Timothy, you pay about $3,240/yr in card interest, while $66K sits above your safety cushion.",
+            "voice": "Timothy, you pay about 3,240 dollars a year in card interest, while 66 thousand dollars sits above your safety cushion.",
+            "keys": [
+              "card.yearlyInterest",
+              "cash.cashAboveReserve"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "idle-cash",
+            "figure": {
+              "key": "card.yearlyInterest",
+              "value": 3240,
+              "display": "$3,240/yr",
+              "exact": "$3,240 a year",
+              "label": "Yearly interest on the Chase CC balance (balance x rate)"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Two numbers that don't fit together",
+            "caption": "Same household, two numbers that don't fit together. The card costs you $3,240/yr. The extra cash could clear it.",
+            "voice": "Same household, two numbers that don't fit together. The card costs you 3,240 dollars a year. The extra cash could clear it.",
+            "keys": [
+              "card.yearlyInterest",
+              "cash.cashAboveReserve"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "card.yearlyInterest",
+              "value": 3240,
+              "display": "$3,240/yr",
+              "exact": "$3,240 a year",
+              "label": "Card interest you pay"
+            },
+            "right": {
+              "key": "cash.cashAboveReserve",
+              "value": 66222.5,
+              "display": "$66K",
+              "exact": "$66,223",
+              "label": "Cash above your safety cushion"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Pay down revolving card",
+            "caption": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+            "voice": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+            "keys": [
+              "move.0.before",
+              "move.0.after",
+              "combo.0.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 0,
+              "title": "Pay down revolving card",
+              "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+              "effort": "medium",
+              "before": 60,
+              "after": 62,
+              "beforeKey": "move.0.before",
+              "afterKey": "move.0.after"
+            },
+            "combo": {
+              "after": 78,
+              "moves": [
+                "Pay down revolving card",
+                "Add life cover",
+                "Add umbrella cover"
+              ],
+              "key": "combo.0.after"
+            }
+          }
+        }
+      },
+      {
+        "id": "college",
+        "emoji": "🎓",
+        "move": 0,
+        "label": "College for Liam and Josh",
+        "short": "college for Liam and Josh",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "College for Liam and Josh: $114K still to fund.",
+            "caption": "Timothy, college for Liam and Josh still needs $114K beyond what's already saved. Saving about $4,609/yr extra, starting now, gets you there.",
+            "voice": "Timothy, college for Liam and Josh still needs 114 thousand dollars beyond what's already saved. Saving about 4,609 dollars a year extra, starting now, gets you there.",
+            "keys": [
+              "education.fundingGap",
+              "education.extraYearlySaving"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "college",
+            "figure": {
+              "key": "education.fundingGap",
+              "value": 113508.6,
+              "display": "$114K",
+              "exact": "$113,509",
+              "label": "College funding still needed beyond current 529 balances"
+            }
+          },
+          "compare": null,
+          "move": {
+            "type": "move",
+            "headline": "Pay down revolving card",
+            "caption": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+            "voice": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+            "keys": [
+              "move.0.before",
+              "move.0.after",
+              "combo.0.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 0,
+              "title": "Pay down revolving card",
+              "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+              "effort": "medium",
+              "before": 60,
+              "after": 62,
+              "beforeKey": "move.0.before",
+              "afterKey": "move.0.after"
+            },
+            "combo": {
+              "after": 78,
+              "moves": [
+                "Pay down revolving card",
+                "Add life cover",
+                "Add umbrella cover"
+              ],
+              "key": "combo.0.after"
+            }
+          }
+        }
+      },
+      {
+        "id": "protection",
+        "emoji": "🛡️",
+        "move": 1,
+        "label": "The family, if something happens",
+        "short": "protecting the family",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "Life cover: $140K. The plan recommends at least $750K.",
+            "caption": "Timothy, if something happened to you, your life cover pays $140K. The plan recommends at least $750K.",
+            "voice": "Timothy, if something happened to you, your life cover pays 140 thousand dollars. The plan recommends at least 750 thousand dollars.",
+            "keys": [
+              "life.cover.client",
+              "life.recommendedMin.client"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "protection",
+            "figure": {
+              "key": "life.cover.client",
+              "value": 140000,
+              "display": "$140K",
+              "exact": "$140,000",
+              "label": "Timothy's life cover today"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Life cover today vs. what the plan recommends",
+            "caption": "Your life cover today is $140K. The plan recommends at least $750K.",
+            "voice": "Your life cover today is 140 thousand dollars. The plan recommends at least 750 thousand dollars.",
+            "keys": [
+              "life.cover.client",
+              "life.recommendedMin.client"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "life.cover.client",
+              "value": 140000,
+              "display": "$140K",
+              "exact": "$140,000",
+              "label": "Life cover today"
+            },
+            "right": {
+              "key": "life.recommendedMin.client",
+              "value": 750000,
+              "display": "$750K",
+              "exact": "$750,000",
+              "label": "Recommended minimum"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Add life cover",
+            "caption": "The move for this: add life cover. It doesn't change the score, it closes a gap the plan flags. Pair it with pay down revolving card and add umbrella cover, and it reaches 78.",
+            "voice": "The move for this: add life cover. It doesn't change the score, it closes a gap the plan flags. Pair it with pay down revolving card and add umbrella cover, and it reaches 78.",
+            "keys": [
+              "combo.0.after",
+              "move.1.before",
+              "move.1.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 1,
+              "title": "Add life cover",
+              "action": "Add $235,000 of life cover to raise the mortality ratio and clear the gate",
+              "effort": "low",
+              "before": 60,
+              "after": 60,
+              "beforeKey": "move.1.before",
+              "afterKey": "move.1.after"
+            },
+            "combo": {
+              "after": 78,
+              "moves": [
+                "Pay down revolving card",
+                "Add life cover",
+                "Add umbrella cover"
+              ],
+              "key": "combo.0.after"
+            }
+          }
+        }
+      },
+      {
+        "id": "home",
+        "emoji": "🏠",
+        "move": 0,
+        "label": "The home in 2030",
+        "short": "the home in 2030",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "A $600K home in 2030. Cash that's free today: $60K.",
+            "caption": "Timothy, the plan buys a home in 2030, priced at $600K. After your safety cushion and near-term goals, $60K of your cash is free today.",
+            "voice": "Timothy, the plan buys a home in 2030, priced at 600 thousand dollars. After your safety cushion and near-term goals, 60 thousand dollars of your cash is free today.",
+            "keys": [
+              "goal.home.amount",
+              "goal.home.year",
+              "cash.cashAboveTotalNeeded"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "home",
+            "figure": {
+              "key": "goal.home.amount",
+              "value": 600000,
+              "display": "$600K",
+              "exact": "$600,000",
+              "label": "Home purchase price in the plan"
+            }
+          },
+          "compare": null,
+          "move": {
+            "type": "move",
+            "headline": "Pay down revolving card",
+            "caption": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+            "voice": "One move changes the picture: pay down revolving card. Your score goes from 60 to 62. Pair it with add life cover and add umbrella cover, and it reaches 78.",
+            "keys": [
+              "move.0.before",
+              "move.0.after",
+              "combo.0.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 0,
+              "title": "Pay down revolving card",
+              "action": "Pay $6,800 on the 18% card from cash to remove high revolving exposure and clear the gate",
+              "effort": "medium",
+              "before": 60,
+              "after": 62,
+              "beforeKey": "move.0.before",
+              "afterKey": "move.0.after"
+            },
+            "combo": {
+              "after": 78,
+              "moves": [
+                "Pay down revolving card",
+                "Add life cover",
+                "Add umbrella cover"
+              ],
+              "key": "combo.0.after"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "audio": {},
+  "explain": {
+    "card.yearlyInterest": {
+      "label": "Yearly interest on the Chase CC balance (balance x rate)",
+      "value": "$3,240 a year",
+      "simple": "What the card balance costs you each year just in interest.",
+      "expert": "Yearly interest on the Chase CC balance (balance x rate): $3,240 a year. Calculated from figures in the plan."
+    },
+    "cash.cashAboveReserve": {
+      "label": "Cash above the top of the emergency reserve, before near-term goals",
+      "value": "$66,223",
+      "simple": "Cash beyond the safety cushion the plan recommends keeping for emergencies.",
+      "expert": "Cash above the top of the emergency reserve, before near-term goals: $66,223 (today). Straight from the Sherpas plan."
+    },
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "60",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 60. Straight from the Sherpas plan."
+    },
+    "pillar.0.points": {
+      "label": "Savings and cash flow: points earned",
+      "value": "26",
+      "simple": "Points this area adds to your score.",
+      "expert": "Savings and cash flow: points earned: 26. Straight from the Sherpas plan."
+    },
+    "pillar.1.points": {
+      "label": "Debt: points earned",
+      "value": "12",
+      "simple": "Points this area adds to your score.",
+      "expert": "Debt: points earned: 12. Straight from the Sherpas plan."
+    },
+    "pillar.2.points": {
+      "label": "Investments: points earned",
+      "value": "8",
+      "simple": "Points this area adds to your score.",
+      "expert": "Investments: points earned: 8. Straight from the Sherpas plan."
+    },
+    "pillar.3.points": {
+      "label": "Liquidity and emergency fund: points earned",
+      "value": "15",
+      "simple": "Points this area adds to your score.",
+      "expert": "Liquidity and emergency fund: points earned: 15. Straight from the Sherpas plan."
+    },
+    "pillar.4.points": {
+      "label": "Insurance and protection: points earned",
+      "value": "7",
+      "simple": "Points this area adds to your score.",
+      "expert": "Insurance and protection: points earned: 7. Straight from the Sherpas plan."
+    },
+    "retirement.withdrawalRateAverage": {
+      "label": "Average yearly draw as a share of savings at the start of retirement",
+      "value": "1%",
+      "simple": "Average yearly draw as a share of savings at the start of retirement.",
+      "expert": "Average yearly draw as a share of savings at the start of retirement: 1% (average over the 31 years of retirement). Straight from the Sherpas plan. A lifetime average. Do not compare it with the 4% sustainable rate."
+    },
+    "retirement.incomeShareOfNeed": {
+      "label": "Share of the yearly retirement spending need that income covers (guaranteed and other income)",
+      "value": "93%",
+      "simple": "Share of the yearly retirement spending need that income covers (guaranteed and other income).",
+      "expert": "Share of the yearly retirement spending need that income covers (guaranteed and other income): 93% (average over the 31 years of retirement). Straight from the Sherpas plan."
+    },
+    "retirement.spendingGap": {
+      "label": "Yearly retirement spending that income does not cover, paid from savings",
+      "value": "$12,853 a year",
+      "simple": "Yearly retirement spending that income does not cover, paid from savings.",
+      "expert": "Yearly retirement spending that income does not cover, paid from savings: $12,853 a year (average over the 31 years of retirement). Straight from the Sherpas plan. Savings, cash and required IRA withdrawals included, pay this each year on average. It is what the plan asks of savings."
+    },
+    "cash.monthsCovered": {
+      "label": "Months of essential expenses accessible cash covers",
+      "value": "16 months",
+      "simple": "Months of essential expenses accessible cash covers.",
+      "expert": "Months of essential expenses accessible cash covers: 16 months (today, before near-term goals). Straight from the Sherpas plan."
+    },
+    "education.fundingGap": {
+      "label": "College funding still needed beyond current 529 balances",
+      "value": "$113,509",
+      "simple": "College funding still needed beyond current 529 balances.",
+      "expert": "College funding still needed beyond current 529 balances: $113,509 (one lump sum for all college years). Straight from the Sherpas plan. Not the amount to invest today and not the goal. It is larger than the total cost because college costs are inflated to the years they are paid."
+    },
+    "life.shortfall.client": {
+      "label": "Timothy's life cover shortfall vs the recommended minimum",
+      "value": "$610,000",
+      "simple": "Timothy's life cover shortfall vs the recommended minimum.",
+      "expert": "Timothy's life cover shortfall vs the recommended minimum: $610,000. Straight from the Sherpas plan."
+    },
+    "client.retirementAge": {
+      "label": "Timothy's target retirement age",
+      "value": "age 62",
+      "simple": "Timothy's target retirement age.",
+      "expert": "Timothy's target retirement age: age 62. Straight from the Sherpas plan."
+    },
+    "move.0.before": {
+      "label": "Score today, before \"Pay down revolving card\"",
+      "value": "60",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Pay down revolving card\": 60. Straight from the Sherpas plan."
+    },
+    "move.0.after": {
+      "label": "Score after \"Pay down revolving card\"",
+      "value": "62",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Pay down revolving card\": 62. Straight from the Sherpas plan."
+    },
+    "combo.0.after": {
+      "label": "Score after doing together: Pay down revolving card + Add life cover + Add umbrella cover",
+      "value": "78",
+      "simple": "Score after doing together: Pay down revolving card + Add life cover + Add umbrella cover.",
+      "expert": "Score after doing together: Pay down revolving card + Add life cover + Add umbrella cover: 78. Straight from the Sherpas plan."
+    },
+    "move.1.before": {
+      "label": "Score today, before \"Add life cover\"",
+      "value": "60",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Add life cover\": 60. Straight from the Sherpas plan."
+    },
+    "move.1.after": {
+      "label": "Score after \"Add life cover\"",
+      "value": "60",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Add life cover\": 60. Straight from the Sherpas plan."
+    },
+    "move.2.before": {
+      "label": "Score today, before \"Add umbrella cover\"",
+      "value": "60",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Add umbrella cover\": 60. Straight from the Sherpas plan."
+    },
+    "move.2.after": {
+      "label": "Score after \"Add umbrella cover\"",
+      "value": "60",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Add umbrella cover\": 60. Straight from the Sherpas plan."
+    },
+    "education.extraYearlySaving": {
+      "label": "Extra yearly saving needed for college (first year)",
+      "value": "$4,609 a year",
+      "simple": "Extra yearly saving needed for college (first year).",
+      "expert": "Extra yearly saving needed for college (first year): $4,609 a year (per year from now until each child starts college, rising each year). Straight from the Sherpas plan."
+    },
+    "life.cover.client": {
+      "label": "Timothy's life cover today",
+      "value": "$140,000",
+      "simple": "Timothy's life cover today.",
+      "expert": "Timothy's life cover today: $140,000. Straight from the Sherpas plan."
+    },
+    "life.recommendedMin.client": {
+      "label": "Recommended minimum life cover for Timothy",
+      "value": "$750,000",
+      "simple": "Recommended minimum life cover for Timothy.",
+      "expert": "Recommended minimum life cover for Timothy: $750,000. Straight from the Sherpas plan."
+    },
+    "goal.home.amount": {
+      "label": "Home purchase price in the plan",
+      "value": "$600,000",
+      "simple": "Home purchase price in the plan.",
+      "expert": "Home purchase price in the plan: $600,000. Straight from the Sherpas plan."
+    },
+    "goal.home.year": {
+      "label": "Year of the planned home purchase",
+      "value": "2030",
+      "simple": "Year of the planned home purchase.",
+      "expert": "Year of the planned home purchase: 2030. Straight from the Sherpas plan."
+    },
+    "cash.cashAboveTotalNeeded": {
+      "label": "Cash above the emergency reserve and near-term goals",
+      "value": "$60,223",
+      "simple": "Cash above the emergency reserve and near-term goals.",
+      "expert": "Cash above the emergency reserve and near-term goals: $60,223 (today). Straight from the Sherpas plan. This is the cash that is free after the reserve and the near-term goals. Say it is above both; never call it the amount above the reserve or the reserve target."
+    }
+  },
+  "report": []
+}

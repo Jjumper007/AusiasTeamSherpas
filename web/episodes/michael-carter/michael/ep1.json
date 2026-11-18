@@ -1,0 +1,1119 @@
+{
+  "caseId": "michael-carter",
+  "person": "michael",
+  "personName": "Michael",
+  "episode": 1,
+  "title": "Your plan in 60 seconds",
+  "day": 0,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:25:14.955Z",
+  "family": {
+    "adults": [
+      {
+        "id": "michael",
+        "name": "Michael",
+        "role": "client"
+      }
+    ],
+    "location": "Austin, TX",
+    "score": 26,
+    "band": "critical"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "Retire at 58? Today, the money runs out at 85.",
+      "caption": "Michael, you want to retire at 58. Today, your savings run out at 85.",
+      "voice": "Michael, you want to retire at 58. Today, your savings run out at 85.",
+      "keys": [
+        "client.retirementAge",
+        "retirement.savingsRunOutAge"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "retirement",
+      "figure": {
+        "key": "retirement.savingsRunOutAge",
+        "value": 85,
+        "display": "85",
+        "exact": "age 85",
+        "label": "Age at which savings and investments run out"
+      }
+    },
+    {
+      "type": "score",
+      "headline": "26",
+      "caption": "Your financial health score is 26 out of a hundred. Critical. But it's a starting line, not a verdict.",
+      "voice": "Your financial health score is 26 out of a hundred. Critical. But it's a starting line, not a verdict.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "score": 26,
+      "band": "critical",
+      "colour": "red"
+    },
+    {
+      "type": "pillars",
+      "headline": "Where your score comes from",
+      "caption": "Five areas make up that score. Your strongest is debt. Your weakest is savings and cash flow.",
+      "voice": "Five areas make up that score. Your strongest is debt. Your weakest is savings and cash flow.",
+      "keys": [
+        "pillar.0.points",
+        "pillar.1.points",
+        "pillar.2.points",
+        "pillar.3.points",
+        "pillar.4.points"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "modes": [
+        "straight",
+        "nerd"
+      ],
+      "items": [
+        {
+          "label": "Savings and cash flow",
+          "points": 0,
+          "max": 25,
+          "key": "pillar.0.points"
+        },
+        {
+          "label": "Debt",
+          "points": 8,
+          "max": 10,
+          "key": "pillar.1.points"
+        },
+        {
+          "label": "Investments",
+          "points": 11,
+          "max": 25,
+          "key": "pillar.2.points"
+        },
+        {
+          "label": "Liquidity and emergency fund",
+          "points": 4,
+          "max": 20,
+          "key": "pillar.3.points"
+        },
+        {
+          "label": "Insurance and protection",
+          "points": 4,
+          "max": 20,
+          "key": "pillar.4.points"
+        }
+      ],
+      "best": 1,
+      "worst": 0
+    },
+    {
+      "type": "metrics",
+      "headline": "The numbers behind it",
+      "caption": "For the detail-minded: the numbers behind your score. Tap any of them for the exact figure and where it comes from.",
+      "voice": "For the detail-minded: the numbers behind your score. Tap any of them for the exact figure and where it comes from.",
+      "keys": [
+        "retirement.savingsRunOutAge",
+        "retirement.withdrawalRateAverage",
+        "retirement.incomeShareOfNeed",
+        "retirement.spendingGap",
+        "cash.monthsCovered",
+        "life.shortfall.client"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "modes": [
+        "nerd"
+      ],
+      "tiles": [
+        {
+          "key": "retirement.savingsRunOutAge",
+          "value": 85,
+          "display": "85",
+          "exact": "age 85",
+          "label": "Age savings run out"
+        },
+        {
+          "key": "retirement.withdrawalRateAverage",
+          "value": 5.6,
+          "display": "5.6%",
+          "exact": "5.6%",
+          "label": "Average withdrawal rate in retirement"
+        },
+        {
+          "key": "retirement.incomeShareOfNeed",
+          "value": 34,
+          "display": "34%",
+          "exact": "34%",
+          "label": "Retirement spending covered by income"
+        },
+        {
+          "key": "retirement.spendingGap",
+          "value": 59612.79,
+          "display": "$60K/yr",
+          "exact": "$59,613 a year",
+          "label": "Yearly gap your savings must fill"
+        },
+        {
+          "key": "cash.monthsCovered",
+          "value": 3.2,
+          "display": "3.2 mo",
+          "exact": "3.2 months",
+          "label": "Months of expenses in cash"
+        },
+        {
+          "key": "life.shortfall.client",
+          "value": 720000,
+          "display": "$720K",
+          "exact": "$720,000",
+          "label": "Life cover shortfall"
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "headline": "Your savings, year by year",
+      "caption": "This line is your savings, one point per year of your life. You stop working at 58. Then the line falls, and it hits zero at 85.",
+      "voice": "This line is your savings, one point per year of your life. You stop working at 58. Then the line falls, and it hits zero at 85.",
+      "keys": [
+        "client.retirementAge",
+        "retirement.savingsRunOutAge"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "series": [
+        {
+          "year": 2026,
+          "age": 37,
+          "value": 178717
+        },
+        {
+          "year": 2027,
+          "age": 38,
+          "value": 81172
+        },
+        {
+          "year": 2028,
+          "age": 39,
+          "value": 95902
+        },
+        {
+          "year": 2029,
+          "age": 40,
+          "value": 125852
+        },
+        {
+          "year": 2030,
+          "age": 41,
+          "value": 168253
+        },
+        {
+          "year": 2031,
+          "age": 42,
+          "value": 220835
+        },
+        {
+          "year": 2032,
+          "age": 43,
+          "value": 279056
+        },
+        {
+          "year": 2033,
+          "age": 44,
+          "value": 343382
+        },
+        {
+          "year": 2034,
+          "age": 45,
+          "value": 414064
+        },
+        {
+          "year": 2035,
+          "age": 46,
+          "value": 490947
+        },
+        {
+          "year": 2036,
+          "age": 47,
+          "value": 574395
+        },
+        {
+          "year": 2037,
+          "age": 48,
+          "value": 664934
+        },
+        {
+          "year": 2038,
+          "age": 49,
+          "value": 763133
+        },
+        {
+          "year": 2039,
+          "age": 50,
+          "value": 869605
+        },
+        {
+          "year": 2040,
+          "age": 51,
+          "value": 985008
+        },
+        {
+          "year": 2041,
+          "age": 52,
+          "value": 1110046
+        },
+        {
+          "year": 2042,
+          "age": 53,
+          "value": 1245478
+        },
+        {
+          "year": 2043,
+          "age": 54,
+          "value": 1392123
+        },
+        {
+          "year": 2044,
+          "age": 55,
+          "value": 1550861
+        },
+        {
+          "year": 2045,
+          "age": 56,
+          "value": 1722644
+        },
+        {
+          "year": 2046,
+          "age": 57,
+          "value": 1908497
+        },
+        {
+          "year": 2047,
+          "age": 58,
+          "value": 1949763
+        },
+        {
+          "year": 2048,
+          "age": 59,
+          "value": 1915159
+        },
+        {
+          "year": 2049,
+          "age": 60,
+          "value": 1873361
+        },
+        {
+          "year": 2050,
+          "age": 61,
+          "value": 1823675
+        },
+        {
+          "year": 2051,
+          "age": 62,
+          "value": 1760504
+        },
+        {
+          "year": 2052,
+          "age": 63,
+          "value": 1663937
+        },
+        {
+          "year": 2053,
+          "age": 64,
+          "value": 1548941
+        },
+        {
+          "year": 2054,
+          "age": 65,
+          "value": 1405516
+        },
+        {
+          "year": 2055,
+          "age": 66,
+          "value": 1237402
+        },
+        {
+          "year": 2056,
+          "age": 67,
+          "value": 1125478
+        },
+        {
+          "year": 2057,
+          "age": 68,
+          "value": 1066679
+        },
+        {
+          "year": 2058,
+          "age": 69,
+          "value": 1008458
+        },
+        {
+          "year": 2059,
+          "age": 70,
+          "value": 948978
+        },
+        {
+          "year": 2060,
+          "age": 71,
+          "value": 881919
+        },
+        {
+          "year": 2061,
+          "age": 72,
+          "value": 805174
+        },
+        {
+          "year": 2062,
+          "age": 73,
+          "value": 717522
+        },
+        {
+          "year": 2063,
+          "age": 74,
+          "value": 623386
+        },
+        {
+          "year": 2064,
+          "age": 75,
+          "value": 559828
+        },
+        {
+          "year": 2065,
+          "age": 76,
+          "value": 497847
+        },
+        {
+          "year": 2066,
+          "age": 77,
+          "value": 436531
+        },
+        {
+          "year": 2067,
+          "age": 78,
+          "value": 376111
+        },
+        {
+          "year": 2068,
+          "age": 79,
+          "value": 316843
+        },
+        {
+          "year": 2069,
+          "age": 80,
+          "value": 259007
+        },
+        {
+          "year": 2070,
+          "age": 81,
+          "value": 202914
+        },
+        {
+          "year": 2071,
+          "age": 82,
+          "value": 148903
+        },
+        {
+          "year": 2072,
+          "age": 83,
+          "value": 97348
+        },
+        {
+          "year": 2073,
+          "age": 84,
+          "value": 48660
+        },
+        {
+          "year": 2074,
+          "age": 85,
+          "value": 3288
+        },
+        {
+          "year": 2075,
+          "age": 86,
+          "value": 0
+        },
+        {
+          "year": 2076,
+          "age": 87,
+          "value": 0
+        },
+        {
+          "year": 2077,
+          "age": 88,
+          "value": 0
+        },
+        {
+          "year": 2078,
+          "age": 89,
+          "value": 0
+        },
+        {
+          "year": 2079,
+          "age": 90,
+          "value": 0
+        },
+        {
+          "year": 2080,
+          "age": 91,
+          "value": 0
+        }
+      ],
+      "seriesLabel": "Savings and investments",
+      "markers": [
+        {
+          "key": "client.retirementAge",
+          "value": 58,
+          "display": "58",
+          "exact": "age 58",
+          "label": "Retire"
+        },
+        {
+          "key": "retirement.savingsRunOutAge",
+          "value": 85,
+          "display": "85",
+          "exact": "age 85",
+          "label": "Savings run out"
+        }
+      ]
+    },
+    {
+      "type": "compare",
+      "headline": "Retirement: what you'll spend vs. what's guaranteed",
+      "caption": "In retirement you'll spend about $90K/yr. Guaranteed income covers $30K/yr. Your savings have to fill the rest.",
+      "voice": "In retirement you'll spend about 90 thousand dollars a year. Guaranteed income covers 30 thousand dollars a year. Your savings have to fill the rest.",
+      "keys": [
+        "retirement.spendingNeed",
+        "retirement.guaranteedIncome"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "left": {
+        "key": "retirement.spendingNeed",
+        "value": 89648.57,
+        "display": "$90K/yr",
+        "exact": "$89,649 a year",
+        "label": "Yearly spending need"
+      },
+      "right": {
+        "key": "retirement.guaranteedIncome",
+        "value": 30035.78,
+        "display": "$30K/yr",
+        "exact": "$30,036 a year",
+        "label": "Guaranteed income"
+      }
+    },
+    {
+      "type": "move",
+      "headline": "Lower the withdrawal rate",
+      "caption": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+      "voice": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+      "keys": [
+        "move.1.before",
+        "move.1.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 1,
+        "title": "Lower the withdrawal rate",
+        "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+        "effort": "high",
+        "before": 26,
+        "after": 62,
+        "beforeKey": "move.1.before",
+        "afterKey": "move.1.after"
+      },
+      "combo": null
+    },
+    {
+      "type": "action",
+      "headline": "Your turn. Pick your first step.",
+      "caption": "Your turn. Pick your first step. Just one.",
+      "voice": "Your turn. Pick your first step. Just one.",
+      "keys": [
+        "move.1.before",
+        "move.1.after",
+        "move.0.before",
+        "move.0.after",
+        "move.2.before",
+        "move.2.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "choose",
+      "cta": [
+        "I'll do this one",
+        "Talk to my advisor"
+      ],
+      "options": [
+        {
+          "i": 1,
+          "title": "Lower the withdrawal rate",
+          "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+          "effort": "high",
+          "before": 26,
+          "after": 62,
+          "beforeKey": "move.1.before",
+          "afterKey": "move.1.after"
+        },
+        {
+          "i": 0,
+          "title": "Add umbrella cover",
+          "action": "Add $1M of umbrella to raise the liability shield",
+          "effort": "low",
+          "before": 26,
+          "after": 31,
+          "beforeKey": "move.0.before",
+          "afterKey": "move.0.after"
+        },
+        {
+          "i": 2,
+          "title": "Raise growth allocation toward glide",
+          "action": "Move the invested mix from 74% to 88% growth (glide 98%) for the next horizon-fit band — about $19,900 of the invested book",
+          "effort": "high",
+          "before": 26,
+          "after": 31,
+          "beforeKey": "move.2.before",
+          "afterKey": "move.2.after"
+        }
+      ]
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Michael",
+      "Mike"
+    ],
+    "household": [],
+    "d6": "FREEDOM",
+    "d6Text": "FREEDOM, CONFIDENCE: LOW and PROVISIONAL.",
+    "worries": [
+      {
+        "id": "retire",
+        "emoji": "🏖️",
+        "move": 1,
+        "label": "Retiring at 58",
+        "short": "retiring at 58",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "Retire at 58? Today, the money runs out at 85.",
+            "caption": "Michael, you want to retire at 58. Today, your savings run out at 85.",
+            "voice": "Michael, you want to retire at 58. Today, your savings run out at 85.",
+            "keys": [
+              "client.retirementAge",
+              "retirement.savingsRunOutAge"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "retirement",
+            "figure": {
+              "key": "retirement.savingsRunOutAge",
+              "value": 85,
+              "display": "85",
+              "exact": "age 85",
+              "label": "Age at which savings and investments run out"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Retirement: what you'll spend vs. what's guaranteed",
+            "caption": "In retirement you'll spend about $90K/yr. Guaranteed income covers $30K/yr. Your savings have to fill the rest.",
+            "voice": "In retirement you'll spend about 90 thousand dollars a year. Guaranteed income covers 30 thousand dollars a year. Your savings have to fill the rest.",
+            "keys": [
+              "retirement.spendingNeed",
+              "retirement.guaranteedIncome"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "retirement.spendingNeed",
+              "value": 89648.57,
+              "display": "$90K/yr",
+              "exact": "$89,649 a year",
+              "label": "Yearly spending need"
+            },
+            "right": {
+              "key": "retirement.guaranteedIncome",
+              "value": 30035.78,
+              "display": "$30K/yr",
+              "exact": "$30,036 a year",
+              "label": "Guaranteed income"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Lower the withdrawal rate",
+            "caption": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+            "voice": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+            "keys": [
+              "move.1.before",
+              "move.1.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 1,
+              "title": "Lower the withdrawal rate",
+              "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+              "effort": "high",
+              "before": 26,
+              "after": 62,
+              "beforeKey": "move.1.before",
+              "afterKey": "move.1.after"
+            },
+            "combo": null
+          }
+        }
+      },
+      {
+        "id": "home",
+        "emoji": "🏠",
+        "move": 1,
+        "label": "The home in 2027",
+        "short": "the home in 2027",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "The home in 2027 needs $113K set aside. You hold $30K.",
+            "caption": "Michael, you want to buy a home in 2027. The plan sets aside $113K in cash for it. Today you hold $30K.",
+            "voice": "Michael, you want to buy a home in 2027. The plan sets aside 113 thousand dollars in cash for it. Today you hold 30 thousand dollars.",
+            "keys": [
+              "goal.home.year",
+              "cash.nearTerm.home",
+              "cash.accessibleCash"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "home",
+            "figure": {
+              "key": "cash.nearTerm.home",
+              "value": 113300,
+              "display": "$113K",
+              "exact": "$113,300",
+              "label": "Purchase a home: cash to hold for its next payment"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "The home: cash it needs vs. cash you have",
+            "caption": "The plan holds $113K for the home's next payment. Your accessible cash today is $30K.",
+            "voice": "The plan holds 113 thousand dollars for the home's next payment. Your accessible cash today is 30 thousand dollars.",
+            "keys": [
+              "cash.nearTerm.home",
+              "cash.accessibleCash"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "cash.nearTerm.home",
+              "value": 113300,
+              "display": "$113K",
+              "exact": "$113,300",
+              "label": "Cash to set aside for the home"
+            },
+            "right": {
+              "key": "cash.accessibleCash",
+              "value": 30000,
+              "display": "$30K",
+              "exact": "$30,000",
+              "label": "Accessible cash today"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Lower the withdrawal rate",
+            "caption": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+            "voice": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+            "keys": [
+              "move.1.before",
+              "move.1.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 1,
+              "title": "Lower the withdrawal rate",
+              "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+              "effort": "high",
+              "before": 26,
+              "after": 62,
+              "beforeKey": "move.1.before",
+              "afterKey": "move.1.after"
+            },
+            "combo": null
+          }
+        }
+      },
+      {
+        "id": "cushion",
+        "emoji": "🛟",
+        "move": 1,
+        "label": "A cushion if things go wrong",
+        "short": "your safety cushion",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "If your income stopped, your cash would last 3.2 mo.",
+            "caption": "Michael, if your income stopped tomorrow, your cash would last 3.2 mo. The plan recommends keeping $47K to $56K aside.",
+            "voice": "Michael, if your income stopped tomorrow, your cash would last 3.2 months. The plan recommends keeping 47 thousand dollars to 56 thousand dollars aside.",
+            "keys": [
+              "cash.monthsCovered",
+              "cash.emergencyReserve.min",
+              "cash.emergencyReserve.max"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "cushion",
+            "figure": {
+              "key": "cash.monthsCovered",
+              "value": 3.2,
+              "display": "3.2 mo",
+              "exact": "3.2 months",
+              "label": "Months of essential expenses accessible cash covers"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Your cash vs. the cushion the plan recommends",
+            "caption": "You can reach $30K in cash. The plan's recommended cushion starts at $47K.",
+            "voice": "You can reach 30 thousand dollars in cash. The plan's recommended cushion starts at 47 thousand dollars.",
+            "keys": [
+              "cash.accessibleCash",
+              "cash.emergencyReserve.min"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "cash.accessibleCash",
+              "value": 30000,
+              "display": "$30K",
+              "exact": "$30,000",
+              "label": "Accessible cash today"
+            },
+            "right": {
+              "key": "cash.emergencyReserve.min",
+              "value": 46530,
+              "display": "$47K",
+              "exact": "$46,530",
+              "label": "Recommended cushion (low end)"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Lower the withdrawal rate",
+            "caption": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+            "voice": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+            "keys": [
+              "move.1.before",
+              "move.1.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 1,
+              "title": "Lower the withdrawal rate",
+              "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+              "effort": "high",
+              "before": 26,
+              "after": 62,
+              "beforeKey": "move.1.before",
+              "afterKey": "move.1.after"
+            },
+            "combo": null
+          }
+        }
+      },
+      {
+        "id": "protection",
+        "emoji": "🛡️",
+        "move": 0,
+        "label": "Being covered if something happens",
+        "short": "being covered",
+        "scenes": {
+          "hook": {
+            "type": "hook",
+            "headline": "Life cover: $180K. The plan recommends at least $900K.",
+            "caption": "Michael, if something happened to you, your life cover pays $180K. The plan recommends at least $900K.",
+            "voice": "Michael, if something happened to you, your life cover pays 180 thousand dollars. The plan recommends at least 900 thousand dollars.",
+            "keys": [
+              "life.cover.client",
+              "life.recommendedMin.client"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "theme": "protection",
+            "figure": {
+              "key": "life.cover.client",
+              "value": 180000,
+              "display": "$180K",
+              "exact": "$180,000",
+              "label": "Michael's life cover today"
+            }
+          },
+          "compare": {
+            "type": "compare",
+            "headline": "Life cover today vs. what the plan recommends",
+            "caption": "Your life cover today is $180K. The plan recommends at least $900K.",
+            "voice": "Your life cover today is 180 thousand dollars. The plan recommends at least 900 thousand dollars.",
+            "keys": [
+              "life.cover.client",
+              "life.recommendedMin.client"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "left": {
+              "key": "life.cover.client",
+              "value": 180000,
+              "display": "$180K",
+              "exact": "$180,000",
+              "label": "Life cover today"
+            },
+            "right": {
+              "key": "life.recommendedMin.client",
+              "value": 900000,
+              "display": "$900K",
+              "exact": "$900,000",
+              "label": "Recommended minimum"
+            }
+          },
+          "move": {
+            "type": "move",
+            "headline": "Add umbrella cover",
+            "caption": "One move changes the picture: add umbrella cover. Your score goes from 26 to 31.",
+            "voice": "One move changes the picture: add umbrella cover. Your score goes from 26 to 31.",
+            "keys": [
+              "move.0.before",
+              "move.0.after"
+            ],
+            "from": {
+              "headline": "template",
+              "voice": "template"
+            },
+            "move": {
+              "i": 0,
+              "title": "Add umbrella cover",
+              "action": "Add $1M of umbrella to raise the liability shield",
+              "effort": "low",
+              "before": 26,
+              "after": 31,
+              "beforeKey": "move.0.before",
+              "afterKey": "move.0.after"
+            },
+            "combo": null
+          }
+        }
+      }
+    ]
+  },
+  "audio": {},
+  "explain": {
+    "client.retirementAge": {
+      "label": "Michael's target retirement age",
+      "value": "age 58",
+      "simple": "Michael's target retirement age.",
+      "expert": "Michael's target retirement age: age 58. Straight from the Sherpas plan."
+    },
+    "retirement.savingsRunOutAge": {
+      "label": "Age at which savings and investments run out",
+      "value": "age 85",
+      "simple": "The age when, if nothing changes, your savings and investments would be used up.",
+      "expert": "Age at which savings and investments run out: age 85. Straight from the Sherpas plan."
+    },
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "26",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 26. Straight from the Sherpas plan."
+    },
+    "pillar.0.points": {
+      "label": "Savings and cash flow: points earned",
+      "value": "0",
+      "simple": "Points this area adds to your score.",
+      "expert": "Savings and cash flow: points earned: 0. Straight from the Sherpas plan."
+    },
+    "pillar.1.points": {
+      "label": "Debt: points earned",
+      "value": "8",
+      "simple": "Points this area adds to your score.",
+      "expert": "Debt: points earned: 8. Straight from the Sherpas plan."
+    },
+    "pillar.2.points": {
+      "label": "Investments: points earned",
+      "value": "11",
+      "simple": "Points this area adds to your score.",
+      "expert": "Investments: points earned: 11. Straight from the Sherpas plan."
+    },
+    "pillar.3.points": {
+      "label": "Liquidity and emergency fund: points earned",
+      "value": "4",
+      "simple": "Points this area adds to your score.",
+      "expert": "Liquidity and emergency fund: points earned: 4. Straight from the Sherpas plan."
+    },
+    "pillar.4.points": {
+      "label": "Insurance and protection: points earned",
+      "value": "4",
+      "simple": "Points this area adds to your score.",
+      "expert": "Insurance and protection: points earned: 4. Straight from the Sherpas plan."
+    },
+    "retirement.withdrawalRateAverage": {
+      "label": "Average yearly draw as a share of savings at the start of retirement",
+      "value": "5.6%",
+      "simple": "Average yearly draw as a share of savings at the start of retirement.",
+      "expert": "Average yearly draw as a share of savings at the start of retirement: 5.6% (average over the 33 years of retirement). Straight from the Sherpas plan. A lifetime average. Do not compare it with the 4% sustainable rate."
+    },
+    "retirement.incomeShareOfNeed": {
+      "label": "Share of the yearly retirement spending need that income covers (guaranteed and other income)",
+      "value": "34%",
+      "simple": "Share of the yearly retirement spending need that income covers (guaranteed and other income).",
+      "expert": "Share of the yearly retirement spending need that income covers (guaranteed and other income): 34% (average over the 33 years of retirement). Straight from the Sherpas plan."
+    },
+    "retirement.spendingGap": {
+      "label": "Yearly retirement spending that income does not cover, paid from savings",
+      "value": "$59,613 a year",
+      "simple": "Yearly retirement spending that income does not cover, paid from savings.",
+      "expert": "Yearly retirement spending that income does not cover, paid from savings: $59,613 a year (average over the 33 years of retirement). Straight from the Sherpas plan. Savings, cash and required IRA withdrawals included, pay this each year on average. It is what the plan asks of savings."
+    },
+    "cash.monthsCovered": {
+      "label": "Months of essential expenses accessible cash covers",
+      "value": "3.2 months",
+      "simple": "Months of essential expenses accessible cash covers.",
+      "expert": "Months of essential expenses accessible cash covers: 3.2 months (today, before near-term goals). Straight from the Sherpas plan."
+    },
+    "life.shortfall.client": {
+      "label": "Michael's life cover shortfall vs the recommended minimum",
+      "value": "$720,000",
+      "simple": "Michael's life cover shortfall vs the recommended minimum.",
+      "expert": "Michael's life cover shortfall vs the recommended minimum: $720,000. Straight from the Sherpas plan."
+    },
+    "retirement.spendingNeed": {
+      "label": "Yearly retirement spending need (excluding estimated long-term care)",
+      "value": "$89,649 a year",
+      "simple": "What you're expected to spend each year once you stop working, in today's money.",
+      "expert": "Yearly retirement spending need (excluding estimated long-term care): $89,649 a year (average over the 33 years of retirement). Straight from the Sherpas plan. Includes taxes, debt payments and goals after retirement; do not add those on top. annualTotalIncomeNeeded adds an estimated long-term care cost: do not quote it."
+    },
+    "retirement.guaranteedIncome": {
+      "label": "Guaranteed income in retirement (Social Security, annuities, pensions)",
+      "value": "$30,036 a year",
+      "simple": "Money that keeps arriving in retirement no matter what markets do, like Social Security.",
+      "expert": "Guaranteed income in retirement (Social Security, annuities, pensions): $30,036 a year (average over the 33 years of retirement; years before a benefit starts count as zero). Straight from the Sherpas plan."
+    },
+    "move.1.before": {
+      "label": "Score today, before \"Lower the withdrawal rate\"",
+      "value": "26",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Lower the withdrawal rate\": 26. Straight from the Sherpas plan."
+    },
+    "move.1.after": {
+      "label": "Score after \"Lower the withdrawal rate\"",
+      "value": "62",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Lower the withdrawal rate\": 62. Straight from the Sherpas plan."
+    },
+    "move.0.before": {
+      "label": "Score today, before \"Add umbrella cover\"",
+      "value": "26",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Add umbrella cover\": 26. Straight from the Sherpas plan."
+    },
+    "move.0.after": {
+      "label": "Score after \"Add umbrella cover\"",
+      "value": "31",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Add umbrella cover\": 31. Straight from the Sherpas plan."
+    },
+    "move.2.before": {
+      "label": "Score today, before \"Raise growth allocation toward glide\"",
+      "value": "26",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Raise growth allocation toward glide\": 26. Straight from the Sherpas plan."
+    },
+    "move.2.after": {
+      "label": "Score after \"Raise growth allocation toward glide\"",
+      "value": "31",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Raise growth allocation toward glide\": 31. Straight from the Sherpas plan."
+    },
+    "goal.home.year": {
+      "label": "Year of the planned home purchase",
+      "value": "2027",
+      "simple": "Year of the planned home purchase.",
+      "expert": "Year of the planned home purchase: 2027. Straight from the Sherpas plan."
+    },
+    "cash.nearTerm.home": {
+      "label": "Purchase a home: cash to hold for its next payment",
+      "value": "$113,300",
+      "simple": "Purchase a home: cash to hold for its next payment.",
+      "expert": "Purchase a home: cash to hold for its next payment: $113,300 (next payment January 2027). Straight from the Sherpas plan."
+    },
+    "cash.accessibleCash": {
+      "label": "Accessible cash (bank accounts plus taxable money market)",
+      "value": "$30,000",
+      "simple": "Accessible cash (bank accounts plus taxable money market).",
+      "expert": "Accessible cash (bank accounts plus taxable money market): $30,000 (balance today). Straight from the Sherpas plan."
+    },
+    "cash.emergencyReserve.min": {
+      "label": "Recommended emergency reserve (5–6 months of essential expenses) (low end)",
+      "value": "$46,530",
+      "simple": "Recommended emergency reserve (5–6 months of essential expenses) (low end).",
+      "expert": "Recommended emergency reserve (5–6 months of essential expenses) (low end): $46,530 (target balance today). Straight from the Sherpas plan."
+    },
+    "cash.emergencyReserve.max": {
+      "label": "Recommended emergency reserve (5–6 months of essential expenses) (high end)",
+      "value": "$55,836",
+      "simple": "Recommended emergency reserve (5–6 months of essential expenses) (high end).",
+      "expert": "Recommended emergency reserve (5–6 months of essential expenses) (high end): $55,836 (target balance today). Straight from the Sherpas plan."
+    },
+    "life.cover.client": {
+      "label": "Michael's life cover today",
+      "value": "$180,000",
+      "simple": "Michael's life cover today.",
+      "expert": "Michael's life cover today: $180,000. Straight from the Sherpas plan."
+    },
+    "life.recommendedMin.client": {
+      "label": "Recommended minimum life cover for Michael",
+      "value": "$900,000",
+      "simple": "Recommended minimum life cover for Michael.",
+      "expert": "Recommended minimum life cover for Michael: $900,000. Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}

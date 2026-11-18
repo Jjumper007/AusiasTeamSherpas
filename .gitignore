@@ -1,0 +1,30 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and builds
+node_modules/
+.venv/
+venv/
+__pycache__/
+dist/
+build/
+.next/
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+
+# Impeccable local state
+.impeccable/hook.cache.json
+.impeccable/review/
+.impeccable/config.local.json
+
+# Team notes, local only
+CONTEXTO_EQUIPO.md
+
+# Pipeline outputs (keep pre-rendered demo videos)
+runs/*
+!runs/demo/

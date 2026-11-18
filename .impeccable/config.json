@@ -1,0 +1,31 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-18T00:48:45.487Z"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "web/index.html"
+        ],
+        "createdAt": "2026-11-18T04:32:44.184Z",
+        "reason": "Claude verified live: .explain-card padding is ~30px each side at 1280x800; the static detector renders without the stage container size"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "web/index.html"
+        ],
+        "createdAt": "2026-11-18T04:37:53.203Z",
+        "reason": "Claude, after finish review (not flagged there): the stage is the video player frame that holds the onboarding rows, the episode card and the explain dialog"
+      }
+    ]
+  }
+}

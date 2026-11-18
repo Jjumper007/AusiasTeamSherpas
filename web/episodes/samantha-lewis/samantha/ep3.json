@@ -1,0 +1,136 @@
+{
+  "caseId": "samantha-lewis",
+  "person": "samantha",
+  "personName": "Samantha",
+  "episode": 3,
+  "title": "Did it work?",
+  "day": 30,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.566Z",
+  "family": {
+    "adults": [
+      {
+        "id": "samantha",
+        "name": "Samantha",
+        "role": "client"
+      }
+    ],
+    "location": "Miami, FL",
+    "score": 82,
+    "band": "strong"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "A month ago, your score was 82.",
+      "caption": "Samantha, a month ago your score was 82. You picked one move: close a coverage gap.",
+      "voice": "Samantha, a month ago your score was 82. You picked one move: close a coverage gap.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "check-in",
+      "figure": {
+        "key": "score",
+        "value": 82,
+        "display": "82",
+        "exact": "82",
+        "label": "Financial health score, 0 to 100"
+      }
+    },
+    {
+      "type": "action",
+      "headline": "Did you take your step?",
+      "caption": "So, did you take your step?",
+      "voice": "So, did you take your step?",
+      "keys": [
+        "move.0.before",
+        "move.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "checkin",
+      "cta": [
+        "Yes, done",
+        "Not yet"
+      ],
+      "options": [
+        {
+          "i": 0,
+          "title": "Close a coverage gap",
+          "action": "Add homeowners insurance on Primary home so coverage integrity clears that gap",
+          "effort": "medium",
+          "before": 82,
+          "after": 84,
+          "beforeKey": "move.0.before",
+          "afterKey": "move.0.after"
+        }
+      ]
+    },
+    {
+      "type": "move",
+      "headline": "Close a coverage gap",
+      "caption": "One move changes the picture: close a coverage gap. Your score goes from 82 to 84.",
+      "voice": "One move changes the picture: close a coverage gap. Your score goes from 82 to 84.",
+      "keys": [
+        "move.0.before",
+        "move.0.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 0,
+        "title": "Close a coverage gap",
+        "action": "Add homeowners insurance on Primary home so coverage integrity clears that gap",
+        "effort": "medium",
+        "before": 82,
+        "after": 84,
+        "beforeKey": "move.0.before",
+        "afterKey": "move.0.after"
+      },
+      "combo": null
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Samantha",
+      "Sam"
+    ],
+    "household": [
+      "Ethan",
+      "Ava"
+    ],
+    "d6": "DUTY",
+    "d6Text": "DUTY, CONFIDENCE: LOW and PROVISIONAL.",
+    "worries": []
+  },
+  "audio": {},
+  "explain": {
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "82",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 82. Straight from the Sherpas plan."
+    },
+    "move.0.before": {
+      "label": "Score today, before \"Close a coverage gap\"",
+      "value": "82",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Close a coverage gap\": 82. Straight from the Sherpas plan."
+    },
+    "move.0.after": {
+      "label": "Score after \"Close a coverage gap\"",
+      "value": "84",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Close a coverage gap\": 84. Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}

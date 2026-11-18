@@ -1,0 +1,150 @@
+{
+  "episodes": {
+    "1": {
+      "title": "Your plan in 60 seconds",
+      "day": 0
+    },
+    "2": {
+      "title": "Your first step",
+      "day": 3
+    },
+    "3": {
+      "title": "Did it work?",
+      "day": 30
+    }
+  },
+  "cases": [
+    {
+      "caseId": "daniel-emily-johnson",
+      "family": {
+        "adults": [
+          {
+            "id": "daniel",
+            "name": "Daniel",
+            "role": "client"
+          },
+          {
+            "id": "emily",
+            "name": "Emily",
+            "role": "co-client"
+          }
+        ],
+        "location": "Denver, CO",
+        "score": 52,
+        "band": "vulnerable"
+      },
+      "people": [
+        {
+          "id": "daniel",
+          "name": "Daniel",
+          "episodes": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "id": "emily",
+          "name": "Emily",
+          "episodes": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "caseId": "michael-carter",
+      "family": {
+        "adults": [
+          {
+            "id": "michael",
+            "name": "Michael",
+            "role": "client"
+          }
+        ],
+        "location": "Austin, TX",
+        "score": 26,
+        "band": "critical"
+      },
+      "people": [
+        {
+          "id": "michael",
+          "name": "Michael",
+          "episodes": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "caseId": "samantha-lewis",
+      "family": {
+        "adults": [
+          {
+            "id": "samantha",
+            "name": "Samantha",
+            "role": "client"
+          }
+        ],
+        "location": "Miami, FL",
+        "score": 82,
+        "band": "strong"
+      },
+      "people": [
+        {
+          "id": "samantha",
+          "name": "Samantha",
+          "episodes": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "caseId": "timothy-melanie-weah",
+      "family": {
+        "adults": [
+          {
+            "id": "timothy",
+            "name": "Timothy",
+            "role": "client"
+          },
+          {
+            "id": "melanie",
+            "name": "Melanie",
+            "role": "co-client"
+          }
+        ],
+        "location": "San Francisco, CA",
+        "score": 60,
+        "band": "stable"
+      },
+      "people": [
+        {
+          "id": "melanie",
+          "name": "Melanie",
+          "episodes": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "id": "timothy",
+          "name": "Timothy",
+          "episodes": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "caseId": "michael-carter",
+  "person": "michael",
+  "personName": "Michael",
+  "episode": 2,
+  "title": "Your first step",
+  "day": 3,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.535Z",
+  "family": {
+    "adults": [
+      {
+        "id": "michael",
+        "name": "Michael",
+        "role": "client"
+      }
+    ],
+    "location": "Austin, TX",
+    "score": 26,
+    "band": "critical"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "Your first step: lower the withdrawal rate",
+      "caption": "Michael, a few days ago you picked one move: lower the withdrawal rate. Here's how to actually do it.",
+      "voice": "Michael, a few days ago you picked one move: lower the withdrawal rate. Here's how to actually do it.",
+      "keys": [],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "first-step",
+      "figure": {
+        "key": "move.1.after",
+        "value": 62,
+        "display": "62",
+        "exact": "62",
+        "label": "Score after \"Lower the withdrawal rate\""
+      }
+    },
+    {
+      "type": "steps",
+      "headline": "How to: lower the withdrawal rate",
+      "caption": "Here's how to lower the withdrawal rate, in three steps. You can start the first one today.",
+      "voice": "Here's how to lower the withdrawal rate, in three steps. You can start the first one today.",
+      "keys": [],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "steps": [
+        "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+        "Decide how your January 2027 home purchase and your cash cushion fit together, and keep that near-term money separate from your long-term investments.",
+        "Book a short call with your advisor to confirm the details."
+      ]
+    },
+    {
+      "type": "move",
+      "headline": "Lower the withdrawal rate",
+      "caption": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+      "voice": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+      "keys": [
+        "move.1.before",
+        "move.1.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 1,
+        "title": "Lower the withdrawal rate",
+        "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+        "effort": "high",
+        "before": 26,
+        "after": 62,
+        "beforeKey": "move.1.before",
+        "afterKey": "move.1.after"
+      },
+      "combo": null
+    },
+    {
+      "type": "action",
+      "headline": "Ready?",
+      "caption": "Tap done when it's done. We'll check in with you in a few weeks.",
+      "voice": "Tap done when it's done. We'll check in with you in a few weeks.",
+      "keys": [
+        "move.1.before",
+        "move.1.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "commit",
+      "cta": [
+        "Done",
+        "Remind me tomorrow"
+      ],
+      "options": [
+        {
+          "i": 1,
+          "title": "Lower the withdrawal rate",
+          "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+          "effort": "high",
+          "before": 26,
+          "after": 62,
+          "beforeKey": "move.1.before",
+          "afterKey": "move.1.after"
+        }
+      ]
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Michael",
+      "Mike"
+    ],
+    "household": [],
+    "d6": "FREEDOM",
+    "d6Text": "FREEDOM, CONFIDENCE: LOW and PROVISIONAL.",
+    "worries": []
+  },
+  "audio": {},
+  "explain": {
+    "move.1.before": {
+      "label": "Score today, before \"Lower the withdrawal rate\"",
+      "value": "26",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Lower the withdrawal rate\": 26. Straight from the Sherpas plan."
+    },
+    "move.1.after": {
+      "label": "Score after \"Lower the withdrawal rate\"",
+      "value": "62",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Lower the withdrawal rate\": 62. Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}

@@ -1,0 +1,133 @@
+{
+  "caseId": "michael-carter",
+  "person": "michael",
+  "personName": "Michael",
+  "episode": 3,
+  "title": "Did it work?",
+  "day": 30,
+  "source": "local",
+  "generatedAt": "2026-11-18T00:21:30.543Z",
+  "family": {
+    "adults": [
+      {
+        "id": "michael",
+        "name": "Michael",
+        "role": "client"
+      }
+    ],
+    "location": "Austin, TX",
+    "score": 26,
+    "band": "critical"
+  },
+  "scenes": [
+    {
+      "type": "hook",
+      "headline": "A month ago, your score was 26.",
+      "caption": "Michael, a month ago your score was 26. You picked one move: lower the withdrawal rate.",
+      "voice": "Michael, a month ago your score was 26. You picked one move: lower the withdrawal rate.",
+      "keys": [
+        "score"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "theme": "check-in",
+      "figure": {
+        "key": "score",
+        "value": 26,
+        "display": "26",
+        "exact": "26",
+        "label": "Financial health score, 0 to 100"
+      }
+    },
+    {
+      "type": "action",
+      "headline": "Did you take your step?",
+      "caption": "So, did you take your step?",
+      "voice": "So, did you take your step?",
+      "keys": [
+        "move.1.before",
+        "move.1.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "mode": "checkin",
+      "cta": [
+        "Yes, done",
+        "Not yet"
+      ],
+      "options": [
+        {
+          "i": 1,
+          "title": "Lower the withdrawal rate",
+          "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+          "effort": "high",
+          "before": 26,
+          "after": 62,
+          "beforeKey": "move.1.before",
+          "afterKey": "move.1.after"
+        }
+      ]
+    },
+    {
+      "type": "move",
+      "headline": "Lower the withdrawal rate",
+      "caption": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+      "voice": "One move changes the picture: lower the withdrawal rate. Your score goes from 26 to 62.",
+      "keys": [
+        "move.1.before",
+        "move.1.after"
+      ],
+      "from": {
+        "headline": "template",
+        "voice": "template"
+      },
+      "move": {
+        "i": 1,
+        "title": "Lower the withdrawal rate",
+        "action": "Cutting withdrawals to $10,300/year (6.0%) reaches the sustainable band",
+        "effort": "high",
+        "before": 26,
+        "after": 62,
+        "beforeKey": "move.1.before",
+        "afterKey": "move.1.after"
+      },
+      "combo": null
+    }
+  ],
+  "personalize": {
+    "names": [
+      "Michael",
+      "Mike"
+    ],
+    "household": [],
+    "d6": "FREEDOM",
+    "d6Text": "FREEDOM, CONFIDENCE: LOW and PROVISIONAL.",
+    "worries": []
+  },
+  "audio": {},
+  "explain": {
+    "score": {
+      "label": "Financial health score, 0 to 100",
+      "value": "26",
+      "simple": "A 0 to 100 check-up of your whole financial life. Higher is healthier.",
+      "expert": "Financial health score, 0 to 100: 26. Straight from the Sherpas plan."
+    },
+    "move.1.before": {
+      "label": "Score today, before \"Lower the withdrawal rate\"",
+      "value": "26",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score today, before \"Lower the withdrawal rate\": 26. Straight from the Sherpas plan."
+    },
+    "move.1.after": {
+      "label": "Score after \"Lower the withdrawal rate\"",
+      "value": "62",
+      "simple": "Your score before and after this one move, as the plan calculates it.",
+      "expert": "Score after \"Lower the withdrawal rate\": 62. Straight from the Sherpas plan."
+    }
+  },
+  "report": []
+}
