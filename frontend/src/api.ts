@@ -1,4 +1,4 @@
-import type { Answers, CaseSummary, DemoInfo, JobEvent, JobResult, Progress, SurveyAnswers, SurveyInfo } from './types'
+import type { Answers, CaseSummary, DemoSite, JobEvent, JobResult, Progress, SurveyAnswers, SurveyInfo } from './types'
 
 /** Reads a JSON response, turning an API error ({ error }) into an Error with its message. */
 async function json<T>(res: Response): Promise<T> {
@@ -17,12 +17,8 @@ export const getCases = (): Promise<CaseSummary[]> =>
 export const getSurvey = (caseId: string, member: string): Promise<SurveyInfo> =>
   fetch(`/api/cases/${encodeURIComponent(caseId)}/${encodeURIComponent(member)}/survey`).then((r) => json<SurveyInfo>(r))
 
-/** Whether the app is the demo (npm run demo) and who has a video made earlier. */
-export const getDemo = (): Promise<DemoInfo> => fetch('/api/demo').then((r) => json<DemoInfo>(r))
-
-/** A demo video's result; its videoUrl points at the demo folder. */
-export const getDemoResult = (caseId: string, member: string): Promise<JobResult> =>
-  fetch(`/api/demo/${encodeURIComponent(caseId)}/${encodeURIComponent(member)}`).then((r) => json<JobResult>(r))
+/** The demo site's data (npm run demo:build writes it next to the app): everyone the demo can play. */
+export const getDemoSite = (): Promise<DemoSite> => fetch('/demo.json').then((r) => json<DemoSite>(r))
 
 /** Only the four answers are sent; a skipped one is left out and the backend uses its default. */
 const toSurveyAnswers = ({ nickname, explainLevel, topOfMind, decisionStyle }: Answers): SurveyAnswers => ({
@@ -41,7 +37,7 @@ export async function startJob(caseId: string, member: string, answers: Answers)
   return (await json<{ id: string }>(res)).id
 }
 
-interface JobListeners {
+export interface JobListeners {
   progress(p: Progress): void
   done(result: JobResult): void
   error(message: string): void
@@ -76,6 +72,21 @@ export function followJob(id: string, on: JobListeners): () => void {
     if (!finished && es.readyState === EventSource.CLOSED) on.error('Lost the connection to the server.')
   })
   return () => es.close()
+}
+
+/** Starts a job and follows it until it is done. Returns a function that stops listening. */
+export function runJob(caseId: string, member: string, answers: Answers, on: JobListeners): () => void {
+  let alive = true
+  let stop = () => {}
+  startJob(caseId, member, answers)
+    .then((id) => {
+      if (alive) stop = followJob(id, on)
+    })
+    .catch((e: Error) => alive && on.error(e.message))
+  return () => {
+    alive = false
+    stop()
+  }
 }
 
 // ---------- per-person memory in this browser ----------

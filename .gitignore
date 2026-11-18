@@ -3,3 +3,5 @@ dist/
 runs/
 out/
 .env
+demo-site/
+.vercel/

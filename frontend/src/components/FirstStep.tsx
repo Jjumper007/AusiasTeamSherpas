@@ -1,6 +1,6 @@
 // "Your first step" (SPEC §1, §3): the main move from top_moves, shaped by how this person decides.
 // What it shows per decision style lives in ../first-step-card.ts; this file only renders it.
-// "I did it" and "Remind me" are kept in this browser, with a simulated nudge.
+// "I did it" and "Remind me" are kept in this browser (not in the demo), with a simulated nudge.
 import { useState } from "react";
 import { Bell, Check, ChevronRight, Send } from "lucide-react";
 import { store } from "../api";
@@ -9,14 +9,14 @@ import type { JobResult } from "../types";
 
 const PRIMARY_ICON: Record<PrimaryAction["kind"], typeof Send> = { start: ChevronRight, share: Send, remind: Bell };
 
-export function FirstStep({ result, onSeek }: { result: JobResult; onSeek(t: number): void }) {
+export function FirstStep({ result, onSeek, remember = true }: { result: JobResult; onSeek(t: number): void; remember?: boolean }) {
   const { firstStep: m, cta, caseId, member } = result;
-  const [status, setStatus] = useState<StepMark | null>(() => store.get<StepMark>(caseId, member, "step"));
+  const [status, setStatus] = useState<StepMark | null>(() => (remember ? store.get<StepMark>(caseId, member, "step") : null));
   const card = firstStepCard(result, status);
   const [toast, setToast] = useState<string | null>(null);
 
   const mark = (s: StepMark) => {
-    store.set(caseId, member, "step", s);
+    if (remember) store.set(caseId, member, "step", s);
     setStatus(s);
     setToast(toastFor(s));
   };

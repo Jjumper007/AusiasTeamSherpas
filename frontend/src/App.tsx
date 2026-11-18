@@ -1,11 +1,10 @@
 // Plan in Motion: pick who is watching (production has a login), answer four questions, play the
 // yak run while the backend generates the video, then watch it with chapters and the first step.
 // Links: ?case=daniel-emily-johnson&person=emily
-// The demo (npm run demo) only plays videos made earlier: no questions, nothing kept in this browser.
+// The demo (npm run demo) is its own app: ./demo/DemoApp.tsx.
 import { useEffect, useRef, useState } from "react";
 import { UserPen } from "lucide-react";
-import { getCases, getDemo, getDemoResult, getSurvey, store } from "./api";
-import { DEMO_PERSONALIZE_TITLE, NO_DEMO_VIDEOS, NOT_DEMO, demoCases } from "./demo";
+import { getCases, getSurvey, runJob, store } from "./api";
 import { Survey } from "./components/Survey";
 import { Wait } from "./components/Wait";
 import { Watch } from "./components/Watch";
@@ -19,16 +18,13 @@ export function App() {
   const [who, setWho] = useState<{ caseId: string; member: string } | null>(null);
   const [info, setInfo] = useState<SurveyInfo | null>(null);
   const [phase, setPhase] = useState<Phase>({ kind: "loading" });
-  const [demo, setDemo] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
 
-  // Families and adults; in the demo, only those with a video made earlier.
+  // Families and adults.
   useEffect(() => {
-    Promise.all([getCases(), getDemo().catch(() => NOT_DEMO)])
-      .then(([all, demoInfo]) => {
-        const cs = demoInfo.demo ? demoCases(all, demoInfo) : all;
-        if (cs.length === 0) { setPhase({ kind: "error", message: demoInfo.demo ? NO_DEMO_VIDEOS : "No families found in cases/." }); return; }
-        setDemo(demoInfo.demo);
+    getCases()
+      .then((cs) => {
+        if (cs.length === 0) { setPhase({ kind: "error", message: "No families found in cases/." }); return; }
         setCases(cs);
         const c = cs.find((x) => x.caseId === params.get("case")) ?? cs.find((x) => x.caseId === "daniel-emily-johnson") ?? cs[0];
         const p = c.people.find((x) => x.id === params.get("person")) ?? c.people[0];
@@ -38,25 +34,22 @@ export function App() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The person changed: their questions, and their last video if this browser has one.
-  // In the demo: their demo video, straight away.
   useEffect(() => {
     if (!who) return;
     let alive = true; // a slower answer for the previous person must not land on this one
     history.replaceState(null, "", `?${new URLSearchParams({ case: who.caseId, person: who.member })}`);
     setPhase({ kind: "loading" });
     setInfo(null);
-    const next: Promise<Phase> = demo
-      ? getDemoResult(who.caseId, who.member).then((result) => ({ kind: "watch", result }))
-      : getSurvey(who.caseId, who.member).then((s) => {
-          if (alive) setInfo(s);
-          const last = store.get<JobResult>(who.caseId, who.member, "result");
-          return last ? { kind: "watch", result: last } : { kind: "survey" };
-        });
-    next
+    getSurvey(who.caseId, who.member)
+      .then((s): Phase => {
+        if (alive) setInfo(s);
+        const last = store.get<JobResult>(who.caseId, who.member, "result");
+        return last ? { kind: "watch", result: last } : { kind: "survey" };
+      })
       .then((p) => alive && setPhase(p))
       .catch((e: Error) => alive && setPhase({ kind: "error", message: e.message }));
     return () => { alive = false; };
-  }, [who, demo]);
+  }, [who]);
 
   const answers = who ? store.get<Answers>(who.caseId, who.member, "answers") ?? {} : {};
 
@@ -98,7 +91,7 @@ export function App() {
               ))}
             </select>
           </label>
-          <button className="chip-btn" type="button" disabled={demo || !info || asking} onClick={() => setPhase({ kind: "survey" })} title={demo ? DEMO_PERSONALIZE_TITLE : "Answer the four questions again"}>
+          <button className="chip-btn" type="button" disabled={!info || asking} onClick={() => setPhase({ kind: "survey" })} title="Answer the four questions again">
             <UserPen className="ic" /> Personalize
           </button>
         </div>
@@ -113,7 +106,7 @@ export function App() {
             {phase.kind === "error" && <p className="stage-msg">{phase.message}</p>}
             {phase.kind === "survey" && info && who && <Survey key={`${who.caseId}/${who.member}`} info={info} initial={answers} onDone={surveyDone} />}
             {phase.kind === "wait" && info && who && (
-              <Wait caseId={who.caseId} member={who.member} answers={phase.answers} name={phase.answers.nickname || info.name} origin={phase.origin} onReady={ready} />
+              <Wait source={(on) => runJob(who.caseId, who.member, phase.answers, on)} name={phase.answers.nickname || info.name} origin={phase.origin} onReady={ready} />
             )}
           </div>
         )}

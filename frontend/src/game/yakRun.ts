@@ -1,6 +1,7 @@
 // Yak run: the little game on the wait screen while the video is generated (ported from the static player).
 // The Sherpas yak runs a mountain trail; Space, ↑, tap or click jumps (hold for a higher jump).
-// yakRun(canvas, { autorun }) -> { exit(): Promise (the yak runs off to the right), stop() }.
+// yakRun(canvas, { autorun, remember }) -> { exit(): Promise (the yak runs off to the right), stop() }.
+// remember: keep the best distance in this browser (off in the demo, which keeps nothing).
 // With reduced motion it waits for the first jump instead of starting by itself.
 
 const YAK_SRC = "/sherpas-yak.png"; // design/assets is Vite's public dir
@@ -13,6 +14,10 @@ const C = {
   text: "#E0EEFF", muted: "#9EA6C4",
 };
 
+// Loaded once, when the app starts: the host makes every later request revalidate, and during the wait
+// that request would queue behind the video's download, leaving the trail without its yak.
+const YAK_IMAGE = typeof Image === "undefined" ? null : Object.assign(new Image(), { src: YAK_SRC });
+
 const hash = (n: number) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 const readBest = () => { try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch { return 0; } };
 const saveBest = (v: number) => { try { localStorage.setItem(BEST_KEY, String(v)); } catch {} };
@@ -21,10 +26,8 @@ interface Obstacle { x: number; w: number; h: number; kind: "rock" | "ice" }
 
 export interface YakRun { exit(opts?: { instant?: boolean }): Promise<void>; stop(): void }
 
-export function yakRun(canvas: HTMLCanvasElement, { autorun = true }: { autorun?: boolean } = {}): YakRun {
+export function yakRun(canvas: HTMLCanvasElement, { autorun = true, remember = true }: { autorun?: boolean; remember?: boolean } = {}): YakRun {
   const ctx = canvas.getContext("2d")!;
-  const yak = new Image();
-  yak.src = YAK_SRC;
 
   let W = 0, H = 0, u = 1, m = 1, gy = 0, dpr = 1;
   const resize = () => {
@@ -45,7 +48,7 @@ export function yakRun(canvas: HTMLCanvasElement, { autorun = true }: { autorun?
   let running = autorun, over = false;
   let exiting: { t: number; x: number; resolve: () => void } | null = null;
   let dist = 0, speed = 55, y = autorun ? 14 : 0, vy = 0, holding = false, bob = 0;
-  let rocks: Obstacle[] = [], nextRock = 0.9, best = readBest();
+  let rocks: Obstacle[] = [], nextRock = 0.9, best = remember ? readBest() : 0;
   const firstRock = (): Obstacle[] => [{ x: W / u * 0.72, w: 8, h: 7, kind: "rock" }]; // something to jump right away
   let raf = 0, last = performance.now();
 
@@ -113,7 +116,7 @@ export function yakRun(canvas: HTMLCanvasElement, { autorun = true }: { autorun?
     for (const r of rocks) {
       if (yb.r > r.x + r.w * 0.15 && yb.l < r.x + r.w * 0.85 && yb.b > GROUND - r.h * 0.8) {
         over = true; running = false;
-        if (metres() > best) { best = metres(); saveBest(best); }
+        if (metres() > best) { best = metres(); if (remember) saveBest(best); }
       }
     }
   }
@@ -202,7 +205,8 @@ export function yakRun(canvas: HTMLCanvasElement, { autorun = true }: { autorun?
       ctx.moveTo(x + w * 0.12, g - h * 0.62); ctx.lineTo(x + w * 0.42, g - h); ctx.lineTo(x + w * 0.36, g - h * 0.45); ctx.closePath(); ctx.fill();
     }
 
-    if (yak.complete && yak.naturalWidth) {
+    const yak = YAK_IMAGE;
+    if (yak?.complete && yak.naturalWidth) {
       const x = (exiting ? yakX() + exiting.x : yakX()) * u;
       const lift = y === 0 && (running || exiting) ? Math.abs(Math.sin(bob)) * 0.7 : 0;
       const top = gy - (y + YAK_H + lift) * u;
@@ -251,7 +255,7 @@ export function yakRun(canvas: HTMLCanvasElement, { autorun = true }: { autorun?
     exit({ instant = false } = {}) {
       if (instant) return Promise.resolve();
       return new Promise<void>((resolve) => {
-        if (metres() > best) { best = metres(); saveBest(best); }
+        if (metres() > best) { best = metres(); if (remember) saveBest(best); }
         over = false; running = true;
         let settled = false;
         const finish = () => { if (!settled) { settled = true; resolve(); } };

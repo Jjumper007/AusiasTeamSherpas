@@ -1,9 +1,8 @@
 import { Router } from 'express'
 import { listCaseIds, loadCase, type CaseData } from '../brief/case-loader'
-import { buildSurveyOptions } from '../brief/survey-options'
-import { adultsOf, findAdult } from '../survey/members'
-import { resolveSurvey } from '../survey/resolve-survey'
-import type { CaseSummary, SurveyInfo } from './types'
+import { adultsOf } from '../survey/members'
+import { surveyInfo } from '../survey/survey-info'
+import type { CaseSummary } from './types'
 
 const summarise = (caseData: CaseData): CaseSummary => {
   const adults = adultsOf(caseData)
@@ -25,17 +24,7 @@ export const casesRoutes = (): Router => {
   })
 
   router.get('/cases/:caseId/:member/survey', (req, res) => {
-    const caseData = loadCase(req.params.caseId)
-    const adult = findAdult(caseData, req.params.member)
-    const info: SurveyInfo = {
-      caseId: caseData.caseId,
-      member: adult.id,
-      name: adult.firstName,
-      partner: adult.partner,
-      options: buildSurveyOptions(caseData),
-      defaults: resolveSurvey(caseData, adult, {}),
-    }
-    res.json(info)
+    res.json(surveyInfo(req.params.caseId, req.params.member))
   })
 
   return router

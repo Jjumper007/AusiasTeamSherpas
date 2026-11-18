@@ -1,24 +1,30 @@
-// The wait: the stage wipes to navy from the tapped answer, the yak runs, and the real progress of the
-// job (SSE from the backend) fills the strip above the game. When the video is ready the yak runs off
-// and onReady(result) shows it.
+// The wait: the stage wipes to navy from the tapped answer, the yak runs, and the progress of the
+// video fills the strip above the game: the real job (SSE from the backend) in the app, the run
+// replay in the demo. When the video is ready the yak runs off and onReady(result) shows it.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { followJob, startJob } from "../api";
+import type { JobListeners } from "../api";
 import { yakRun } from "../game/yakRun";
-import type { Answers, JobResult, Progress } from "../types";
+import type { JobResult, Progress } from "../types";
 
 const reduced = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
+/** Where the progress comes from: starts it and returns a function that stops listening. */
+export type ProgressSource = (on: JobListeners) => () => void;
+
 interface Props {
-  caseId: string;
-  member: string;
-  answers: Answers;
+  /** Started again by "Try again" after an error. */
+  source: ProgressSource;
   name: string;
+  /** The line shown once the video is ready; "Your video is ready" by default. */
+  doneLabel?: string;
+  /** Keep the game's best distance in this browser; off in the demo. */
+  remember?: boolean;
   /** Where the curtain opens from, in the stage's coordinates. */
   origin: { x: number; y: number } | null;
   onReady(r: JobResult): void;
 }
 
-export function Wait({ caseId, member, answers, name, origin, onReady }: Props) {
+export function Wait({ source, name, doneLabel = "Your video is ready", remember = true, origin, onReady }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [progress, setProgress] = useState<Progress>({ progress: 0, label: "Reading your plan" });
@@ -40,31 +46,26 @@ export function Wait({ caseId, member, answers, name, origin, onReady }: Props) 
   const game = useRef<ReturnType<typeof yakRun> | null>(null);
   useEffect(() => {
     if (!canvas.current) return;
-    game.current = yakRun(canvas.current, { autorun: !reduced() });
+    game.current = yakRun(canvas.current, { autorun: !reduced(), remember });
     return () => game.current?.stop();
   }, []);
 
-  // The job.
+  // The job, or its replay.
   useEffect(() => {
-    let stop = () => {};
     let alive = true;
     setError(null);
-    startJob(caseId, member, answers)
-      .then((id) => {
+    const stop = source({
+      progress: (p) => alive && setProgress(p),
+      error: (message) => alive && setError(message),
+      done: async (r) => {
         if (!alive) return;
-        stop = followJob(id, {
-          progress: setProgress,
-          error: setError,
-          done: async (r) => {
-            setProgress({ progress: 1, label: "Your video is ready" });
-            setReady(true);
-            await game.current?.exit();
-            if (!reduced()) await root.current?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, delay: 350, easing: "ease-out", fill: "forwards" }).finished;
-            if (alive) onReady(r);
-          },
-        });
-      })
-      .catch((e: Error) => alive && setError(e.message));
+        setProgress({ progress: 1, label: doneLabel });
+        setReady(true);
+        await game.current?.exit();
+        if (!reduced()) await root.current?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, delay: 350, easing: "ease-out", fill: "forwards" }).finished;
+        if (alive) onReady(r);
+      },
+    });
     return () => { alive = false; stop(); };
   }, [attempt]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -72,7 +73,7 @@ export function Wait({ caseId, member, answers, name, origin, onReady }: Props) 
 
   return (
     <div className="wait" ref={root}>
-      <canvas ref={canvas} className="yak-game" role="img" aria-label="Mini game while your video is generated: the Sherpas yak runs a mountain trail. Press Space or tap to jump over the rocks." />
+      <canvas ref={canvas} className="yak-game" role="img" aria-label="Mini game while your video is generated: the Sherpas yak runs and jumps over rocks. Press Space or tap to jump." />
       <div className="wait-top">
         <div className="wait-row">
           <p className="wait-title"><span className="yak-mark" aria-hidden="true" /><span className="t">{ready ? `${name}'s video is ready` : `Generating ${name}'s video`}</span></p>

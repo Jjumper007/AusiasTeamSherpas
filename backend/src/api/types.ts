@@ -31,18 +31,6 @@ export interface SurveyInfo {
   readonly defaults: Survey
 }
 
-/** An adult with a demo video, made earlier and copied to the demo folder. */
-export interface DemoPerson {
-  readonly caseId: string
-  readonly member: string
-}
-
-/** `GET /api/demo`. In demo mode the app only plays videos made earlier; `people` is empty outside it. */
-export interface DemoInfo {
-  readonly demo: boolean
-  readonly people: ReadonlyArray<DemoPerson>
-}
-
 /** Body of `POST /api/jobs`. */
 export interface JobRequest {
   readonly caseId: string
@@ -103,4 +91,29 @@ export interface JobResult {
   /** "What waiting costs": the gap the first step leaves open, from an existing fact. null when no fact names it. */
   readonly waitGap: FactDetail | null
   readonly detail: ReadonlyArray<FactDetail>
+}
+
+/** A step of a run as the demo replays it: the visual review shows as a step of its own. */
+export type ReplayStepId = StepId | 'review'
+
+/** One step of the run that made a demo video, with how long it really took. */
+export interface ReplayStep {
+  readonly step: ReplayStepId
+  /** The label the progress bar showed for it: "Designing your scenes". */
+  readonly label: string
+  /** Whole seconds. */
+  readonly seconds: number
+}
+
+/** A member in the demo: their survey, their demo video and the steps of the run that made it. */
+export interface DemoMember {
+  readonly survey: SurveyInfo
+  /** `survey` inside it holds the demo answers: the only answers the demo lets them pick. */
+  readonly result: JobResult
+  readonly replay: ReadonlyArray<ReplayStep>
+}
+
+/** `demo.json` of the demo site (`npm run demo:build`): everyone the demo can play. */
+export interface DemoSite {
+  readonly members: ReadonlyArray<DemoMember>
 }

@@ -8,7 +8,11 @@ import { FirstStep } from "./FirstStep";
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 const at = (starts: number[], t: number) => Math.max(0, starts.findLastIndex((s) => s <= t + 0.001));
 
-export function Watch({ result }: { result: JobResult }) {
+const LOAD_FAILED = "Couldn't load the video. It may have been removed from the server; answer the questions again to make a new one.";
+const DEMO_LOAD_FAILED = "Couldn't load the video. Check your connection and reload the page to try again.";
+
+/** In the demo (`demo`), nothing is kept in this browser and a failed load does not suggest a new video. */
+export function Watch({ result, demo = false }: { result: JobResult; demo?: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [t, setT] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -49,7 +53,7 @@ export function Watch({ result }: { result: JobResult }) {
         <video ref={video} className="mp4" src={result.videoUrl} playsInline preload="metadata" onClick={toggle}
           onTimeUpdate={(e) => setT(e.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}
           onError={() => setFailed(true)} />
-        {failed && <p className="stage-msg">Couldn't load the video. It may have been removed from the server; answer the questions again to make a new one.</p>}
+        {failed && <p className="stage-msg">{demo ? DEMO_LOAD_FAILED : LOAD_FAILED}</p>}
         {!started && !failed && (
           <button className="start" type="button" onClick={toggle}>
             <span className="start-play" aria-hidden="true" />
@@ -81,7 +85,7 @@ export function Watch({ result }: { result: JobResult }) {
             ))}
           </ol>
         </section>
-        <FirstStep result={result} onSeek={seek} />
+        <FirstStep result={result} onSeek={seek} remember={!demo} />
       </div>
     </>
   );

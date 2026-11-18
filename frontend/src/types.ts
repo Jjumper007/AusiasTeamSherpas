@@ -4,14 +4,16 @@ import type { SurveyAnswers } from '@sherpas/backend/src/api/types'
 export type {
   CaseSummary,
   ChapterMark,
-  DemoInfo,
+  DemoMember,
+  DemoSite,
   FactDetail,
   JobEvent,
   JobResult,
+  ReplayStep,
   SurveyAnswers,
   SurveyInfo,
 } from '@sherpas/backend/src/api/types'
-export type { DecisionStyle, ExplainLevel, TopicId } from '@sherpas/shared'
+export type { DecisionStyle, ExplainLevel, Survey, TopicId } from '@sherpas/shared'
 
 /** What the survey screen keeps: the answers it sends, plus "Something else" in the person's own words. */
 export interface Answers extends SurveyAnswers {

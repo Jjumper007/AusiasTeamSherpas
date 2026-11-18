@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.json && vite build",
     "preview": "vite preview",
+    "build:demo": "tsc -p tsconfig.json && VITE_DEMO=1 vite build --outDir ../demo-site --emptyOutDir",
+    "demo:serve": "vite preview --outDir ../demo-site",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {

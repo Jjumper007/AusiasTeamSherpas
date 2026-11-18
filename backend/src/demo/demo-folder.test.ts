@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { emilyRun, removeTempDirs, tempDir, writeRunFolder } from './demo-run.test-helper'
-import { addToDemo, DemoFileError, isSlug, listDemoPeople, readDemoResult } from './demo-folder'
+import { addToDemo, DemoFileError, isSlug, listDemoPeople, readDemoReplay, readDemoResult } from './demo-folder'
 
 const emily = { caseId: 'daniel-emily-johnson', member: 'emily' }
 const run = emilyRun()
@@ -28,11 +28,20 @@ describe('isSlug', () => {
 })
 
 describe('addToDemo and listDemoPeople', () => {
-  it('copies result.json and video.mp4 and lists the person', () => {
+  it('copies result.json and video.mp4, writes replay.json from the log and lists the person', () => {
     const demoDir = demoWithEmily()
 
     expect(listDemoPeople(demoDir)).toEqual([emily])
-    expect(readdirSync(join(demoDir, emily.caseId, emily.member)).sort()).toEqual(['result.json', 'video.mp4'])
+    expect(readdirSync(join(demoDir, emily.caseId, emily.member)).sort()).toEqual(['replay.json', 'result.json', 'video.mp4'])
+  })
+
+  it('refuses a run whose log does not show the video being written, and copies nothing', () => {
+    const demoDir = tempDir('demo')
+    const unfinished = writeRunFolder(join(tempDir('run'), 'run'), { ...run, log: '2026-11-18T10:00:00.000Z [brief] emily\n' })
+
+    expect(() => addToDemo(demoDir, emily, unfinished)).toThrow(/log.txt/)
+    expect(listDemoPeople(demoDir)).toEqual([])
+    expect(readdirSync(demoDir)).toEqual([])
   })
 
   it("replaces the person's earlier demo files", () => {
@@ -48,10 +57,11 @@ describe('addToDemo and listDemoPeople', () => {
     expect(listDemoPeople(join(tempDir('demo'), 'missing'))).toEqual([])
   })
 
-  it('skips people with only one of the two files and folders that are not slugs', () => {
+  it('skips people missing one of the three files and folders that are not slugs', () => {
     const demoDir = demoWithEmily()
     mkdirSync(join(demoDir, emily.caseId, 'daniel'))
     writeFileSync(join(demoDir, emily.caseId, 'daniel', 'video.mp4'), 'x')
+    writeFileSync(join(demoDir, emily.caseId, 'daniel', 'result.json'), '{}')
     mkdirSync(join(demoDir, 'Not A Slug', 'emily'), { recursive: true })
 
     expect(listDemoPeople(demoDir)).toEqual([emily])
@@ -63,11 +73,10 @@ describe('addToDemo and listDemoPeople', () => {
 })
 
 describe('readDemoResult', () => {
-  it('gives the result with the video in the demo folder', () => {
+  it('gives the result as the run wrote it', () => {
     const result = readDemoResult(demoWithEmily(), emily)
 
-    expect(result).toMatchObject({ member: 'emily', partner: 'Daniel', chapters: run.result.chapters })
-    expect(result?.videoUrl).toBe('/demo/daniel-emily-johnson/emily/video.mp4')
+    expect(result).toMatchObject({ member: 'emily', partner: 'Daniel', chapters: run.result.chapters, videoUrl: run.result.videoUrl })
   })
 
   it('gives null for someone without a demo video', () => {
@@ -100,5 +109,25 @@ describe('readDemoResult', () => {
     const copied = JSON.parse(readFileSync(join(demoDir, emily.caseId, emily.member, 'result.json'), 'utf8'))
 
     expect(copied.videoUrl).toBe(run.result.videoUrl)
+  })
+})
+
+describe('readDemoReplay', () => {
+  it("gives the steps of the run that made the person's demo video", () => {
+    expect(readDemoReplay(demoWithEmily(), emily).map(({ step, seconds }) => [step, seconds])).toEqual([
+      ['brief', 0],
+      ['script', 20],
+      ['voice', 10],
+      ['scenes', 1],
+      ['render', 60],
+    ])
+  })
+
+  it('throws a DemoFileError for a missing or broken replay.json', () => {
+    const demoDir = demoWithEmily()
+    const file = join(demoDir, emily.caseId, emily.member, 'replay.json')
+    writeFileSync(file, JSON.stringify([{ step: 'dance', label: 'x', seconds: 1 }]))
+    expect(() => readDemoReplay(demoDir, emily)).toThrow(DemoFileError)
+    expect(() => readDemoReplay(demoDir, { ...emily, member: 'daniel' })).toThrow(DemoFileError)
   })
 })

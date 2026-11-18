@@ -95,8 +95,26 @@
   .pick select { width: 100%; }
   .feature { font-size: 14px; }
   .theatre { padding: 12px 8px 16px; }
+  /* A phone is too narrow for the questions at 16:9: the light screens (intro, survey) take the height they need. */
+  .stage:has(.onboard) { aspect-ratio: auto; height: min(calc(100dvh - 90px), 760px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------- the demo: prototype intro, locked answers ---------- */
+
+.intro { justify-content: safe center; overflow-y: auto; }
+.intro-page { display: grid; gap: max(10px, 2cqmin); width: min(100%, 860px); margin: 0 auto; }
+.intro-text { margin: 0; color: var(--ink-2); font-size: max(14px, 2.6cqmin); line-height: 1.5; max-width: 68ch; }
+.intro-pick { margin: max(6px, 1.4cqmin) 0 0; font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; font-size: max(16px, 3.4cqmin); color: var(--ink); }
+.intro-members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: max(8px, 1.6cqmin); }
+.intro-go { width: 1.1em; height: 1.1em; color: var(--blue); }
+.ob-opt.only { border-color: var(--blue); }
+.ob-opt:disabled { cursor: not-allowed; background: var(--frame); color: var(--ink-3); box-shadow: none; }
+.ob-opt:disabled:hover { border-color: var(--hair); box-shadow: none; }
+.ob-opt:disabled .ob-ic { background: var(--hair); color: var(--ink-3); }
+.ob-opt:disabled small { color: var(--ink-2); }
+.ob-write input:read-only { border-color: var(--hair); box-shadow: none; color: var(--ink-2); }
+.preload { display: none; }

@@ -1,15 +1,11 @@
 import express, { type ErrorRequestHandler, type Express } from 'express'
 import { BriefError } from '../brief/errors'
-import { DEMO_URL_PREFIX } from '../demo/demo-folder'
-import { demoRoutes } from '../demo/demo-routes'
 import { casesRoutes } from './cases-routes'
 import { jobsRoutes, type JobsRoutesDeps } from './jobs-routes'
 
 export interface AppDeps extends JobsRoutesDeps {
   /** Folder served under /runs: the MP4 and everything else each job wrote. */
   readonly runsDir: string
-  /** Set in demo mode (DEMO=1): the folder of videos made earlier, served under /demo. No new videos are made. */
-  readonly demoDir?: string
 }
 
 const MAX_BODY = '16kb'
@@ -40,7 +36,7 @@ const handleErrors: ErrorRequestHandler = (error, req, res, _next) => {
 
 const STATIC_OPTIONS = { fallthrough: false, dotfiles: 'ignore', index: false } as const
 
-/** The Express app: /api for the web app, /runs for the outputs of each job, /demo for the demo videos. */
+/** The Express app: /api for the web app, /runs for the outputs of each job. The demo is a static site (`npm run demo`). */
 export const createApp = (deps: AppDeps): Express => {
   const app = express()
   app.disable('x-powered-by')
@@ -49,10 +45,8 @@ export const createApp = (deps: AppDeps): Express => {
     res.json({ ok: true })
   })
   app.use('/api', casesRoutes())
-  app.use('/api', demoRoutes(deps.demoDir))
   app.use('/api', jobsRoutes(deps))
   app.use('/runs', express.static(deps.runsDir, STATIC_OPTIONS))
-  if (deps.demoDir) app.use(DEMO_URL_PREFIX, express.static(deps.demoDir, STATIC_OPTIONS))
   app.use(handleErrors)
   return app
 }

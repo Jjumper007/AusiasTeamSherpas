@@ -3,6 +3,10 @@ import "../../design/sherpas-tokens.css";
 import "./styles.css";
 import "./app.css";
 import { App } from "./App";
+import { DemoApp } from "./demo/DemoApp";
+
+/** The demo build (npm run demo:build sets VITE_DEMO=1) plays videos made earlier, with no backend. */
+const Root = import.meta.env.VITE_DEMO === "1" ? DemoApp : App;
 
 // No StrictMode: its double effects in development would start every generation job twice.
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(<Root />);

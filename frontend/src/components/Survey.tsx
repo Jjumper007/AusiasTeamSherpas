@@ -1,17 +1,20 @@
 // The four questions (SPEC §3), one per page, inside the stage: a light Sherpas app screen.
 // Beside them, the card of "your video" fills in with each answer. Skip passes over one question
 // (the video uses its default); after the last one, onDone(answers, the element tapped).
+// In the demo (`locked`), every answer shows but only the demo answer can be picked, and nothing is skipped.
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import {
   ArrowLeft, ChartColumn, ChevronRight, Clock, CreditCard, GraduationCap, House, LifeBuoy,
   MessageSquareText, PencilLine, Search, Shield, Sprout, TreePalm, TrendingUp, UserRound, UsersRound, Zap,
 } from "lucide-react";
-import type { Answers, DecisionStyle, ExplainLevel, SurveyInfo, TopicId } from "../types";
+import { isOffered, NOT_IN_DEMO, type PageId } from "../demo/locked";
+import { EXPLAIN_TEXT } from "../survey-labels";
+import type { Answers, DecisionStyle, ExplainLevel, Survey as DemoAnswers, SurveyInfo, TopicId } from "../types";
 
 const EXPLAIN: Record<ExplainLevel, { label: string; sub: string; icon: ReactNode }> = {
-  simple: { label: "Keep it simple", sub: "No jargon, fewer numbers", icon: <Sprout /> },
-  straight: { label: "Straight talk", sub: "The plan, plainly", icon: <MessageSquareText /> },
-  nerd: { label: "Nerd mode", sub: "Every number, exact", icon: <ChartColumn /> },
+  simple: { ...EXPLAIN_TEXT.simple, icon: <Sprout /> },
+  straight: { ...EXPLAIN_TEXT.straight, icon: <MessageSquareText /> },
+  nerd: { ...EXPLAIN_TEXT.nerd, icon: <ChartColumn /> },
 };
 
 const TOPIC_ICONS: Record<TopicId, ReactNode> = {
@@ -26,12 +29,19 @@ const decisions = (partner: string | null): Record<DecisionStyle, { label: strin
   wait: { label: "I wait until I'm sure", sub: "Remind me later", icon: <Clock /> },
 });
 
-type PageId = "name" | "explain" | "worry" | "decision";
 interface Option { value: string; label: string; sub?: string; icon: ReactNode }
 
 const reduced = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-export function Survey({ info, initial, onDone }: { info: SurveyInfo; initial: Answers; onDone(a: Answers, from: HTMLElement | null): void }) {
+interface Props {
+  info: SurveyInfo;
+  initial: Answers;
+  /** The demo answers: the only ones that can be picked. Absent outside the demo. */
+  locked?: DemoAnswers;
+  onDone(a: Answers, from: HTMLElement | null): void;
+}
+
+export function Survey({ info, initial, locked, onDone }: Props) {
   const [answers, setAnswers] = useState<Answers>(initial);
   const [at, setAt] = useState(0);
   const [dir, setDir] = useState(1);
@@ -65,7 +75,7 @@ export function Survey({ info, initial, onDone }: { info: SurveyInfo; initial: A
   }
 
   function pick(value: string, from: HTMLElement | null) {
-    if (finished.current) return;
+    if (finished.current || !isOffered(page.id, value, locked)) return;
     const a = { ...answers };
     if (page.id === "explain") a.explainLevel = value as ExplainLevel;
     if (page.id === "worry") { a.topOfMind = value as TopicId; delete a.otherTopic; }
@@ -75,7 +85,7 @@ export function Survey({ info, initial, onDone }: { info: SurveyInfo; initial: A
   }
 
   function skip() {
-    if (finished.current) return;
+    if (finished.current || locked) return;
     const a = { ...answers };
     if (page.id === "name") delete a.nickname;
     if (page.id === "explain") delete a.explainLevel;
@@ -114,7 +124,7 @@ export function Survey({ info, initial, onDone }: { info: SurveyInfo; initial: A
     const onKey = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement).closest?.("input, select") || finished.current) return;
       const n = Number(e.key);
-      if (n >= 1 && page?.options[n - 1]) { e.preventDefault(); pick(page.options[n - 1].value, document.querySelectorAll<HTMLElement>(".ob-opt")[n - 1]); }
+      if (n >= 1 && page?.options[n - 1] && isOffered(page.id, page.options[n - 1].value, locked)) { e.preventDefault(); pick(page.options[n - 1].value, document.querySelectorAll<HTMLElement>(".ob-opt")[n - 1]); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -147,7 +157,7 @@ export function Survey({ info, initial, onDone }: { info: SurveyInfo; initial: A
           <div className="ob-segs" aria-hidden="true">{pages.map((p, k) => <i key={p.id} className={k <= at ? "on" : ""} />)}</div>
           <span className="ob-count">{Math.min(at + 1, pages.length)} of {pages.length}</span>
         </div>
-        <button className="ob-skip" type="button" onClick={skip} aria-label="Skip this question">
+        <button className="ob-skip" type="button" onClick={skip} aria-label="Skip this question" style={{ visibility: locked ? "hidden" : "visible" }}>
           <span>Skip</span> <ChevronRight className="ic" />
         </button>
       </div>
@@ -161,23 +171,27 @@ export function Survey({ info, initial, onDone }: { info: SurveyInfo; initial: A
 
           {shown.id === "name" ? (
             <form className={`ob-custom ob-write${anim}`} onSubmit={submitName}>
-              <input name="name" type="text" autoComplete="given-name" maxLength={24} defaultValue={answers.nickname || info.name} aria-label="Your name" autoFocus onFocus={(e) => e.currentTarget.select()} />
+              <input name="name" type="text" autoComplete="given-name" maxLength={24} defaultValue={locked?.nickname ?? (answers.nickname || info.name)} readOnly={Boolean(locked)} aria-label="Your name" autoFocus onFocus={(e) => !locked && e.currentTarget.select()} />
               <button className="solid" type="submit"><span>Continue</span><ChevronRight className="ic" /></button>
             </form>
           ) : (
             <>
               <div className="ob-opts">
-                {shown.options.map((o, k) => (
-                  <button key={o.value} type="button" className={`ob-opt${anim}`} style={{ animationDelay: `${k * 40}ms` }} onClick={(e) => pick(o.value, e.currentTarget)}>
-                    <span className="ob-ic">{o.icon}</span>
-                    <span className="l">{o.label}{o.sub && <small>{o.sub}</small>}</span>
-                    <kbd className="ob-k" aria-hidden="true">{k + 1}</kbd>
-                  </button>
-                ))}
+                {shown.options.map((o, k) => {
+                  const offered = isOffered(shown.id, o.value, locked);
+                  const sub = offered ? o.sub : NOT_IN_DEMO;
+                  return (
+                    <button key={o.value} type="button" disabled={!offered} className={`ob-opt${anim}${locked && offered ? " only" : ""}`} style={{ animationDelay: `${k * 40}ms` }} onClick={(e) => pick(o.value, e.currentTarget)}>
+                      <span className="ob-ic">{o.icon}</span>
+                      <span className="l">{o.label}{sub && <small>{sub}</small>}</span>
+                      {offered && <kbd className="ob-k" aria-hidden="true">{k + 1}</kbd>}
+                    </button>
+                  );
+                })}
                 {shown.custom && (
-                  <button type="button" className={`ob-opt${anim}${other ? " picked" : ""}`} style={{ animationDelay: `${shown.options.length * 40}ms` }} onClick={() => setOther(true)}>
-                    <span className="ob-ic"><PencilLine /></span><span className="l">Something else</span>
-                    <kbd className="ob-k" aria-hidden="true">{shown.options.length + 1}</kbd>
+                  <button type="button" disabled={Boolean(locked)} className={`ob-opt${anim}${other ? " picked" : ""}`} style={{ animationDelay: `${shown.options.length * 40}ms` }} onClick={() => setOther(true)}>
+                    <span className="ob-ic"><PencilLine /></span><span className="l">Something else{locked && <small>{NOT_IN_DEMO}</small>}</span>
+                    {!locked && <kbd className="ob-k" aria-hidden="true">{shown.options.length + 1}</kbd>}
                   </button>
                 )}
               </div>

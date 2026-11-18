@@ -2,7 +2,7 @@
 import { createApp } from './api/app'
 import { loadEnvFile } from './env'
 import { createJobStore, type Job, type JobStore } from './jobs/job-store'
-import { demoDir, RUNS_DIR, SPEECH_CACHE_DIR } from './paths'
+import { RUNS_DIR, SPEECH_CACHE_DIR } from './paths'
 import { renderCheckFrames, renderWithRemotion } from './pipeline/render-video'
 import { runJob } from './pipeline/run-job'
 import { createScenesWriter } from './scenes/write-scenes'
@@ -37,20 +37,11 @@ const pipelineStarter = (store: JobStore, port: number): ((job: Job) => void) =>
   return (job) => void runJob(job, deps)
 }
 
-/** The demo never makes a video; `POST /api/jobs` is refused before it gets here. */
-const refuseJob = (job: Job): void => {
-  throw new Error(`Job ${job.id} reached the pipeline in demo mode`)
-}
-
 loadEnvFile()
 const port = parsePort(process.env.API_PORT)
 const store = createJobStore()
-/** Demo mode (DEMO=1, `npm run demo`): plays the videos in the demo folder and never calls Claude or ElevenLabs. */
-const demo = process.env.DEMO === '1' ? demoDir() : undefined
-const startJob = demo ? refuseJob : pipelineStarter(store, port)
-const app = createApp({ store, runsDir: RUNS_DIR, demoDir: demo, startJob })
+const app = createApp({ store, runsDir: RUNS_DIR, startJob: pipelineStarter(store, port) })
 
 app.listen(port, () => {
   console.log(`Sherpas API on http://localhost:${port} (outputs in ${RUNS_DIR})`)
-  if (demo) console.log(`Demo mode: playing the videos in ${demo}; no new videos are made`)
 })

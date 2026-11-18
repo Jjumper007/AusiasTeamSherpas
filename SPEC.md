@@ -49,7 +49,7 @@ La respuesta 4 decide la llamada a la acción y **tiene prioridad sobre D5** de 
 | `just_do_it` | Un único botón grande y "takes 10 minutes" |
 | `research_first` | Sección para ampliar ("why this number?") y enlaces a más información |
 | `ask_trusted` | Botón "Send this to [pareja]" / "to someone you trust" |
-| `wait` | Lo que cuesta esperar (datos de `projections.yearly`) y un recordatorio |
+| `wait` | Lo que cuesta esperar ("your score stays at X instead of Y" y el hueco que el primer paso deja abierto, solo con facts que ya existen; sin `projections.yearly`, decidido en #8) y un recordatorio |
 
 La encuesta está abierta a añadir preguntas más adelante. Los hijos no tienen vídeo propio, pero aparecen en la historia de sus padres.
 
@@ -120,11 +120,22 @@ runs/             salidas (.gitignore)
 
 ## 7. Demo
 
-- **Caso principal: Daniel & Emily**, con los vídeos **ya renderizados y descargados**:
+La demo es **la experiencia entera del usuario** con vídeos que el pipeline ya hizo. Es la misma en local (`npm run demo`) y en el enlace público que se pasa a la primera criba del hackatón. Vocabulario en `GLOSSARY.md` (Demo, Demo video, Demo answers, Prototype intro, Run replay).
+
+- **Personas:** Daniel y Emily, con los vídeos ya renderizados y verificados contra el caso:
   - **Daniel:** `nerd` · retirement · `research_first` → vídeo denso en datos, con sección para ampliar.
-  - **Emily:** `simple` · protecting the kids · `ask_trusted` → vídeo cálido, con botón "Send this to Daniel".
-- Vídeos de respaldo renderizados para los otros 4 adultos.
-- La generación en directo (3–8 min) es opcional; se puede enseñar el progreso por SSE.
+  - **Emily:** `simple` · protection · `ask_trusted` → vídeo cálido, con botón "Send this to Daniel".
+- **Recorrido:**
+  1. **Pantalla de inicio:** explica que es un prototipo que funciona de verdad y que la demo reproduce un vídeo que ya hizo el pipeline. Termina con una tarjeta por persona; pulsarla empieza su cuestionario y la descarga de su vídeo. El enlace siempre entra por aquí.
+  2. **Cuestionario:** las cuatro preguntas reales. Solo se puede elegir la respuesta con la que se hizo el vídeo; las demás salen en gris con "Not in this demo". El nombre llega relleno y no hay "Skip".
+  3. **Espera (~9 s):** repite los pasos de la ejecución real con la duración de cada uno, sacada de su `log.txt`, y termina diciendo que es una demo. No muestra el tiempo total.
+  4. **Vídeo, capítulos y tarjeta del primer paso.** Los botones de la tarjeta muestran su aviso, pero la demo no guarda nada en el navegador. "Start over" vuelve al inicio.
+- **Cómo se monta:**
+  - `npm run demo:add -w backend -- <run>` verifica la ejecución y copia `result.json`, `video.mp4` y `replay.json` a la carpeta de la demo (`DEMO_DIR`, por defecto `../sherpass-demo`, fuera de Git).
+  - `npm run demo:build` genera `demo-site/`: la web en modo demo (`VITE_DEMO=1`), `demo.json` y los MP4. Es un sitio estático, sin backend, de ~61 MB.
+  - `npm run demo` lo construye y lo sirve en local.
+  - Publicación: `npx vercel deploy --prod demo-site`, con la cuenta del equipo (Vercel Hobby admite hasta 100 MB por despliegue). `demo:build` vacía `demo-site/` y con ello el enlace al proyecto (`demo-site/.vercel`): al volver a publicar, el CLI pregunta a qué proyecto va; se elige el mismo para conservar el dominio.
+- Los otros 4 adultos no están en la demo (decisión del equipo).
 - Las diapositivas incluyen el seguimiento del día 3 y del día 30.
 
 ## 8. Equipo e hitos

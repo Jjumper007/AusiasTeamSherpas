@@ -3,10 +3,9 @@ import { existsSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { SurveySchema, VideoPropsSchema } from '@sherpas/shared'
 import type { z } from 'zod'
-import type { DemoPerson } from '../api/types'
 import { BriefError, describeIssues } from '../brief/errors'
 import { editableSources, PROPS_FILE, SANDBOX_DIR } from '../scenes/sandbox'
-import { DEMO_RESULT_FILE, DEMO_VIDEO_FILE, DemoFileError, parseResult } from './demo-folder'
+import { DEMO_RESULT_FILE, DEMO_VIDEO_FILE, DemoFileError, parseResult, type DemoPerson } from './demo-folder'
 import { caseTruth, checkRun, type RunData, type RunReport } from './verify-run'
 
 /**

@@ -26,7 +26,15 @@ export const emilyRun = (): RunData => {
     timings: props.scenes,
     videoUrl: `/runs/${runId}/video.mp4`,
   })
-  return { result, props, survey, sceneSources: null, log: '2026-11-18T10:01:00.000Z [render] video.mp4 written with the standard scenes\n' }
+  const log = [
+    '2026-11-18T10:00:00.000Z [brief] daniel-emily-johnson/emily: 86 facts',
+    '2026-11-18T10:00:20.000Z [script] written without Claude',
+    '2026-11-18T10:00:30.000Z [voice] 5 scenes: 5 from cache, 0 from the proxy',
+    "2026-11-18T10:00:31.000Z [scenes] Claude failed 3 times; rendering the template's own scenes",
+    '2026-11-18T10:01:31.000Z [render] video.mp4 written with the standard scenes',
+    '',
+  ].join('\n')
+  return { result, props, survey, sceneSources: null, log }
 }
 
 const created: string[] = []

@@ -33,7 +33,7 @@ export interface PipelineDeps {
   readonly now: () => Date
 }
 
-const STEP_LABEL: Readonly<Record<StepId, string>> = {
+export const STEP_LABEL: Readonly<Record<StepId, string>> = {
   brief: 'Reading your plan',
   script: 'Writing your script',
   voice: 'Recording the narration',
@@ -59,7 +59,7 @@ const VIDEO_FILE = 'video.mp4'
 /** Shown on the progress bar and in the step's note when Claude's scenes fail every attempt. */
 const FALLBACK_SCENES_NOTE = 'Using the standard scenes'
 /** The scenes passed their checks; Claude now looks at their frames (#10). */
-const REVIEW_LABEL = 'Checking how your scenes look'
+export const REVIEW_LABEL = 'Checking how your scenes look'
 /** Where the visual review starts within the scenes step, by time. */
 const REVIEW_SHARE = 0.5
 
