@@ -9,7 +9,7 @@ Plan in Motion is a feature of Sherpas, not its own brand: the "sherpas" wordmar
 
 ## Sources (single source of truth)
 
-- `design/sherpas-tokens.css`: colours, type, radii, shadows taken from sherpaswealth.com and the Sherpas app. Link it (`../design/sherpas-tokens.css` from `web/`) instead of copying values.
+- `design/sherpas-tokens.css`: the whole system as CSS variables. `--sw-*`/`--app-*`/`--fm-*` are the brand primitives from sherpaswealth.com and the app; `--sh-*` are the roles to use (light and navy worlds, accents, score bands, mountain palette, type scale, spacing, radii, shadows, focus, motion); `--sh-video-*` are the 1920 x 1080 values for Remotion (safe area, type in px, timing in frames). Import it instead of copying values.
 - `design/assets/sherpas-yak.png`, `design/assets/sherpas-wordmark.png`: white on transparent, cropped from `assets/banner.png`. Tint with CSS `mask-image` + `background: currentColor`.
 - `design/assets/sherpas-favicon-32.png`, `design/assets/sherpas-favicon-180.png`: the favicon (black Sherpas "s" on white; the 32 px one is the team's `sherpas-favicon.avif` as PNG, the 180 px one redrawn to match); 32 px for the tab, 180 px for `apple-touch-icon`.
 - `web/lib/icons.js`: Lucide line icons (stroke 1.75). Add names in `scripts/build-icons.mjs`, then `npm run icons`.

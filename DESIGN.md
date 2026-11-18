@@ -184,14 +184,14 @@ Rejected outright: a dark video player with one neon accent, a generic stepper f
 
 ### Source files and how to use them
 
-- `design/sherpas-tokens.css`: the brand tokens (`--sw-*` from the website, `--app-*` from the app, `--fm-*` for the financial map). Link it before your own CSS (`../design/sherpas-tokens.css` from `web/`); do not copy values. Comments are in Spanish.
+- `design/sherpas-tokens.css`: the tokens, in three layers: brand primitives (`--sw-*` from the website, `--app-*` from the app, `--fm-*` for the financial map), semantic roles (`--sh-*`: both worlds, accents, score bands, the mountain palette, type scale, spacing, radii, shadows, focus, motion) and the 1920 x 1080 video values (`--sh-video-*`: safe area, type in px, radii, timing in frames at 30 fps). Link or import it before your own CSS (`../design/sherpas-tokens.css` from `web/`, `import "../../design/sherpas-tokens.css"` in React or Remotion); use the `--sh-*` roles and do not copy values. `class="sh-navy"` switches any container to the navy world, `data-accent` picks its accent.
 - `web/styles.css`: the implemented roles. `:root` defines the light world (`--frame`, `--raised`, `--hair`, `--ink`, `--ink-2`, `--ink-3`, `--blue`, `--blue-wash`, `--blue-line`, `--cta`, `--shadow-row`, `--shadow-pop`, `--r-*`, `--font-*`, `--ease-out`); `.stage` redefines the navy world (`--navy`, `--navy-deep`, `--surface`, `--surface-2`, `--line`, `--text`, `--muted`, `--accent`, score-band colours). New screens reuse these role names.
 - `design/assets/sherpas-yak.png`, `design/assets/sherpas-wordmark.png`: white on transparent, cropped from `assets/banner.png`. Tint with `mask: url(...) center / contain no-repeat` plus `background: currentColor`, so one file serves ink, brand blue and white.
 - `design/assets/sherpas-favicon-32.png`, `design/assets/sherpas-favicon-180.png`: the favicon (black Sherpas "s" on white; the 32 px one is the team's `sherpas-favicon.avif` as PNG, the 180 px one redrawn to match); 32 px for the tab, 180 px for `apple-touch-icon`.
 - `web/lib/icons.js`: generated from Lucide by `scripts/build-icons.mjs`. Add the name to `ICONS`, run `npm run icons`, call `icon(name)`. Never edit the generated file.
 - Fonts: Google Fonts, Inter 400/500/600/700 and Poppins 500/600.
 - `npm run serve` serves only `web/` and `design/`, matching GitHub Pages at the repo root; assets must live in one of them.
-- Remotion and slides: use the navy world values below as literal colours and the same Poppins/Inter roles; size type in proportion to the frame's short side as the stage does with `cqmin`.
+- Remotion and slides: import the tokens file and use the `--sh-*` colours with the `--sh-video-*` sizes (1920 x 1080, 30 fps); load Poppins and Inter with `@remotion/google-fonts`. The video lives in the navy world.
 
 ## Colors
 
