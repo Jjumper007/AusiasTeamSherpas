@@ -3,6 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "typecheck": "tsc -p tsconfig.json", "brief": "tsx src/brief/cli.ts" },
-  "dependencies": { "@sherpas/shared": "*" }
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "brief": "tsx src/brief/cli.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.545",
+    "@remotion/renderer": "4.0.545",
+    "@sherpas/shared": "*",
+    "express": "^5.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6"
+  }
 }

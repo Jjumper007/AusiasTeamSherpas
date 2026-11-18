@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plantilla de vídeo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top">
+    <a href="index.html">Mapa</a>
+    <a href="contracts.html">Contratos</a>
+    <a href="brief.html">Caso → brief</a>
+    <a href="number-guard.html">Guardia de cifras</a>
+    <a href="video.html" aria-current="page">Vídeo</a>
+    <a href="pipeline.html">Pipeline</a>
+  </nav>
+
+  <h1>Plantilla de vídeo <span class="badge done">#3</span></h1>
+  <p class="lead">Proyecto Remotion con una sola composición, <code>SherpasVideo</code>. Recibe un <code>VideoProps</code> y produce un MP4 de 1920×1080 a 30 fps. Es a la vez el vídeo de respaldo y la base que Claude modificará en #9.</p>
+
+  <div class="callout">
+    <p><b>El aspecto visual es un placeholder.</b> Paleta, ilustración y tipografía se rehacen con las reglas de diseño del equipo. La estructura de esta página no cambia con eso.</p>
+  </div>
+
+  <h2>El módulo, visto desde fuera</h2>
+  <div class="module">
+    <div class="iface">
+      <div class="label">Interfaz</div>
+      <ul>
+        <li>remotion render src/index.ts SherpasVideo out.mp4 --props=video-props.json</li>
+        <li>props: VideoProps (se validan con VideoPropsSchema al empezar)</li>
+        <li>duración total = suma de scenes[i].durationSec</li>
+      </ul>
+    </div>
+    <div class="impl">
+      <div class="label">Implementación que esconde (23 archivos, ~920 líneas)</div>
+      <div class="chips">
+        <span class="chip">reparto en fotogramas</span><span class="chip">audio por escena</span><span class="chip">subtítulos con o sin tiempos</span>
+        <span class="chip">5 escenas</span><span class="chip">variantes simple/straight/nerd</span><span class="chip">sendero, altímetro, mochila, familia</span>
+      </div>
+    </div>
+    <div class="meta">Sin audio, el vídeo funciona en silencio y reparte la narración en subtítulos. Con <code>audioFile</code> y <code>captions</code>, usa la voz y sus tiempos. Quien llama no cambia nada.</div>
+  </div>
+
+  <h2>Zona bloqueada y zona editable</h2>
+  <p>En #9, Claude trabaja sobre una copia de esta carpeta. Puede tocar la zona editable; si toca la bloqueada, el intento cuenta como fallo (se comprueba por hash).</p>
+  <div class="zones">
+    <div class="zone locked">
+      <h3>🔒 <code>src/locked/</code></h3>
+      <div class="chips">
+        <span class="chip">tokens.ts</span><span class="chip">Root.tsx</span><span class="chip">Video.tsx</span>
+        <span class="chip">AudioCaptionLayer.tsx</span><span class="chip">timing.ts</span><span class="chip">captions.ts</span>
+      </div>
+      <p>Colores, tipografías y márgenes; registro de la composición; orden y duración de las escenas; voz y subtítulos.</p>
+    </div>
+    <div class="zone editable">
+      <h3>✏️ <code>src/scenes/</code> y <code>src/components/</code></h3>
+      <div class="chips">
+        <span class="chip">HookScene</span><span class="chip">WhereYouAreScene</span><span class="chip">WhatMattersScene</span>
+        <span class="chip">FirstStepScene</span><span class="chip">WhatChangesScene</span><span class="chip">scene-facts</span>
+        <span class="chip">Backdrop</span><span class="chip">Hikers</span><span class="chip">Altimeter</span><span class="chip">Backpack</span>
+        <span class="chip">FactRows</span><span class="chip">Panel</span><span class="chip">trail</span>
+      </div>
+      <p>Qué se dibuja en cada parte del arco y cómo se anima.</p>
+    </div>
+  </div>
+
+  <h2>Cómo se renderiza</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TD
+  P{{"VideoProps<br/>(--props)"}} --> R["Root.tsx · calculateMetadata<br/>valida con zod y calcula la duración"]
+  R --> V["Video.tsx<br/>sceneFrameRanges(scenes, fps)"]
+  V --> S1["Sequence 1<br/>hook"]
+  V --> S2["Sequence 2<br/>where_you_are"]
+  V --> S3["Sequence 3<br/>what_matters"]
+  V --> S4["Sequence 4<br/>first_step"]
+  V --> S5["Sequence 5<br/>what_changes"]
+  S3 --> SC["SCENES[part]<br/>la escena dibujada"]
+  S3 --> AC["AudioCaptionLayer<br/>voz + subtítulos"]
+
+  classDef locked fill:#e9ecf3,stroke:#1f2a44,stroke-width:2px,color:#1f2a44
+  classDef editable fill:#fdf0ea,stroke:#c8573a,stroke-dasharray:5 5,color:#5a2312
+  classDef contract fill:#efe8fa,stroke:#6b4ea0,color:#2a1d45
+  class R,V,AC,S1,S2,S3,S4,S5 locked
+  class SC editable
+  class P contract
+    </pre>
+    <figcaption>Cada <code>Sequence</code> lleva dos capas: la escena (editable) y la de audio y subtítulos (bloqueada). Solo se muestra el desglose de la tercera; las otras son iguales.</figcaption>
+  </figure>
+
+  <h3>Las duraciones vienen de los props, no del código</h3>
+  <p>Con el fixture de Daniel (sin voz), 72 s en total:</p>
+  <div class="timeline">
+    <div style="flex: 8">hook 8 s</div>
+    <div style="flex: 14">where 14 s</div>
+    <div style="flex: 24">what_matters 24 s</div>
+    <div style="flex: 12">first 12 s</div>
+    <div style="flex: 14">changes 14 s</div>
+  </div>
+  <p>Cuando exista la narración (#7), cada duración será la de su audio.</p>
+
+  <h2>El seam donde se enchufan las escenas</h2>
+  <p><code>Video.tsx</code> no conoce ninguna escena concreta: busca el componente en el mapa <code>SCENES</code> y le pasa siempre los mismos props. Ese mapa es el seam entre la parte bloqueada y la editable.</p>
+  <pre class="code"><code>// src/scenes/types.ts
+interface SceneProps {
+  brief: Brief
+  facts: Facts
+  scene: Scene            // narration, visualIdea, factsUsed
+  chapter: Chapter
+  durationInFrames: number
+}
+
+// src/scenes/index.ts
+const SCENES: Record&lt;Part, FC&lt;SceneProps&gt;&gt;</code></pre>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  V["Video.tsx (bloqueado)"] -->|"SceneProps"| SEAM{{"SCENES[part]"}}
+  SEAM --> A1["Escenas de respaldo<br/>(hoy)"]
+  SEAM --> A2["Escenas escritas por Claude<br/>(#9)"]
+  classDef done fill:#e3f3e8,stroke:#2f7d4a,color:#13361f
+  classDef planned fill:#fbf1d6,stroke:#8a6d1f,stroke-dasharray:5 5,color:#3d300c
+  class V,A1 done
+  class A2 planned
+    </pre>
+    <figcaption>Dos adapters para el mismo seam: por eso es un seam real. Si las escenas de Claude fallan los validadores, se usan las de respaldo y siempre sale un MP4.</figcaption>
+  </figure>
+
+  <h2>Reglas que cumple toda escena</h2>
+  <ul>
+    <li><b>Solo muestra cifras de <code>scene.factsUsed</code>,</b> a través de <code>sceneFacts</code> / <code>pointsFacts</code> y siempre formateadas con <code>fmt</code>. Ninguna cifra escrita a mano: <code>validateTsx</code> da por buenos los 14 archivos TSX.</li>
+    <li><b>Toma colores, fuentes y márgenes de <code>tokens.ts</code>.</b> Cambiar el estilo es cambiar ese archivo.</li>
+    <li><b>La parte 3 cambia con <code>explainLevel</code>:</b> una cifra grande (<code>simple</code>), hasta 3 filas (<code>straight</code>) o la tabla con cifra exacta y redondeada (<code>nerd</code>).</li>
+    <li>Si a una escena le faltan los facts que necesita, enseña el texto del capítulo en vez de un número.</li>
+  </ul>
+
+  <h2>Comandos</h2>
+  <pre class="code"><code>cd video-template
+npm run studio                                  # vista previa interactiva con el fixture
+npm run render                                  # out/video.mp4 con el fixture
+npm run render -- --props=ruta/props.json       # con otros props
+npm run still -- out/frame.png --frame=600      # un fotograma</code></pre>
+
+  <footer>Código: <code>video-template/src/</code>. Tests: <code>locked/timing.test.ts</code>, <code>locked/captions.test.ts</code>, <code>scenes/scene-facts.test.ts</code>.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="diagrams.js"></script>
+</body>
+</html>

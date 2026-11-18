@@ -9,10 +9,14 @@
     "video-template"
   ],
   "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "start": "npm run start -w backend",
+    "build": "npm run build -w frontend",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "vitest run"
   },
   "devDependencies": {
+    "concurrently": "^9.2.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.1.1"

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arquitectura de Sherpas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top">
+    <a href="index.html" aria-current="page">Mapa</a>
+    <a href="contracts.html">Contratos</a>
+    <a href="brief.html">Caso → brief</a>
+    <a href="number-guard.html">Guardia de cifras</a>
+    <a href="video.html">Vídeo</a>
+    <a href="pipeline.html">Pipeline</a>
+  </nav>
+
+  <h1>Arquitectura de Sherpas</h1>
+  <p class="lead">Cómo se conectan los módulos que convierten un caso financiero y una encuesta en un vídeo MP4 por persona, y qué interfaz presenta cada uno.</p>
+
+  <div class="callout">
+    <p><b>Estado:</b> commit <code>af40729</code> (18-11-2026). Cerrados #1–#4; el pipeline (#5–#10) aún no existe.</p>
+    <p><span class="badge done">implementado</span> existe y tiene tests · <span class="badge planned">planificado</span> lo construye un issue abierto · <span class="badge proposal">propuesta</span> forma sugerida, pendiente de acordar.</p>
+  </div>
+
+  <h2>Mapa del sistema</h2>
+  <p>Dos vistas del mismo sistema: qué datos viajan de un módulo a otro, y qué carpeta importa a cuál.</p>
+
+  <h3>1 · Flujo de datos</h3>
+  <p>Cada flecha lleva el <b>contrato</b> que cruza: un esquema zod de <code>@sherpas/shared</code>. Los módulos solo se conocen a través de esos contratos, por eso las tres personas pueden trabajar en paralelo.</p>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TB
+  UI["frontend<br/>selector + encuesta"]
+  JOBS["Jobs + SSE"]
+  BRIEF["Caso → brief"]
+  SCRIPT["Guion<br/>claude -p"]
+  TTS["Narración<br/>ElevenLabs"]
+  TSX["TSX + validadores<br/>claude -p"]
+  VIDEO["Vídeo<br/>Remotion"]
+  PLAYER["frontend<br/>reproductor + capítulos<br/>+ tarjeta"]
+  CASES[("cases/")]
+
+  UI -->|"Survey"| JOBS
+  JOBS --> BRIEF
+  CASES --> BRIEF
+  BRIEF -->|"Brief + Facts"| SCRIPT
+  SCRIPT -->|"Script"| TTS
+  TTS -->|"SceneTiming x5"| TSX
+  TSX -->|"VideoProps"| VIDEO
+  VIDEO -->|"MP4"| PLAYER
+
+  classDef done fill:#e3f3e8,stroke:#2f7d4a,color:#13361f
+  classDef planned fill:#fbf1d6,stroke:#8a6d1f,stroke-dasharray:5 5,color:#3d300c
+  class BRIEF,VIDEO done
+  class UI,JOBS,SCRIPT,TTS,TSX,PLAYER planned
+    </pre>
+    <figcaption>Verde: implementado. Amarillo con borde discontinuo: planificado. El detalle de cada paso, sus reintentos y sus respaldos está en <a href="pipeline.html">Pipeline</a>.</figcaption>
+  </figure>
+
+  <h3>2 · Quién importa a quién</h3>
+  <p>Las tres carpetas de aplicación dependen solo de <code>shared/</code>, nunca entre sí. Así cada persona del equipo trabaja en su carpeta sin romper las demás.</p>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TB
+  FE["frontend/<br/>Vite + React"]
+  BE["backend/<br/>Express"]
+  VT["video-template/<br/>Remotion"]
+  subgraph SH["shared/ · @sherpas/shared"]
+    CONTRACTS["Contratos zod"]
+    GUARD["Guardia de cifras<br/>fmt · validateNarration · validateTsx"]
+  end
+  FE --> CONTRACTS
+  BE --> CONTRACTS
+  VT --> CONTRACTS
+  FE -->|"fmt"| GUARD
+  BE -->|"validate*"| GUARD
+  VT -->|"fmt"| GUARD
+
+  classDef done fill:#e3f3e8,stroke:#2f7d4a,color:#13361f
+  classDef planned fill:#fbf1d6,stroke:#8a6d1f,stroke-dasharray:5 5,color:#3d300c
+  class CONTRACTS,GUARD,VT done
+  class FE,BE planned
+    </pre>
+    <figcaption><code>backend/</code> aparece como planificado porque solo existe su primer módulo (caso → brief); el servidor Express llega con #5.</figcaption>
+  </figure>
+
+  <h2>Cómo leer estas páginas</h2>
+  <p>Usamos el vocabulario de <i>deep modules</i>:</p>
+  <ul>
+    <li><b>Módulo:</b> cualquier cosa con interfaz e implementación, sea una función o una carpeta entera.</li>
+    <li><b>Interfaz:</b> todo lo que quien llama necesita saber: firmas, pero también invariantes, errores y configuración.</li>
+    <li><b>Profundo:</b> mucho comportamiento detrás de una interfaz pequeña. Lo que buscamos.</li>
+    <li><b>Seam:</b> el sitio donde vive una interfaz y donde se puede cambiar el comportamiento sin tocar a quien llama.</li>
+    <li><b>Adapter:</b> lo que se enchufa en un seam. Un seam con un solo adapter es hipotético; con dos, es real.</li>
+  </ul>
+  <p>Cada módulo se dibuja así: la interfaz en la franja oscura de arriba, la implementación que esconde debajo.</p>
+
+  <div class="module">
+    <div class="iface"><div class="label">Interfaz</div>pocas funciones, parámetros simples</div>
+    <div class="impl"><div class="label">Implementación</div><div class="chips"><span class="chip">lógica</span><span class="chip">parsers</span><span class="chip">reglas</span><span class="chip">casos raros</span><span class="chip">…</span></div></div>
+  </div>
+
+  <h2>Módulos</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Módulo</th><th>Carpeta</th><th>Interfaz (resumen)</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td><a href="contracts.html">Contratos</a></td><td><code>shared/src/*.ts</code></td><td>5 esquemas zod: <code>Survey</code>, <code>Facts</code>, <code>Brief</code>, <code>Script</code>, <code>VideoProps</code></td><td><span class="badge done">#1</span></td></tr>
+        <tr><td><a href="brief.html">Caso → brief</a></td><td><code>backend/src/brief/</code></td><td><code>generateCaseOutputs(caseData, member, survey)</code></td><td><span class="badge done">#2</span></td></tr>
+        <tr><td><a href="number-guard.html">Guardia de cifras</a></td><td><code>shared/src/number-guard/</code></td><td><code>fmt.*</code>, <code>validateNarration</code>, <code>validateTsx</code></td><td><span class="badge done">#4</span></td></tr>
+        <tr><td><a href="video.html">Vídeo</a></td><td><code>video-template/</code></td><td>Composición <code>SherpasVideo</code> con props <code>VideoProps</code>; seam <code>SceneProps</code></td><td><span class="badge done">#3</span></td></tr>
+        <tr><td><a href="pipeline.html">Pipeline</a></td><td><code>backend/</code></td><td>Jobs, SSE y pasos guion → voz → TSX → render</td><td><span class="badge planned">#5–#10</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Páginas</h2>
+  <div class="cards">
+    <a href="contracts.html"><b>Contratos</b><span>Los cinco esquemas, quién produce y quién consume cada uno, y sus invariantes.</span></a>
+    <a href="brief.html"><b>Caso → brief</b><span>De los JSON y <code>persona.md</code> al brief, los facts y las opciones de encuesta.</span></a>
+    <a href="number-guard.html"><b>Guardia de cifras</b><span>Cómo <code>fmt</code> y los validadores garantizan que no se inventan números.</span></a>
+    <a href="video.html"><b>Vídeo</b><span>Zona bloqueada y zona editable de Remotion, y el seam donde Claude escribe escenas.</span></a>
+    <a href="pipeline.html"><b>Pipeline</b><span>Lo que falta: jobs, SSE, reintentos, respaldo y las interfaces propuestas de cada paso.</span></a>
+  </div>
+
+  <footer>Fuentes: <code>SPEC.md</code>, issues #1–#11 y el código en <code>af40729</code>. Si el código cambia, actualiza la página del módulo afectado.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="diagrams.js"></script>
+</body>
+</html>

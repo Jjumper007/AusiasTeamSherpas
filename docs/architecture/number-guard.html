@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guardia de cifras</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top">
+    <a href="index.html">Mapa</a>
+    <a href="contracts.html">Contratos</a>
+    <a href="brief.html">Caso → brief</a>
+    <a href="number-guard.html" aria-current="page">Guardia de cifras</a>
+    <a href="video.html">Vídeo</a>
+    <a href="pipeline.html">Pipeline</a>
+  </nav>
+
+  <h1>Guardia de cifras <span class="badge done">#4</span></h1>
+  <p class="lead">La garantía de que el vídeo no inventa números. Un único sitio convierte un fact en texto (<code>fmt</code>) y un único sitio comprueba que todo número escrito sale de ahí (<code>validate*</code>).</p>
+
+  <h2>El módulo</h2>
+  <div class="module">
+    <div class="iface">
+      <div class="label">Interfaz</div>
+      <ul>
+        <li>fmt.round(x) → "$1.4M" · fmt.currency(x) → "$1,427,456" · fmt.percent(x) → "49%"</li>
+        <li>fmt.years(x) → "17 years" · fmt.fact(fact) → formato según su unit</li>
+        <li>validateNarration(text, facts) → { ok, errors[] }</li>
+        <li>validateTsx(source, facts) → { ok, errors[] }</li>
+      </ul>
+    </div>
+    <div class="impl">
+      <div class="label">Implementación que esconde (9 archivos, ~860 líneas)</div>
+      <div class="chips">
+        <span class="chip">tokens: encuentra números y escalas</span>
+        <span class="chip">accepted: formas válidas de cada fact</span>
+        <span class="chip">tsx-scan: escáner de TSX</span>
+        <span class="chip">tsx-structural: qué es estructural</span>
+        <span class="chip">errors: línea, columna, fact más cercano</span>
+      </div>
+    </div>
+    <div class="meta">Los validadores nunca lanzan: devuelven los errores como datos. <code>fmt</code> no usa APIs de Node ni <code>Intl</code>, así que funciona igual en el backend, en Remotion y en el navegador.</div>
+  </div>
+
+  <h2>Quién lo usa</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  subgraph G["Guardia de cifras"]
+    FMT["fmt"]
+    VN["validateNarration"]
+    VT["validateTsx"]
+  end
+  SCENES["Escenas del vídeo<br/>FactRows, WhatChangesScene"]
+  CARD["Tarjeta 'Your first step'<br/>(#8)"]
+  SCRIPT["Paso de guion<br/>(#6)"]
+  TSX["Bucle de TSX<br/>(#9)"]
+  CLAUDE["claude -p"]
+
+  SCENES --> FMT
+  CARD --> FMT
+  SCRIPT --> VN
+  TSX --> VT
+  VN -->|"errors[].message"| CLAUDE
+  VT -->|"errors[].message"| CLAUDE
+
+  classDef done fill:#e3f3e8,stroke:#2f7d4a,color:#13361f
+  classDef planned fill:#fbf1d6,stroke:#8a6d1f,stroke-dasharray:5 5,color:#3d300c
+  class FMT,VN,VT,SCENES done
+  class CARD,SCRIPT,TSX,CLAUDE planned
+    </pre>
+    <figcaption>Los mensajes de error están pensados para volver a Claude en el siguiente intento: dicen qué número, dónde y cómo debería escribirse.</figcaption>
+  </figure>
+
+  <h2>Cómo decide si un número es válido</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TD
+  N["Número encontrado en el texto"] --> S{"¿Lleva escala?<br/>K, M, B, million…"}
+  S -->|no| D{"¿1 o 2 dígitos?"}
+  D -->|sí| OK["Aceptado"]
+  D -->|no| C{"¿Es 100 o un plan<br/>tipo 401(k)?"}
+  C -->|sí| OK
+  C -->|no| E{"¿Coincide con un fact?<br/>valor exacto, fmt.fact,<br/>o fmt.round escrito entero"}
+  S -->|sí| R{"¿Es exactamente lo que<br/>imprime fmt.round<br/>para algún fact?"}
+  E -->|sí| OK
+  R -->|sí| OK
+  E -->|no| X["Error con el fact más cercano"]
+  R -->|no| X
+    </pre>
+    <figcaption>En TSX, además, se ignoran los números estructurales: props numéricas, estilos, aritmética, colores, medidas CSS y rutas. Se comprueba el texto JSX, las cadenas y los argumentos de <code>fmt.*</code>.</figcaption>
+  </figure>
+
+  <h3>Por qué no pueden desincronizarse</h3>
+  <p>Las formas aceptadas de cada fact se calculan <b>ejecutando <code>fmt</code></b> y leyendo lo que imprime. Si mañana <code>fmt.round</code> pasa a escribir "$1.43M", el validador lo acepta automáticamente y rechaza "$1.4M". Cambiar el formato es tocar un único archivo.</p>
+
+  <h2>Ejemplos</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Fact</th><th>Escrito</th><th>Resultado</th></tr></thead>
+      <tbody>
+        <tr><td><code>RETIREMENT_GAP = 1427455.89</code> (usd)</td><td>"$1.4M", "1.4 million", "$1,427,456", "$1,400,000"</td><td><span class="badge done">aceptado</span></td></tr>
+        <tr><td><code>RETIREMENT_GAP = 1427455.89</code> (usd)</td><td>"$1.5M", "$1,427K"</td><td><span class="badge rejected">rechazado</span></td></tr>
+        <tr><td><code>RETIREMENT_INCOME_SHARE_OF_NEED = 0.4928</code> (percent)</td><td>"49%", "49.28%"</td><td><span class="badge done">aceptado</span></td></tr>
+        <tr><td><code>RETIREMENT_YEAR = 2044</code> (calendar_year)</td><td>"2044" / "2045"</td><td><span class="badge done">aceptado</span> / <span class="badge rejected">rechazado</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <pre class="code"><code>Number "$1.5M" at line 2, column 24 does not come from facts.
+Nearest fact: RETIREMENT_GAP = 1427455.89 (usd). Write it as "$1.4M" or "$1,427,456".
+Context: "Your retirement gap is $1.5M today."</code></pre>
+
+  <h2>Límites conocidos</h2>
+  <ul>
+    <li><b>Se cuela</b> un número inventado que llega por una constante o una prop numérica: <code>const GAP = 1500000; fmt.round(GAP)</code>. Cerrarlo exige que los argumentos de <code>fmt</code> sean constantes importadas de <code>facts.ts</code>; relevante para #9.</li>
+    <li><b>Se cuelan</b> números escritos con letras, cifras de 1–2 dígitos inventadas y confusiones de unidad ("$2,044").</li>
+    <li><b>Se rechazan</b> números legítimos de 3+ dígitos que no son facts ("529 plan") y las cifras que solo están en la prosa del brief. Lo segundo es intencionado.</li>
+    <li>El escáner de TSX es heurístico, no un parser.</li>
+  </ul>
+  <div class="callout planned">
+    <p><b>Decisión abierta:</b> <code>100</code> se acepta siempre para que pase "52 out of 100", pero también deja pasar un "$100" o un "100%" inventado. La alternativa es un fact <code>SCORE_MAX</code>.</p>
+  </div>
+
+  <footer>Código: <code>shared/src/number-guard/</code>. Tests: 48, en 3 archivos.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="diagrams.js"></script>
+</body>
+</html>

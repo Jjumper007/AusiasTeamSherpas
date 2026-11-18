@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pipeline de generación</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top">
+    <a href="index.html">Mapa</a>
+    <a href="contracts.html">Contratos</a>
+    <a href="brief.html">Caso → brief</a>
+    <a href="number-guard.html">Guardia de cifras</a>
+    <a href="video.html">Vídeo</a>
+    <a href="pipeline.html" aria-current="page">Pipeline</a>
+  </nav>
+
+  <h1>Pipeline de generación <span class="badge planned">#5–#10</span></h1>
+  <p class="lead">Lo que une los módulos anteriores: recibe una encuesta, lanza un trabajo en segundo plano, informa del progreso y siempre termina con un MP4.</p>
+
+  <div class="callout planned">
+    <p><b>Nada de esta página está implementado todavía.</b> El flujo sale de <code>SPEC.md</code> §5 y de los issues #5–#10.</p>
+    <p>Las firmas marcadas como <span class="badge proposal">propuesta</span> no están acordadas. Sirven para que #5, #6 y #7 puedan avanzar en paralelo sabiendo dónde encaja cada uno.</p>
+  </div>
+
+  <h2>Una petición, de principio a fin</h2>
+  <figure class="diagram wide">
+    <pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Persona
+  participant FE as frontend
+  participant API as Express
+  participant J as Trabajo
+  participant R as runs/
+
+  U->>FE: caso y miembro
+  FE->>API: opciones de encuesta
+  API-->>FE: SurveyOption[]
+  U->>FE: encuesta + Generate
+  FE->>API: POST /jobs
+  API->>J: crea el trabajo
+  API-->>FE: jobId, al momento
+  FE->>API: GET /jobs/:id/events
+  loop cada paso
+    J->>R: guarda el resultado
+    J-->>FE: evento SSE
+  end
+  J-->>FE: URL del MP4 + guion
+  FE->>U: vídeo + capítulos + tarjeta
+    </pre>
+    <figcaption><code>POST /jobs</code> recibe <code>{ caseId, member, survey }</code> y responde sin esperar; la generación tarda de 3 a 8 minutos. Cada evento SSE <span class="badge proposal">propuesta</span> lleva <code>{ step, status, message }</code>. El trabajo vive en un <code>Map</code> en memoria y guarda sus archivos en <code>runs/&lt;caseId&gt;/&lt;member&gt;/&lt;timestamp&gt;/</code>.</figcaption>
+  </figure>
+
+  <h2>Los pasos y sus respaldos</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TD
+  IN{{"caseId + member + Survey"}} --> B["1 · Caso → brief<br/>generateCaseOutputs"]
+  B -->|"Brief + Facts"| S["2 · Guion<br/>claude -p + zod + validateNarration"]
+  S -->|"falla 3 veces"| SF["Guion sin Claude<br/>a partir de narrative.*"]
+  S -->|"Script"| T["3 · Narración<br/>ElevenLabs con caché"]
+  SF -->|"Script"| T
+  T -->|"SceneTiming x5"| X["4 · TSX<br/>claude -p en copia aislada"]
+  X --> V["5 · Validadores<br/>tsc · 5 fotogramas · duración · cifras · bloqueados"]
+  V -->|"falla, reintento ≤3"| X
+  V -->|"pasa"| VR["Revisión visual (#10)<br/>lo primero que se recorta"]
+  V -->|"3 fallos"| FB["Escenas de respaldo"]
+  VR --> RD["7 · Render MP4"]
+  FB --> RD
+  RD --> OUT[("runs/.../video.mp4")]
+
+  classDef done fill:#e3f3e8,stroke:#2f7d4a,color:#13361f
+  classDef planned fill:#fbf1d6,stroke:#8a6d1f,stroke-dasharray:5 5,color:#3d300c
+  classDef fallback fill:#e9ecf3,stroke:#56607a,color:#1f2a44
+  class B,FB done
+  class S,T,X,V,VR,RD planned
+  class SF fallback
+    </pre>
+    <figcaption>Hay respaldo en los dos pasos con Claude, por eso siempre sale un MP4. El orden de llegada es #5 (flujo con respaldos), luego #6 y #7, luego #9 y #10.</figcaption>
+  </figure>
+
+  <h2>Interfaces propuestas para cada paso <span class="badge proposal">propuesta</span></h2>
+  <p>Cada paso es un módulo profundo: una función, que recibe sus dependencias externas en vez de crearlas, y devuelve datos de los contratos. El pipeline solo encadena llamadas.</p>
+
+  <div class="module">
+    <div class="iface">
+      <div class="label">Paso 2 · Guion (#6)</div>
+      writeScript(brief, facts, runClaude) → Promise&lt;{ script, attempts, usedFallback }&gt;
+    </div>
+    <div class="impl"><div class="label">Esconde</div><div class="chips"><span class="chip">prompts/script.md con marcadores</span><span class="chip">ScriptSchema</span><span class="chip">validateNarration</span><span class="chip">reintentos con el error</span><span class="chip">guion sin Claude</span></div></div>
+    <div class="meta">En #5 existe solo la rama de respaldo; #6 añade la llamada a Claude sin cambiar la firma.</div>
+  </div>
+
+  <div class="module">
+    <div class="iface">
+      <div class="label">Paso 3 · Narración (#7)</div>
+      narrate(script, tts, runDir) → Promise&lt;SceneTiming x5&gt;
+    </div>
+    <div class="impl"><div class="label">Esconde</div><div class="chips"><span class="chip">un audio por escena</span><span class="chip">caché por hash del texto</span><span class="chip">medida de duraciones</span><span class="chip">tiempos por carácter → subtítulos</span></div></div>
+    <div class="meta">Devuelve exactamente <code>VideoProps.scenes</code>. En #5 puede ser una versión sin voz que estima duraciones.</div>
+  </div>
+
+  <div class="module">
+    <div class="iface">
+      <div class="label">Pasos 4–6 · Vídeo (#9, #10)</div>
+      buildVideoProject(props, runDir, runClaude) → Promise&lt;{ projectDir, usedFallback, attempts }&gt;
+    </div>
+    <div class="impl"><div class="label">Esconde</div><div class="chips"><span class="chip">copia aislada de video-template</span><span class="chip">prompts/scenes.md</span><span class="chip">hash de lo bloqueado</span><span class="chip">tsc, stills, duración, validateTsx</span><span class="chip">revisión visual</span><span class="chip">vuelta al respaldo</span></div></div>
+  </div>
+
+  <div class="module">
+    <div class="iface">
+      <div class="label">Paso 7 · Render (#5)</div>
+      renderMp4(projectDir, props, outFile) → Promise&lt;void&gt;
+    </div>
+  </div>
+
+  <h3>Los dos adapters externos</h3>
+  <p>Los servicios externos entran como parámetros. Así los tests usan una versión falsa y el pipeline la real: dos adapters por seam, seam real.</p>
+  <pre class="code"><code>type RunClaude = (prompt: string, options: { cwd: string; allowedTools: string[] }) =&gt; Promise&lt;string&gt;
+type TextToSpeech = (text: string) =&gt; Promise&lt;{ audio: Uint8Array; characterTimes: CharacterTime[] }&gt;</code></pre>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  WS["writeScript"] --> RC{{"RunClaude"}}
+  BV["buildVideoProject"] --> RC
+  RC --> CR["claude -p<br/>(real)"]
+  RC --> CF["respuestas fijas<br/>(tests)"]
+  NR["narrate"] --> TS{{"TextToSpeech"}}
+  TS --> EL["ElevenLabs /with-timestamps<br/>(real, con caché)"]
+  TS --> TF["audio vacío + tiempos fijos<br/>(tests, sin key)"]
+  classDef proposal fill:#efe8fa,stroke:#6b4ea0,stroke-dasharray:5 5,color:#2a1d45
+  class WS,BV,NR,RC,TS,CR,CF,EL,TF proposal
+    </pre>
+  </figure>
+
+  <h2>Qué se guarda en cada ejecución</h2>
+  <pre class="code"><code>runs/&lt;caseId&gt;/&lt;member&gt;/&lt;timestamp&gt;/
+├── survey.json
+├── brief.json
+├── facts.ts
+├── script.json
+├── audio/            un archivo por escena
+├── project/          copia aislada de video-template (#9)
+├── logs/             un log por paso e intento
+└── video.mp4</code></pre>
+
+  <h2>Trabajo en paralelo</h2>
+  <p>#6 y #7 están bloqueados por #5 solo en su último criterio, integrarse en el pipeline. Con las firmas de arriba acordadas, cada uno puede construir y probar su función con los fixtures de Daniel mientras #5 monta los jobs, el SSE y el render, dejando un hueco con la misma firma.</p>
+
+  <footer>Fuentes: <code>SPEC.md</code> §5 y issues #5–#10.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="diagrams.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caso a brief</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top">
+    <a href="index.html">Mapa</a>
+    <a href="contracts.html">Contratos</a>
+    <a href="brief.html" aria-current="page">Caso → brief</a>
+    <a href="number-guard.html">Guardia de cifras</a>
+    <a href="video.html">Vídeo</a>
+    <a href="pipeline.html">Pipeline</a>
+  </nav>
+
+  <h1>Caso → brief <span class="badge done">#2</span></h1>
+  <p class="lead">Convierte los archivos de un caso y la encuesta de una persona en todo lo que necesita el pipeline: el brief para Claude, los facts con las cifras permitidas y las opciones de la encuesta. Determinista, sin LLM.</p>
+
+  <h2>El módulo</h2>
+  <div class="module">
+    <div class="iface">
+      <div class="label">Interfaz que necesita el pipeline</div>
+      <ul>
+        <li>loadCase(caseId) → CaseData</li>
+        <li>generateCaseOutputs(caseData, memberFirstName, survey) → { brief, facts, factsSource, surveyOptions }</li>
+        <li>listCaseIds() → string[]</li>
+        <li>surveyOptionsForCase(caseId) → SurveyOption[]</li>
+        <li>BriefError: entrada inválida, con un mensaje listo para mostrar</li>
+      </ul>
+    </div>
+    <div class="impl">
+      <div class="label">Implementación que esconde (23 archivos, ~1.350 líneas)</div>
+      <div class="chips">
+        <span class="chip">case-loader</span><span class="chip">case-schema (zod del JSON)</span><span class="chip">persona-parser</span>
+        <span class="chip">brief-extractor</span><span class="chip">narrative-selector</span><span class="chip">decision-style</span>
+        <span class="chip">pillar-points</span><span class="chip">topic-coverage</span><span class="chip">survey-options</span>
+        <span class="chip">facts/score-facts</span><span class="chip">facts/household-facts</span><span class="chip">facts/plan-facts</span>
+        <span class="chip">facts/curated-facts</span><span class="chip">facts/goal-facts</span><span class="chip">facts-source</span>
+      </div>
+    </div>
+    <div class="meta">Quien llama no sabe nada de los formatos de <code>persona.md</code> (que varían entre casos), de cómo se eligen los textos de la narrativa ni de dónde sale cada cifra. Esa es la profundidad del módulo.</div>
+  </div>
+
+  <h2>Qué pasa dentro</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TB
+  FH["cases/caseId/financial-health.json"] --> CS["case-schema<br/>valida el JSON"]
+  PM["cases/caseId/persona.md"] --> PP["persona-parser<br/>D0–D6, O1–On, T1–Tn"]
+  CS --> CD(["CaseData"])
+  PP --> CD
+
+  CD --> BX["brief-extractor<br/>+ narrative-selector<br/>+ decision-style"]
+  SV{{"Survey"}} --> BX
+  CD --> FX["facts/*<br/>5 constructores<br/>+ facts-source"]
+  CD --> SO["survey-options<br/>+ topic-coverage"]
+
+  BX --> B{{"Brief"}}
+  FX --> F{{"Facts + facts.ts"}}
+  SO --> O{{"SurveyOption[]"}}
+
+  classDef contract fill:#efe8fa,stroke:#6b4ea0,color:#2a1d45
+  classDef disk fill:#e9ecf3,stroke:#56607a,color:#1f2a44
+  class SV,B,F,O contract
+  class FH,PM,CS,PP disk
+    </pre>
+    <figcaption>Gris: <code>loadCase</code>, lo único que toca el disco. Debajo de <code>CaseData</code> todo son funciones puras, que es lo que hace <code>generateCaseOutputs</code>. <code>narrative-selector</code> elige los dos resúmenes y los textos del tema de la encuesta hasta 1.600 caracteres; <code>decision-style</code> hace que la encuesta mande sobre D5.</figcaption>
+  </figure>
+
+  <h2>El seam: <code>CaseData</code></h2>
+  <p>El módulo tiene dos versiones de cada función: una que recibe el id del caso y lee el disco (<code>extractBrief</code>, <code>generateFacts</code>, <code>surveyOptionsForCase</code>) y otra pura que recibe <code>CaseData</code> (<code>buildBrief</code>, <code>buildFacts</code>, <code>buildSurveyOptions</code>). El seam real está en <code>CaseData</code>: el pipeline carga el caso una vez y genera todo a partir de él.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  CLI["CLI<br/>npx tsx backend/src/brief/cli.ts"]
+  JOB["Paso 1 del pipeline<br/>(#5)"]
+  HTTP["Endpoint de opciones<br/>de encuesta (#5)"]
+  MOD["Caso → brief"]
+  CLI --> MOD
+  JOB --> MOD
+  HTTP --> MOD
+  classDef done fill:#e3f3e8,stroke:#2f7d4a,color:#13361f
+  classDef planned fill:#fbf1d6,stroke:#8a6d1f,stroke-dasharray:5 5,color:#3d300c
+  class CLI,MOD done
+  class JOB,HTTP planned
+    </pre>
+    <figcaption>Quién lo llama: hoy solo la CLI; con #5, el pipeline y el endpoint que da las opciones al frontend.</figcaption>
+  </figure>
+
+  <h2>Errores</h2>
+  <p>Todo problema de entrada lanza <code>BriefError</code> con un mensaje de una línea: caso desconocido, miembro desconocido, <b>miembro que es un hijo</b> (los hijos aparecen en <code>household</code> pero no tienen vídeo), encuesta inválida o archivo del caso ilegible. El pipeline puede enviar ese mensaje tal cual por SSE.</p>
+
+  <h2>Comportamiento clave</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Qué</th><th>Cómo</th></tr></thead>
+      <tbody>
+        <tr><td>Override de D5</td><td><code>classification.D5</code> pasa a ser, por ejemplo, <code>RESEARCH_FIRST (survey answer; overrides persona.md D5: DUAL)</code>.</td></tr>
+        <tr><td>Tamaño del brief</td><td>7,6–9,2 KB según caso y tema. El test exige ≤ 9,5 KB.</td></tr>
+        <tr><td>Tema no cubierto</td><td>Si <code>topOfMind</code> no está en el plan, el brief lleva solo los resúmenes.</td></tr>
+        <tr><td>Facts</td><td>86 para Daniel y Emily, 68 para Michael, 69 para Samantha, 86 para Timothy y Melanie. Solo datos estructurados, no números de la prosa.</td></tr>
+        <tr><td>Opciones de encuesta</td><td>Un tema aparece si hay un objetivo de ese tipo o una preocupación que lo trata.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Observación de diseño</h2>
+  <div class="callout proposal">
+    <p><b>La interfaz publicada es más ancha que la necesaria.</b> <code>backend/src/brief/index.ts</code> exporta 15 nombres, incluidos detalles internos (<code>parsePersona</code>, <code>overrideD5</code>, <code>coveredTopics</code>). La CLI, además, importa archivos internos directamente.</p>
+    <p>Propuesta: que <code>index.ts</code> exporte solo las cinco piezas de arriba y que la CLI pase por él. Las piezas internas siguen teniendo sus tests; simplemente dejan de ser parte de la interfaz.</p>
+  </div>
+
+  <footer>Código: <code>backend/src/brief/</code>. Tests: 82, en 5 archivos (<code>npx vitest run backend/src/brief</code>).</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="diagrams.js"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contratos compartidos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top">
+    <a href="index.html">Mapa</a>
+    <a href="contracts.html" aria-current="page">Contratos</a>
+    <a href="brief.html">Caso → brief</a>
+    <a href="number-guard.html">Guardia de cifras</a>
+    <a href="video.html">Vídeo</a>
+    <a href="pipeline.html">Pipeline</a>
+  </nav>
+
+  <h1>Contratos compartidos <span class="badge done">#1 · congelados</span></h1>
+  <p class="lead">Cinco esquemas zod en <code>@sherpas/shared</code>. Son los seams entre las tres áreas del equipo: nadie importa código de otra área, solo estos tipos.</p>
+
+  <h2>Quién produce y quién consume</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TB
+  FE1["frontend · encuesta"]
+  BR["Caso → brief"]
+  SC["Paso de guion"]
+  TT["Paso de narración"]
+  PL["Pipeline"]
+  VT["Vídeo"]
+  FE2["frontend · reproductor"]
+
+  S{{"Survey"}}
+  SO{{"SurveyOption[]"}}
+  BF{{"Brief + Facts"}}
+  SCR{{"Script"}}
+  VP{{"VideoProps"}}
+
+  BR --> SO --> FE1
+  FE1 --> S --> BR
+  BR --> BF --> SC
+  SC --> SCR --> TT
+  TT -->|"SceneTiming x5"| PL
+  PL --> VP --> VT
+  SCR -->|"capítulos + cta"| FE2
+  BF -->|"facts de la tarjeta"| FE2
+  VT -->|"MP4"| FE2
+
+  classDef contract fill:#efe8fa,stroke:#6b4ea0,color:#2a1d45
+  class S,SO,BF,SCR,VP contract
+    </pre>
+    <figcaption>Hexágonos: contratos. El frontend consume el guion entero (capítulos y llamada a la acción) y los facts (cifras de la tarjeta).</figcaption>
+  </figure>
+
+  <h2>Forma de cada contrato</h2>
+  <figure class="diagram">
+    <pre class="mermaid">
+classDiagram
+  direction TB
+  class VideoProps {
+    brief : Brief
+    script : Script
+    facts : Facts
+    scenes : 5 SceneTiming
+  }
+  class Brief {
+    caseId
+    member : client o co-client
+    household : con hijos
+    score : value, band, 5 pillars
+    topMoves : 1 a 3
+    goals
+    narrative
+    classification : D0-D6
+    concerns : O1..On
+    tensions : T1..Tn
+    survey : Survey
+  }
+  class Script {
+    scenes : 5 Scene
+    chapters : 5 Chapter
+    cta : DecisionStyle + text
+  }
+  class Fact {
+    value : exacto
+    unit : FactUnit
+    label
+  }
+  class SceneTiming {
+    durationSec
+    audioFile?
+    captions?
+  }
+  class Survey {
+    nickname
+    explainLevel : ExplainLevel
+    topOfMind : TopicId
+    decisionStyle : DecisionStyle
+  }
+  class Scene {
+    part : Part
+    narration
+    visualIdea
+    factsUsed : nombres
+  }
+  VideoProps --> Brief
+  VideoProps --> Script
+  VideoProps --> Fact : Facts
+  VideoProps --> SceneTiming
+  Brief --> Survey
+  Script --> Scene
+    </pre>
+    <figcaption><code>VideoProps</code> no es un dato nuevo: junta los otros tres contratos y añade lo único que no se conoce hasta tener la voz, la duración de cada escena.</figcaption>
+  </figure>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tipo</th><th>Valores</th></tr></thead>
+      <tbody>
+        <tr><td><code>ExplainLevel</code></td><td><code>simple</code> · <code>straight</code> · <code>nerd</code></td></tr>
+        <tr><td><code>DecisionStyle</code></td><td><code>just_do_it</code> · <code>research_first</code> · <code>ask_trusted</code> · <code>wait</code></td></tr>
+        <tr><td><code>TopicId</code></td><td><code>retirement</code> · <code>college</code> · <code>emergency_fund</code> · <code>debt</code> · <code>protection</code> · <code>home_purchase</code> · <code>investments</code></td></tr>
+        <tr><td><code>FactUnit</code></td><td><code>usd</code> · <code>percent</code> · <code>points</code> · <code>years</code> · <code>months</code> · <code>calendar_year</code> · <code>count</code></td></tr>
+        <tr><td><code>Part</code></td><td><code>hook</code> · <code>where_you_are</code> · <code>what_matters</code> · <code>first_step</code> · <code>what_changes</code></td></tr>
+        <tr><td><code>SceneTiming.captions</code></td><td><code>{ text, startSec, endSec }[]</code>, con tiempos relativos al inicio de la escena</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>El arco fijo de cinco partes</h2>
+  <p>La constante <code>PARTS</code> fija el orden. <code>ScriptSchema</code> rechaza un guion con otro número de escenas o con las partes desordenadas; <code>VideoProps.scenes</code> y <code>chapters</code> van en el mismo orden, índice a índice.</p>
+  <div class="arc">
+    <div><b>hook</b>Gancho personal, ≤8 s: apodo, familia y preocupación.</div>
+    <div><b>where_you_are</b>La puntuación como altitud.</div>
+    <div><b>what_matters</b>La preocupación elegida. Cambia con <code>explainLevel</code>.</div>
+    <div><b>first_step</b>Una sola acción: el equipo que falta en la mochila.</div>
+    <div><b>what_changes</b>Puntuación antes → después.</div>
+  </div>
+
+  <h2>La interfaz que no se ve en los tipos</h2>
+  <p>Estas reglas forman parte del contrato aunque zod no pueda comprobarlas todas. Quien produce o consume un contrato tiene que conocerlas.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Regla</th><th>Afecta a</th><th>Dónde se hace cumplir</th></tr></thead>
+      <tbody>
+        <tr><td>Los porcentajes se guardan como fracción: <code>0.4928</code> = 49 %.</td><td>Facts</td><td><code>fmt.percent</code> multiplica por 100</td></tr>
+        <tr><td><code>calendar_year</code> (2044) es distinto de <code>years</code> (17 años).</td><td>Facts</td><td>Generador de facts</td></tr>
+        <tr><td>Nombres de facts en <code>SCREAMING_SNAKE_CASE</code>; el valor es exacto, sin redondear.</td><td>Facts</td><td><code>FactNameSchema</code></td></tr>
+        <tr><td><b>El guion solo cita cifras de facts.</b> La prosa del brief es contexto, no fuente de números.</td><td>Script</td><td><code>validateNarration</code> (decidido al cerrar #2)</td></tr>
+        <tr><td>Cada escena declara en <code>factsUsed</code> los facts que cita; el vídeo solo muestra esos.</td><td>Script, Vídeo</td><td><code>scene-facts.ts</code></td></tr>
+        <tr><td><code>topOfMind</code> es una sola opción de la lista cerrada de 7 temas.</td><td>Survey</td><td><code>TopicIdSchema</code></td></tr>
+        <tr><td>La respuesta <code>decisionStyle</code> manda sobre D5 de <code>persona.md</code>.</td><td>Brief</td><td><code>classification.D5</code> reescrito</td></tr>
+        <tr><td><code>cta.type</code> coincide con <code>survey.decisionStyle</code>.</td><td>Script</td><td>Test de fixtures (aún no en el paso de guion)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Fixtures</h2>
+  <p>En <code>shared/src/fixtures/</code> hay un ejemplo completo de Daniel (<code>nerd</code> · retirement · <code>research_first</code>): <code>briefFixture</code>, <code>factsFixture</code>, <code>scriptFixture</code> y <code>videoPropsFixture</code> (72 s, sin audio). Sirven para que cada área avance sin esperar a las demás.</p>
+  <div class="callout planned">
+    <p><b>Decisión abierta:</b> <code>factsFixture</code> usa nombres escritos a mano (<code>SCORE_AFTER_LIFE_COVER</code>) y el generador de #2 produce <code>SCORE_AFTER_RAISE_MORTALITY_COVERAGE</code>. La recomendación es regenerar el fixture con el generador.</p>
+  </div>
+
+  <footer>Código: <code>shared/src/survey.ts</code>, <code>facts.ts</code>, <code>brief.ts</code>, <code>script.ts</code>, <code>video-props.ts</code>. Tests: <code>shared/src/contracts.test.ts</code>.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="diagrams.js"></script>
+</body>
+</html>
