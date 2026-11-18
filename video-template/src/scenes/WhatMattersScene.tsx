@@ -6,6 +6,7 @@ import { BigFact, FactTable } from '../components/FactRows'
 import { Hikers } from '../components/Hikers'
 import { BodyText, Panel } from '../components/Panel'
 import { fractionForScore } from '../components/trail'
+import { sceneFacts } from './scene-facts'
 import type { SceneProps } from './types'
 
 const STRAIGHT_MAX_FACTS = 3
@@ -28,15 +29,15 @@ const Figures: FC<FiguresProps> = ({ level, facts }) => {
 /** Part 3: what matters most. The only figures shown are the facts the script says this scene uses. */
 export const WhatMattersScene: FC<SceneProps> = ({ brief, facts, scene, chapter }) => {
   const level = brief.survey.explainLevel
-  const sceneFacts = scene.factsUsed.filter((name) => name in facts).map((name) => facts[name])
+  const figures = sceneFacts(scene, facts)
 
   return (
     <AbsoluteFill>
       <Backdrop />
       <Hikers household={brief.household} fraction={fractionForScore(brief.score.value)} />
       <Panel title={chapter.title} width={PANEL_WIDTH[level]}>
-        {sceneFacts.length > 0 ? (
-          <Figures level={level} facts={sceneFacts} />
+        {figures.length > 0 ? (
+          <Figures level={level} facts={figures} />
         ) : (
           <BodyText>{chapter.body}</BodyText>
         )}
