@@ -20,7 +20,7 @@ import { topicFacts, type NamedFact } from './topic-facts'
  * Claude's script (#6) replaces it when it passes the same checks.
  */
 
-const SCORE_FACT = 'SCORE_NOW'
+export const SCORE_FACT = 'SCORE_NOW'
 const SCORE_MAX = 100
 const MAX_NARRATIVE_WORDS = 28
 /** "Daniel's life cover today" keeps its capital inside a sentence; other labels are lower-cased. */
@@ -87,9 +87,13 @@ interface SceneText {
 
 const lowerFirst = (text: string): string => text.charAt(0).toLowerCase() + text.slice(1)
 
-const partnerOf = (brief: Brief): string | null =>
+/** The other adult of the household, or null for someone living alone. */
+export const partnerOf = (brief: Brief): string | null =>
   brief.household.find((person) => person.role !== 'child' && person.firstName !== brief.member.firstName)
     ?.firstName ?? null
+
+/** The fact with the score after a move: SCORE_AFTER_RAISE_MORTALITY_COVERAGE. */
+export const scoreAfterFactName = (move: TopMove): string => `SCORE_AFTER_${toConstantName(move.title)}`
 
 const passesGuard = (text: string, facts: Facts): boolean => validateNarration(text, facts).ok
 
@@ -192,7 +196,7 @@ const firstStep = (brief: Brief, facts: Facts, move: TopMove): SceneText => {
 }
 
 const whatChanges = (facts: Facts, move: TopMove, cta: CtaContext): SceneText => {
-  const afterFact = `SCORE_AFTER_${toConstantName(move.title)}`
+  const afterFact = scoreAfterFactName(move)
   const lifts = move.scoreAfter > move.scoreBefore && afterFact in facts
   const change = lifts
     ? `Take it, and your score climbs from ${move.scoreBefore} to ${move.scoreAfter}. Same mountain, one stretch higher.`

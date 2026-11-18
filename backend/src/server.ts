@@ -1,9 +1,12 @@
 /// <reference types="node" />
 import { createApp } from './api/app'
+import { loadEnvFile } from './env'
 import { createJobStore } from './jobs/job-store'
-import { RUNS_DIR } from './paths'
+import { RUNS_DIR, SPEECH_CACHE_DIR } from './paths'
 import { renderWithRemotion } from './pipeline/render-video'
 import { runJob } from './pipeline/run-job'
+import { runClaudeCli } from './script/claude-cli'
+import { createNarrator } from './voice/narrate'
 
 const DEFAULT_PORT = 3001
 
@@ -13,9 +16,23 @@ const parsePort = (value: string | undefined): number => {
   return port
 }
 
+loadEnvFile()
 const port = parsePort(process.env.API_PORT)
 const store = createJobStore()
-const deps = { store, renderVideo: renderWithRemotion, runsDir: RUNS_DIR, now: () => new Date() }
+/** The render fetches each scene's audio from this server, which serves the run folders under /runs. */
+const narrate = createNarrator({
+  env: process.env,
+  cacheDir: SPEECH_CACHE_DIR,
+  runsUrl: `http://localhost:${port}/runs`,
+})
+const deps = {
+  store,
+  narrate,
+  renderVideo: renderWithRemotion,
+  runClaude: runClaudeCli,
+  runsDir: RUNS_DIR,
+  now: () => new Date(),
+}
 const app = createApp({ store, runsDir: RUNS_DIR, startJob: (job) => void runJob(job, deps) })
 
 app.listen(port, () => {

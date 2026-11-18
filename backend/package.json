@@ -7,7 +7,9 @@
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
     "typecheck": "tsc -p tsconfig.json",
-    "brief": "tsx src/brief/cli.ts"
+    "brief": "tsx src/brief/cli.ts",
+    "script": "tsx src/script/cli.ts",
+    "voice:audition": "tsx src/voice/audition.ts"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.545",

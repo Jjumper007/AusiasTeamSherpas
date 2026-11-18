@@ -1,26 +1,31 @@
-import { validateNarration, VideoPropsSchema, type Brief, type Facts, type Script } from '@sherpas/shared'
+import { VideoPropsSchema, type Brief, type Facts } from '@sherpas/shared'
 import type { JobEvent, JobRequest, StepId } from '../api/types'
 import { loadCase } from '../brief/case-loader'
 import { generateCaseOutputs } from '../brief/generate'
 import type { Job, JobStore } from '../jobs/job-store'
-import { buildFallbackScript } from '../script/fallback-script'
-import { estimateSceneTimings } from '../script/scene-timing'
+import type { RunClaude } from '../script/claude-cli'
+import { writeScript } from '../script/write-script'
 import { findAdult, type Adult } from '../survey/members'
 import { resolveSurvey } from '../survey/resolve-survey'
+import type { Narrate } from '../voice/narrate'
 import { buildJobResult } from './job-result'
 import type { RenderVideo } from './render-video'
 import { createRunFolder, type RunFolder } from './run-folder'
 
 /**
- * The pipeline of one job (SPEC §5), as far as #5 goes:
- *   [1] brief + facts.ts  →  [2] script without Claude  →  [7] render of the fallback video.
- * Voice (#7), Claude's script (#6) and Claude's scenes (#9) plug in between these steps later.
+ * The pipeline of one job (SPEC §5), as far as #7 goes:
+ *   [1] brief + facts.ts  →  [2] script by Claude (or without Claude)  →  [3] voice and captions
+ *   →  [7] render of the fallback video.
+ * Claude's scenes (#9) plug in between voice and render later.
  * Every step is reported over SSE, and everything it produces is written to the run folder.
  */
 
 export interface PipelineDeps {
   readonly store: JobStore
+  readonly narrate: Narrate
   readonly renderVideo: RenderVideo
+  /** `claude -p` for the script (#6); a fake in tests. */
+  readonly runClaude: RunClaude
   readonly runsDir: string
   readonly now: () => Date
 }
@@ -28,14 +33,16 @@ export interface PipelineDeps {
 const STEP_LABEL: Readonly<Record<StepId, string>> = {
   brief: 'Reading your plan',
   script: 'Writing your script',
+  voice: 'Recording the narration',
   render: 'Rendering your video',
 }
 
-/** Where each step sits on the progress bar: rendering is by far the longest. */
+/** Where each step sits on the progress bar, roughly by time: script ~25 s, voice ~10 s, render ~50 s. */
 const STEP_PROGRESS: Readonly<Record<StepId, readonly [start: number, end: number]>> = {
   brief: [0, 0.05],
-  script: [0.05, 0.1],
-  render: [0.1, 1],
+  script: [0.05, 0.3],
+  voice: [0.3, 0.4],
+  render: [0.4, 1],
 }
 
 /** Progress ticks closer than this are not sent: the renderer reports every frame. */
@@ -63,28 +70,6 @@ const prepareInputs = (request: JobRequest, deps: PipelineDeps): Inputs => {
   folder.writeText('facts.ts', outputs.factsSource)
   folder.log(`[brief] ${caseData.caseId}/${adult.id}: ${Object.keys(outputs.facts).length} facts`)
   return { adult, folder, brief: outputs.brief, facts: outputs.facts }
-}
-
-/** Every text of a script that is said or shown: narration, chapters and the call to action. */
-const scriptTexts = (script: Script): string[] => [
-  ...script.scenes.map((scene) => scene.narration),
-  ...script.chapters.flatMap((chapter) => [chapter.title, chapter.body]),
-  script.cta.text,
-]
-
-/** The number guard (SPEC §5.5): every figure in the script must come from facts. */
-const assertFiguresFromFacts = (script: Script, facts: Facts): void => {
-  const errors = scriptTexts(script).flatMap((text) => validateNarration(text, facts).errors)
-  if (errors.length > 0) throw new Error(errors.map((error) => error.message).join(' '))
-}
-
-/** [2] The script without Claude. */
-const writeScript = ({ brief, facts, folder }: Inputs): Script => {
-  const script = buildFallbackScript(brief, facts)
-  assertFiguresFromFacts(script, facts)
-  folder.writeJson('script.json', script)
-  folder.log('[script] written without Claude from the brief and the facts')
-  return script
 }
 
 /** Reports steps and progress of one job, sending only progress ticks that move the bar. */
@@ -123,8 +108,18 @@ export const runJob = async (job: Job, deps: PipelineDeps): Promise<void> => {
   try {
     const inputs = await step('brief', () => prepareInputs(job.request, deps))
     folder = inputs.folder
-    const script = await step('script', () => writeScript(inputs))
-    const timings = estimateSceneTimings(script)
+    const { script } = await step('script', () =>
+      writeScript({
+        ...inputs,
+        runClaude: deps.runClaude,
+        onAttempt: (attempt, maxAttempts) => {
+          if (attempt > 1) progress('script', (attempt - 1) / maxAttempts, `${STEP_LABEL.script} (try ${attempt} of ${maxAttempts})`)
+        },
+      }),
+    )
+    const timings = await step('voice', () =>
+      deps.narrate(script, inputs.folder, (fraction) => progress('voice', fraction)),
+    )
     const props = VideoPropsSchema.parse({ brief: inputs.brief, script, facts: inputs.facts, scenes: timings })
     folder.writeJson('video-props.json', props)
 

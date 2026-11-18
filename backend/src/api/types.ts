@@ -38,7 +38,7 @@ export interface JobRequest {
   readonly answers: SurveyAnswers
 }
 
-export const STEP_IDS = ['brief', 'script', 'render'] as const
+export const STEP_IDS = ['brief', 'script', 'voice', 'render'] as const
 export type StepId = (typeof STEP_IDS)[number]
 export type StepStatus = 'running' | 'done' | 'failed'
 

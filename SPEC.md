@@ -118,7 +118,7 @@ cases/            datos del reto
 runs/             salidas (.gitignore)
 ```
 
-- La key `ELEVENLABS_API_KEY` va en `.env`; se versiona `.env.example`.
+- La key del proxy del hackatón (`LLM_PROXY_URL`, `LLM_PROXY_KEY`) y la voz de marca (`ELEVENLABS_VOICE_ID`) van en `.env`; se versiona `.env.example`. La voz y los tiempos de cada palabra pasan por el proxy (`eleven-multilingual-v2` y `scribe-v2`).
 - **Tests unitarios solo en piezas deterministas:** extractor del brief, generador de `facts.ts`, validador de cifras, correspondencia entre estilo de decisión y llamada a la acción, y esquemas zod. Sin E2E y sin cobertura mínima en la interfaz.
 - "I did it" y "Remind me" guardan el estado en `localStorage` y muestran un aviso simulado ("We'll nudge you on day 3").
 

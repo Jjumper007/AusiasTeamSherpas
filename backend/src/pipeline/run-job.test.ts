@@ -6,6 +6,9 @@ import { VideoPropsSchema } from '@sherpas/shared'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { JobEvent, JobRequest, JobResult } from '../api/types'
 import { createJobStore } from '../jobs/job-store'
+import type { RunClaude } from '../script/claude-cli'
+import { estimateSceneTimings } from '../script/scene-timing'
+import type { Narrate } from '../voice/narrate'
 import type { RenderVideo } from './render-video'
 import { runJob } from './run-job'
 
@@ -26,13 +29,36 @@ const fakeRender: RenderVideo = async (_props, outputFile, onProgress) => {
   writeFileSync(outputFile, 'mp4')
 }
 
-const run = async (request: JobRequest, renderVideo: RenderVideo = fakeRender) => {
+/** Claude is not reachable in tests: every job falls back to the script without Claude. */
+const offlineClaude: RunClaude = async () => {
+  throw new Error('offline')
+}
+
+/** Times the scenes from the narration length instead of calling the voice. */
+const fakeNarrate: Narrate = async (script, folder, onProgress) => {
+  onProgress(1)
+  return estimateSceneTimings(script).map((timing, index) => ({
+    ...timing,
+    audioFile: `http://localhost/runs/${folder.runId}/audio/scene-${index + 1}.mp3`,
+  })) as ReturnType<typeof estimateSceneTimings>
+}
+
+interface Fakes {
+  readonly renderVideo?: RenderVideo
+  readonly runClaude?: RunClaude
+  readonly narrate?: Narrate
+}
+
+const run = async (
+  request: JobRequest,
+  { renderVideo = fakeRender, runClaude = offlineClaude, narrate = fakeNarrate }: Fakes = {},
+) => {
   const store = createJobStore()
   const runsDir = tempRunsDir()
   const job = store.create(request)
   const events: JobEvent[] = []
   store.subscribe(job.id, (event) => events.push(event))
-  await runJob(job, { store, renderVideo, runsDir, now: () => FIXED_NOW })
+  await runJob(job, { store, narrate, renderVideo, runClaude, runsDir, now: () => FIXED_NOW })
   return { store, job: store.get(job.id), events, runsDir }
 }
 
@@ -43,10 +69,19 @@ const emily: JobRequest = {
 }
 
 describe('runJob', () => {
-  it('runs brief → script → render and ends with the result', async () => {
+  it('runs brief → script → voice → render and ends with the result', async () => {
     const { events, job } = await run(emily)
     const steps = events.filter((event) => event.type === 'step').map((event) => `${event.step}:${event.status}`)
-    expect(steps).toEqual(['brief:running', 'brief:done', 'script:running', 'script:done', 'render:running', 'render:done'])
+    expect(steps).toEqual([
+      'brief:running',
+      'brief:done',
+      'script:running',
+      'script:done',
+      'voice:running',
+      'voice:done',
+      'render:running',
+      'render:done',
+    ])
     expect(events.at(-1)?.type).toBe('done')
     expect(job?.status).toBe('done')
   })
@@ -83,15 +118,55 @@ describe('runJob', () => {
     expect(result.partner).toBe('Daniel')
   })
 
+  it("uses Claude's script when it passes the checks", async () => {
+    const first = await run(emily)
+    const folder = join(first.runsDir, 'daniel-emily-johnson', 'emily', '2026-11-18T16-05-03-123Z')
+    const fallback = JSON.parse(readFileSync(join(folder, 'script.json'), 'utf8'))
+    const claudeScript = { ...fallback, cta: { ...fallback.cta, text: 'Show this to Daniel tonight.' } }
+    const { job } = await run(emily, { runClaude: async () => JSON.stringify(claudeScript) })
+    expect(job?.result?.cta.text).toBe('Show this to Daniel tonight.')
+  })
+
+  it('falls back to the script without Claude, and says so in the log', async () => {
+    const { runsDir, job } = await run(emily)
+    const log = readFileSync(join(runsDir, 'daniel-emily-johnson', 'emily', '2026-11-18T16-05-03-123Z', 'log.txt'), 'utf8')
+    expect(log).toContain('Claude failed 3 times')
+    expect(job?.status).toBe('done')
+  })
+
   it('reports a failed render as an error event with the step, and logs it', async () => {
     const broken: RenderVideo = async () => {
       throw new Error('Chrome crashed')
     }
-    const { events, job, runsDir } = await run(emily, broken)
+    const { events, job, runsDir } = await run(emily, { renderVideo: broken })
     expect(events.at(-1)).toEqual({ type: 'error', message: 'Rendering your video failed: Chrome crashed' })
     expect(job?.status).toBe('failed')
     const log = readFileSync(join(runsDir, 'daniel-emily-johnson', 'emily', '2026-11-18T16-05-03-123Z', 'log.txt'), 'utf8')
     expect(log).toContain('Chrome crashed')
+  })
+
+  it('reports a failed narration as an error event and does not render', async () => {
+    const silent: Narrate = async () => {
+      throw new Error('LLM_PROXY_KEY is not set')
+    }
+    let rendered = false
+    const render: RenderVideo = async () => {
+      rendered = true
+    }
+    const { events } = await run(emily, { renderVideo: render, narrate: silent })
+    expect(events.at(-1)).toEqual({
+      type: 'error',
+      message: 'Recording the narration failed: LLM_PROXY_KEY is not set',
+    })
+    expect(rendered).toBe(false)
+  })
+
+  it('passes the voice timings to the render', async () => {
+    const { runsDir } = await run(emily)
+    const props = JSON.parse(
+      readFileSync(join(runsDir, 'daniel-emily-johnson', 'emily', '2026-11-18T16-05-03-123Z', 'video-props.json'), 'utf8'),
+    )
+    expect(props.scenes[0].audioFile).toMatch(/audio\/scene-1\.mp3$/)
   })
 
   it('fails at the brief step for a child, without creating a run folder', async () => {
