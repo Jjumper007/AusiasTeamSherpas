@@ -3,6 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json", "brief": "tsx src/brief/cli.ts" },
   "dependencies": { "@sherpas/shared": "*" }
 }

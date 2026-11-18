@@ -1,4 +1,4 @@
-import { videoPropsFixture, type VideoProps } from '@sherpas/shared'
+import { registerRoot } from 'remotion'
+import { Root } from './locked/Root'
 
-/** Props used when the composition is previewed without a pipeline run: Daniel's sample, silent. */
-export const defaultVideoProps: VideoProps = videoPropsFixture
+registerRoot(Root)
