@@ -1,0 +1,23 @@
+{
+  "name": "video-modelo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts MichaelAdvisorV2 video/VideoModelo.mp4 --muted",
+    "render:webm": "remotion render src/index.ts MichaelAdvisorV2 video/VideoModelo.webm --codec=vp8 --muted",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.545",
+    "remotion": "4.0.545",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.6.0"
+  }
+}
