@@ -1,0 +1,377 @@
+/* ==========================================================================
+   Sherpas design tokens: the single source for every Sherpas surface
+   (web app, Plan in Motion player, Remotion video frames, slides).
+
+   Sources: sherpaswealth.com (Framer) and app.sherpaswealth.com (Tailwind v4),
+   extracted 18 Nov 2026, plus the roles shipped in the Plan in Motion player.
+   Rules and rationale: DESIGN.md. Never copy a hex into your code: use a token.
+
+   Layers, from raw to ready-to-use:
+     1. --sw-*  / --app-* / --fm-*   brand primitives, exactly as the sites ship them
+     2. --sh-*                        semantic roles: what a colour or size is FOR
+     3. --sh-video-*                  the same roles sized for a 1920 x 1080 frame
+
+   Fonts are not loaded by this file. On the web:
+     https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600&display=swap
+   In Remotion: @remotion/google-fonts (loadFont from "@remotion/google-fonts/Poppins"
+   and ".../Inter", weights above), so frames never render with a fallback face.
+
+   Assets (white on transparent, tint them with mask-image + currentColor):
+     design/assets/sherpas-yak.png        the yak
+     design/assets/sherpas-wordmark.png   the "sherpas" wordmark
+     design/assets/sherpas-favicon-32.png / -180.png
+   ========================================================================== */
+
+:root {
+  /* ======================================================================
+     1. BRAND PRIMITIVES
+     ====================================================================== */
+
+  /* ----- Website (marketing) ----- */
+  --sw-navy-900: #161827;      /* dark nav, hero and footer */
+  --sw-navy-hero: #171B33;     /* tone of the hero background image */
+  --sw-ink: #141419;           /* headlines on light */
+  --sw-ink-navy: #0E1C29;      /* navy text and icons, the wordmark on light */
+  --sw-bg: #FCFCFC;            /* page background (home) */
+  --sw-bg-white: #FFFFFF;      /* page background (investment analysis) */
+  --sw-surface: #F5F5F5;       /* feature containers */
+
+  --sw-blue: #4565D6;          /* brand blue: links, icons, checks */
+  --sw-blue-bright: #6586FC;   /* highlighted words in headlines */
+  --sw-lavender: #948DF7;      /* start of the CTA gradient, accent on dark */
+  --sw-link-hover: #8BA1F0;
+  --sw-sky: #61A9FA;           /* big-figure gradient on the site */
+  --sw-ice: #E0EEFF;
+  --sw-violet: #774BE5;        /* one-off accent */
+
+  /* Neutrals, tinted blue-lavender */
+  --sw-gray-700: #44445D;
+  --sw-gray-600: #575875;
+  --sw-gray-500: #717390;      /* default body text on the site */
+  --sw-gray-400: #9799B1;
+  --sw-gray-300: #BFC1D0;      /* light text on dark */
+  --sw-gray-200: #DFE0E8;      /* borders and dividers */
+  --sw-gray-100: #F0F1F3;
+  --sw-gray-50:  #F4F5F6;
+
+  /* Gradients */
+  --sw-gradient-cta: linear-gradient(127deg, #948DF7 11%, #4565D6 119%);
+  --sw-gradient-stat-text: linear-gradient(0deg, #E0EEFF 0%, #61A9FA 100%); /* recorded only: no gradient text */
+  --sw-glow-top: radial-gradient(50% 100% at 50% 0%, rgba(74, 71, 255, 0.18) 0%, #FCFCFC 100%);
+  --sw-glow-soft: radial-gradient(50% 50%, rgba(55, 40, 168, 0.10) 0%, #FCFCFC 100%);
+  --sw-gradient-ring: linear-gradient(229deg, #948DF7 13%, rgba(201,110,240,0) 35%, rgba(164,92,219,0) 64%, #4565D6 88%);
+
+  /* "Glass" cards: recorded from the site, not for use (DESIGN.md bans glassmorphism) */
+  --sw-glass-bg: rgba(252, 252, 252, 0.56);
+  --sw-glass-blur: blur(56px);
+  --sw-card-shadow: 0 0.6px 0.6px -1.25px rgba(0,0,0,.18),
+                    0 2.29px 2.29px -2.5px rgba(0,0,0,.16),
+                    0 10px 10px -3.75px rgba(0,0,0,.06);
+  --sw-cta-inset: inset 0 1px 2px 0 #B8C1E6;
+
+  /* Radii */
+  --sw-radius-badge: 6px;
+  --sw-radius-sm: 10px;
+  --sw-radius-card: 16px;
+  --sw-radius-container: 26px;
+  --sw-radius-pill: 80px;
+
+  /* Type (site: h1 50px/400, lh 60px, -0.5px; sections 32-36px/600; body 14-18px/400; card titles 22px/700) */
+  --sw-font-display: "Poppins", sans-serif;
+  --sw-font-body: "Inter", sans-serif;
+
+  /* ----- App (Tailwind v4) ----- */
+  --app-brand: #4666D7;
+  --app-blue-25: #F5F8FF;
+  --app-blue-50: #EFF5FF;
+  --app-blue-100: #E0E7FF;
+  --app-blue-200: #C6D2FD;
+  --app-blue-300: #A4B7FD;
+  --app-blue-400: #6485FB;
+  --app-blue-500: #4666D7;
+  --app-blue-600: #1C45D7;
+  --app-blue-700: #1738B1;
+  --app-blue-800: #112980;
+  --app-blue-900: #0F2267;
+  --app-blue-950: #0B0F2E;
+
+  --app-gray-50: #F3F3F3;
+  --app-gray-100: #EFF1F5;
+  --app-gray-200: #E2E5EB;
+  --app-gray-300: #D1D4DA;
+  --app-gray-400: #A1A4B3;
+  --app-gray-450: #7F8399;
+  --app-gray-500: #5F6480;
+  --app-gray-600: #4A4E65;
+  --app-gray-700: #434759;
+  --app-gray-800: #2F323E;
+  --app-gray-900: #15161A;
+
+  --app-surface-base: #F3F3F3;
+  --app-primary-bg: #F5F5F5;
+  --app-surface-raised: #FFFFFF;
+  --app-surface-frame: #F8FAFD;
+
+  --app-success: #1DAE53;
+  --app-warning: #E38F10;
+  --app-error: #F04545;
+
+  /* Categorical charts */
+  --app-chart-1: #4565D6;
+  --app-chart-2: #178C42;
+  --app-chart-3: #CC3A3A;
+  --app-chart-4: #ED8E00;
+  --app-chart-5: #5353C8;
+  --app-chart-6: #2EC4C6;
+  --app-chart-7: #E8738A;
+  --app-chart-8: #DBAE3A;
+  --app-chart-9: #94C93E;
+  --app-chart-10: #5F6480;
+  --app-chart-11: #4B4F66;
+  --app-chart-12: #0E7490;
+  /* Sequential */
+  --app-seq-1: #A4B7FD;
+  --app-seq-2: #4666D7;
+  --app-seq-3: #1738B1;
+
+  /* The plan's financial map (text / background / bar) */
+  --fm-income-text: #3F5ABE;      --fm-income-bg: #E3E7F6;      --fm-income-bar: #D8DDF2;
+  --fm-expenses-text: #BC7041;    --fm-expenses-bg: #F5EAE3;    --fm-expenses-bar: #F1E2D8;
+  --fm-savings-text: #6A50AE;     --fm-savings-bg: #EAE6F3;     --fm-savings-bar: #E2DDEF;
+  --fm-assets-text: #3F7A55;      --fm-assets-bg: #E2EBE5;      --fm-assets-bar: #D9E4DD;
+  --fm-liabilities-text: #AB5252; --fm-liabilities-bg: #F2E4E4; --fm-liabilities-bar: #EFDDDD;
+
+  --app-radius: 0.625rem; /* 10px */
+  --app-tracking-poppins: -0.02em;
+  --app-shadow-sm: 0 6px 2px -4px #1414190A, inset 0 -1px 0 #14141933;
+  --app-shadow-lg: 0 1px 2px #0000000D, 0 8px 10px #0000001A;
+  --app-ease-panel: cubic-bezier(.32, .72, 0, 1);
+  --app-duration-hover: .12s;
+
+  /* ======================================================================
+     2. SEMANTIC ROLES (--sh-*)
+     Two worlds, never mixed on one surface:
+       light app world  = asking (questions, settings, panels)
+       navy hero world  = showing (the video, the wait screen, slides)
+     ====================================================================== */
+
+  /* ----- Light app world ----- */
+  --sh-frame: var(--app-surface-frame);        /* page background */
+  --sh-raised: #FFFFFF;                        /* cards, rows, inputs, top bar */
+  --sh-hairline: var(--app-gray-200);          /* every border and divider on light */
+  --sh-chip-track: var(--app-gray-100);        /* recessed track behind segmented chips */
+  --sh-ink: var(--sw-ink);                     /* titles and body */
+  --sh-ink-2: var(--app-gray-500);             /* sub-labels, meta */
+  --sh-ink-3: var(--app-gray-450);             /* placeholders and key hints only (below 4.5:1) */
+  --sh-wordmark-ink: var(--sw-ink-navy);
+  --sh-blue: var(--sw-blue);                   /* selected, focused, tappable. Never decoration */
+  --sh-blue-press: var(--app-blue-600);        /* hover / pressed */
+  --sh-blue-wash: var(--app-blue-50);          /* icon tiles, answer pills, focus halo */
+  --sh-blue-line: var(--app-blue-200);         /* hover border, text selection */
+
+  /* ----- Navy hero world ----- */
+  --sh-navy: var(--sw-navy-900);
+  --sh-navy-deep: var(--app-blue-950);
+  --sh-navy-glow: #222852;
+  --sh-navy-surface: #1C2140;                  /* cards inside the stage */
+  --sh-navy-surface-2: #262C52;                /* raised cards, tags */
+  --sh-navy-line: #2F365E;                     /* borders on navy */
+  --sh-on-navy: var(--sw-ice);                 /* body text on navy */
+  --sh-on-navy-strong: #FFFFFF;                /* headlines and figures on navy */
+  --sh-on-navy-muted: #9EA6C4;                 /* secondary text on navy */
+  --sh-stage-bg: radial-gradient(110% 90% at 18% 0%, #222852 0%, #161827 48%, #0B0F2E 100%);
+  --sh-scrim: rgba(11, 15, 46, 0.78);          /* behind dialogs on navy */
+
+  /* Tints of ice on navy */
+  --sh-ice-10: rgba(224, 238, 255, 0.10);      /* ring tracks */
+  --sh-ice-16: rgba(224, 238, 255, 0.16);      /* progress-segment tracks */
+  --sh-ice-40: rgba(224, 238, 255, 0.40);      /* dotted underline of tappable figures */
+
+  /* ----- Accents on navy: exactly ONE live per surface (the One Accent Rule) ----- */
+  --sh-accent-bright: var(--sw-blue-bright);   /* the default accent */
+  --sh-accent-sky: var(--sw-sky);
+  --sh-accent-lavender: var(--sw-lavender);
+  --sh-accent-lagoon: var(--app-chart-6);
+  --sh-accent: var(--sh-accent-bright);        /* override per surface, never inside a scene */
+
+  /* ----- The one primary action ----- */
+  --sh-cta: var(--sw-gradient-cta);            /* one per screen, text 19px+ weight 600 */
+  --sh-cta-inset: var(--sw-cta-inset);
+  --sh-cta-text: #FFFFFF;
+
+  /* ----- Status and score bands (solid fill + navy-deep text) ----- */
+  --sh-success: var(--app-success);
+  --sh-warning: var(--app-warning);            /* also the "risk" amber for worrying figures */
+  --sh-error: var(--app-error);
+  --sh-band-critical: var(--app-error);
+  --sh-band-vulnerable: var(--app-warning);
+  --sh-band-stable: var(--app-chart-8);
+  --sh-band-strong: var(--app-success);
+  --sh-band-text: var(--app-blue-950);
+  --sh-gain: #3FD27A;                          /* positive deltas as text on navy */
+
+  /* ----- The mountain (wait game and the video's trail metaphor) ----- */
+  --sh-mtn-sky-top: #161827;
+  --sh-mtn-sky-bottom: #0B0F2E;
+  --sh-mtn-far: #283063;                       /* far ridge */
+  --sh-mtn-near: #1B2146;                      /* near ridge */
+  --sh-mtn-snow: rgba(224, 238, 255, 0.50);
+  --sh-mtn-star: rgba(224, 238, 255, 0.55);
+  --sh-mtn-ground: #0E1233;                    /* the trail */
+  --sh-mtn-ground-line: #3A4372;
+  --sh-mtn-pebble: #2A3160;
+  --sh-mtn-rock: #46519A;
+  --sh-mtn-rock-lit: #5F6CB8;
+  --sh-mtn-ice: #7F97D9;
+
+  /* ----- Typography ----- */
+  --sh-font-display: "Poppins", system-ui, sans-serif;                        /* what you read first */
+  --sh-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;  /* what you read next */
+  --sh-weight-regular: 400;
+  --sh-weight-medium: 500;
+  --sh-weight-semibold: 600;
+  --sh-weight-bold: 700;
+  --sh-tracking-display: -0.02em;              /* Poppins titles, questions, headlines */
+  --sh-tracking-figure: -0.035em;              /* big numbers */
+  --sh-tracking-wordmark: -0.01em;
+  --sh-leading-figure: 0.92;
+  --sh-leading-headline: 1.08;
+  --sh-leading-display: 1.12;
+  --sh-leading-title: 1.15;
+  --sh-leading-tight: 1.25;
+  --sh-leading-body: 1.45;
+  --sh-figure-numerals: tabular-nums;          /* font-variant-numeric for every figure */
+
+  /* Type scale for screens (px). No Poppins below 14px, no uppercase tracking. */
+  --sh-text-label: 13px;        /* Inter 500: chips, counters, meta */
+  --sh-text-body: 15px;         /* Inter 400 */
+  --sh-text-body-lg: 17px;
+  --sh-text-title: 18px;        /* Poppins 600: card titles */
+  --sh-text-cta: 19px;          /* 600 on the CTA pill */
+  --sh-text-heading: 24px;      /* Poppins 600: section headings */
+  --sh-text-display: 32px;      /* Poppins 600: page titles, questions */
+  --sh-text-hero: 50px;         /* Poppins: marketing h1 */
+
+  /* Type scale inside a size-container stage (cqmin), each with a px floor */
+  --sh-stage-display: max(22px, 6.2cqmin);
+  --sh-stage-headline: max(24px, 7cqmin);
+  --sh-stage-figure-hero: 30cqmin;
+  --sh-stage-figure-compare: 13cqmin;
+  --sh-stage-figure-tile: 8cqmin;
+  --sh-stage-body: max(15px, 2.8cqmin);
+  --sh-stage-caption: max(13px, 3.1cqmin);    /* Inter 500 + --sh-caption-shadow over scenes */
+  --sh-stage-label: max(11px, 2cqmin);
+
+  /* ----- Spacing (4px rhythm) ----- */
+  --sh-space-1: 4px;
+  --sh-space-2: 8px;
+  --sh-space-3: 12px;
+  --sh-space-4: 16px;
+  --sh-space-5: 20px;
+  --sh-space-6: 24px;
+  --sh-space-8: 32px;
+  --sh-space-12: 48px;
+
+  /* ----- Radii ----- */
+  --sh-radius-tag: 6px;         /* tags, score bands, key hints */
+  --sh-radius-chip: 8px;        /* chips inside their track */
+  --sh-radius-control: 10px;    /* inputs, selects, icon buttons, icon tiles */
+  --sh-radius-card: 16px;       /* rows and cards, light and navy */
+  --sh-radius-stage: 26px;      /* the stage / big containers */
+  --sh-radius-pill: 80px;       /* every text button */
+
+  /* ----- Elevation ----- */
+  --sh-shadow-row: var(--app-shadow-sm);       /* resting rows, selects, round controls */
+  --sh-shadow-pop: var(--app-shadow-lg);       /* hover (with a 1px lift) */
+  --sh-shadow-stage: 0 0 0 1px rgba(20, 20, 25, 0.06), 0 1px 2px #0000000D, 0 24px 48px -12px rgba(22, 24, 39, 0.35);
+  --sh-shadow-panel: 0 1px 2px #0000000D, 0 16px 40px rgba(20, 20, 25, 0.12);
+  --sh-shadow-dialog-navy: 0 24px 48px rgba(0, 0, 0, 0.35);
+  --sh-caption-shadow: 0 1px 2px rgba(11, 15, 46, 0.9), 0 0 12px rgba(11, 15, 46, 0.45);
+  /* On navy there is no shadow at rest: depth is tonal (surface over navy, surface-2 over surface). */
+
+  /* ----- Focus and touch ----- */
+  --sh-focus-width: 2px;
+  --sh-focus-offset: 2px;
+  --sh-focus-color: var(--sh-blue);            /* on navy: var(--sh-accent) */
+  --sh-focus-halo: 0 0 0 3px var(--sh-blue-wash);
+  --sh-tap-min: 44px;                          /* minimum touch target (Apple HIG) */
+
+  /* ----- Icons: Lucide line icons only ----- */
+  --sh-icon-stroke: 1.75;
+  --sh-icon-size: 20px;
+  --sh-icon-size-sm: 16px;
+
+  /* ----- Motion ----- */
+  --sh-ease-out: cubic-bezier(0.16, 1, 0.3, 1);  /* default: exponential ease-out */
+  --sh-ease-panel: var(--app-ease-panel);        /* sheets and panels */
+  --sh-dur-hover: 0.12s;
+  --sh-dur-fast: 0.3s;
+  --sh-dur-base: 0.45s;
+  --sh-dur-slow: 0.6s;
+
+  /* ======================================================================
+     3. VIDEO FRAME (--sh-video-*): Remotion composition 1920 x 1080 @ 30 fps
+     The same roles in px for a 1080p frame (1cqmin = 10.8px).
+     Colours, fonts, tracking and leading are the --sh-* roles above, unchanged.
+     The video lives in the navy hero world: background var(--sh-stage-bg).
+     ====================================================================== */
+  --sh-video-width: 1920px;
+  --sh-video-height: 1080px;
+  --sh-video-fps: 30;
+
+  /* Safe area: nothing important closer to the edge than this */
+  --sh-video-safe: 96px;
+  --sh-video-pad-top: 96px;     /* 9cqmin */
+  --sh-video-pad-side: 76px;    /* 7cqmin */
+  --sh-video-pad-bottom: 172px; /* 16cqmin: room for the caption */
+
+  /* Type at 1080p */
+  --sh-video-figure-hero: 324px;    /* 30cqmin: the one number of the hook */
+  --sh-video-figure-compare: 140px; /* 13cqmin: before -> after */
+  --sh-video-figure-tile: 86px;     /* 8cqmin */
+  --sh-video-headline: 76px;        /* 7cqmin, Poppins 600, white */
+  --sh-video-display: 67px;         /* 6.2cqmin */
+  --sh-video-title: 44px;           /* Poppins 600: card titles in a scene */
+  --sh-video-body: 32px;            /* Inter 400/500 */
+  --sh-video-caption: 34px;         /* 3.1cqmin, Inter 500, with --sh-caption-shadow */
+  --sh-video-label: 24px;           /* Inter 500: tags, units, meta */
+
+  /* Shapes at 1080p (screen values x 2) */
+  --sh-video-radius-tag: 12px;
+  --sh-video-radius-control: 20px;
+  --sh-video-radius-card: 32px;
+  --sh-video-radius-pill: 160px;
+  --sh-video-line: 2px;             /* borders and hairlines */
+  --sh-video-gap: 32px;
+  --sh-video-gap-lg: 64px;
+
+  /* Timing at 30 fps, in frames. Ease with --sh-ease-out, or Remotion
+     spring({ config: { damping: 200 } }) for a move with no bounce. */
+  --sh-video-frames-in: 14;         /* an element enters (0.45 s) */
+  --sh-video-frames-out: 9;         /* an element leaves (0.3 s) */
+  --sh-video-frames-stagger: 4;     /* between siblings entering */
+  --sh-video-frames-scene: 18;      /* scene-to-scene transition (0.6 s) */
+  --sh-video-hook-max: 240;         /* the hook lasts 8 s at most */
+}
+
+/* Respect reduced motion wherever these tokens drive transitions. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sh-dur-hover: 0.01ms;
+    --sh-dur-fast: 0.01ms;
+    --sh-dur-base: 0.01ms;
+    --sh-dur-slow: 0.01ms;
+  }
+}
+
+/* Opt-in helper: class="sh-navy" switches any container to the navy hero world.
+   data-accent picks its one accent (default: bright blue). */
+.sh-navy {
+  color: var(--sh-on-navy);
+  background: var(--sh-stage-bg);
+  color-scheme: dark;
+  --sh-focus-color: var(--sh-accent);
+}
+.sh-navy[data-accent="sky"] { --sh-accent: var(--sh-accent-sky); }
+.sh-navy[data-accent="lavender"] { --sh-accent: var(--sh-accent-lavender); }
+.sh-navy[data-accent="lagoon"] { --sh-accent: var(--sh-accent-lagoon); }
