@@ -68,15 +68,15 @@ const TOPIC_WORDS: Readonly<Record<TopicId, RegExp>> = {
   investments: /invest|portfolio|holdings/i,
 }
 
-/** Part 3 opens with the topic as part of the mountain route. */
+/** Part 3 opens by saying why the topic matters, in plain words. */
 const TOPIC_INTRO: Readonly<Record<TopicId, string>> = {
-  retirement: 'Retirement is the summit of this route.',
-  college: 'College is a long stretch of this route.',
-  emergency_fund: 'Your cash cushion is the gear that keeps a bad month from becoming a fall.',
-  debt: 'Debt is extra weight in the pack.',
-  protection: 'Protection is the rope that holds the family if someone slips.',
-  home_purchase: 'A home of your own is a camp you want to reach on the way up.',
-  investments: 'Your investments are what carries you up the climb.',
+  retirement: 'Retirement is the biggest goal in your plan.',
+  college: "Paying for college is one of your plan's long-term goals.",
+  emergency_fund: 'Your cash cushion is what keeps a bad month from turning into debt.',
+  debt: 'Debt takes a share of every paycheck before anything else.',
+  protection: 'Protection is what keeps the family on its feet if something happens to one of you.',
+  home_purchase: 'Buying a home of your own is one of the goals in your plan.',
+  investments: 'Your investments do most of the work for your long-term goals.',
 }
 
 /** What one scene says and the facts it declares. */
@@ -137,7 +137,7 @@ const narrativeLine = (brief: Brief, topic: TopicId): string | undefined =>
     )
 
 const hookLine = (brief: Brief): string =>
-  `${brief.survey.nickname}, here is your plan as a mountain route, starting with ${TOPIC_PHRASE[brief.survey.topOfMind]}.`
+  `${brief.survey.nickname}, here is your plan in about a minute, starting with ${TOPIC_PHRASE[brief.survey.topOfMind]}.`
 
 const pillarFactNames = (pillar: Pillar): string[] => {
   const name = `PILLAR_${toConstantName(pillar.name)}`
@@ -152,11 +152,11 @@ const whereYouAre = (brief: Brief): SceneText => {
   const level = brief.survey.explainLevel
   if (level === 'simple') {
     return {
-      narration: `Think of your plan as a mountain route. Today you are at ${score}. That is your altitude, and there is a clear way up.`,
+      narration: `Your financial health score today is ${score}. It sums up how ready your money is, and there is a clear way to raise it.`,
       factsUsed: [SCORE_FACT],
     }
   }
-  const base = `Your financial health score is ${score}, which the plan calls ${band}. Think of it as altitude: the higher you climb, the safer the route.`
+  const base = `Your financial health score is ${score}, which the plan calls ${band}. The higher it is, the better prepared your family is.`
   if (level === 'straight') return { narration: base, factsUsed: [SCORE_FACT] }
 
   const ranked = [...pillars].sort((left, right) => shareOfMax(right) - shareOfMax(left))
@@ -186,7 +186,7 @@ const moveAmountFacts = (move: TopMove, facts: Facts): string[] => {
 }
 
 const firstStep = (brief: Brief, facts: Facts, move: TopMove): SceneText => {
-  const step = `Your first step on the trail: ${lowerFirst(move.title)}.`
+  const step = `Your first step: ${lowerFirst(move.title)}.`
   const effort = `The plan rates it ${move.effort} effort.`
   const action = `${move.action.replace(/\.$/, '')}.`
   const withAction = brief.survey.explainLevel !== 'simple' && passesGuard(action, facts)
@@ -199,7 +199,7 @@ const whatChanges = (facts: Facts, move: TopMove, cta: CtaContext): SceneText =>
   const afterFact = scoreAfterFactName(move)
   const lifts = move.scoreAfter > move.scoreBefore && afterFact in facts
   const change = lifts
-    ? `Take it, and your score climbs from ${move.scoreBefore} to ${move.scoreAfter}. Same mountain, one stretch higher.`
+    ? `Take it, and your score goes from ${move.scoreBefore} to ${move.scoreAfter}.`
     : 'It does not move the score, but it closes a gap the plan flags.'
   return { narration: `${change} ${closingLine(cta)}`, factsUsed: lifts ? [SCORE_FACT, afterFact] : [] }
 }
@@ -237,11 +237,11 @@ export const buildFallbackScript = (brief: Brief, facts: Facts): Script => {
 
   return {
     scenes: [
-      { part: 'hook', narration: hook, visualIdea: 'The family at the trailhead, the route on the map.', factsUsed: [] },
-      { part: 'where_you_are', ...where, visualIdea: 'The altimeter rises to the score.' },
-      { part: 'what_matters', ...matters, visualIdea: `The figures about ${topic}, on the trail map.` },
-      { part: 'first_step', ...step, visualIdea: 'The missing gear goes into the backpack.' },
-      { part: 'what_changes', ...changes, visualIdea: 'The family climbs one stretch; the altimeter ticks up.' },
+      { part: 'hook', narration: hook, visualIdea: 'Their name and what is on their mind, on the screen.', factsUsed: [] },
+      { part: 'where_you_are', ...where, visualIdea: 'The score counts up, with the five areas behind it.' },
+      { part: 'what_matters', ...matters, visualIdea: `The figures about ${topic}, as cards on the screen.` },
+      { part: 'first_step', ...step, visualIdea: 'The top moves as numbered cards, the first one highlighted.' },
+      { part: 'what_changes', ...changes, visualIdea: 'The score today and after the first step, side by side.' },
     ],
     chapters: chaptersFor(brief, [hook, where.narration, matters.narration, step.narration, changes.narration]),
     cta: ctaFor(cta),

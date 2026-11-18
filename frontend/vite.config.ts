@@ -3,15 +3,18 @@ import react from "@vitejs/plugin-react";
 
 // The API runs on :3001 (npm run dev -w backend). Brand assets (yak, wordmark, favicon) are served
 // straight from design/assets, so the design system stays the single source.
+// A second checkout can run side by side with API_PORT=3018 WEB_PORT=5181 (both default as below).
+const api = `http://localhost:${process.env.API_PORT || "3001"}`;
+
 export default defineConfig({
   plugins: [react()],
   publicDir: "../design/assets",
   server: {
-    port: 5180,
+    port: Number(process.env.WEB_PORT || 5180),
     strictPort: true,
     proxy: {
-      "/api": "http://localhost:3001",
-      "/runs": "http://localhost:3001",
+      "/api": api,
+      "/runs": api,
     },
   },
 });

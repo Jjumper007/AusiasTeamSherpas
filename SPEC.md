@@ -16,7 +16,7 @@ Qué cubre cada criterio del jurado:
 
 | Criterio | Cómo lo cubrimos |
 |---|---|
-| Engancha | Gancho personal en ≤8 s y metáfora visual de la ruta de montaña |
+| Engancha | Gancho personal en ≤8 s y un presentador que explica el plan en una pantalla |
 | Se entiende | El nivel técnico se elige en la encuesta y cambia la parte central del vídeo |
 | Es para ellos | Un vídeo por persona: misma familia, distinto foco, tono y llamada a la acción |
 | Mueve a actuar | Tarjeta de primer paso según el estilo de decisión de cada persona |
@@ -58,16 +58,12 @@ La encuesta está abierta a añadir preguntas más adelante. Los hijos no tienen
 - **Formato:** 1920×1080, 30 fps, **60–90 s** (el validador acepta hasta 120 s).
 - **Audio:** narración en inglés con ElevenLabs, siempre la **misma voz de marca**, y música de fondo fija.
 - **Subtítulos:** se generan con los tiempos por carácter que devuelve ElevenLabs (`/with-timestamps`).
-- **Metáfora visual, el plan como ruta de montaña:**
-  - la puntuación es la **altitud** a la que está la familia;
-  - cada `top_move` es un **tramo de la ruta** (52 → 57 → 60);
-  - lo que falta (seguro, colchón...) es **el equipo que falta en la mochila**;
-  - la jubilación es **la cima**;
-  - el primer paso es **el siguiente paso en el sendero**.
-- **Estilo:** ilustración plana y cálida, no gráficos de banco. Los datos aparecen dentro de la metáfora (altímetro, mapa con fechas).
+- **Puesta en escena:** el vídeo base de Arturo. Un presentador en una oficina explica el plan mientras la pantalla de la pared muestra los datos: la puntuación y sus 5 áreas, las cifras del tema elegido, los `top_moves` numerados con el primero destacado, y la puntuación antes y después.
+- **Sin metáforas:** ni la narración ni los capítulos usan la ruta de montaña (cumbre, altitud, mochila, sendero). El plan se cuenta con sus propios términos ("52 out of 100", el hueco, el primer paso). Decidido el 18-11-2026; sustituye a la metáfora de la ruta de montaña.
+- **Estilo:** ilustración plana y cálida con el sistema de diseño de Sherpas (`DESIGN.md`), no gráficos de banco.
 - **Arco fijo de 5 partes.** Claude rellena y anima cada parte, pero no cambia el orden:
   1. **Gancho personal** (≤8 s): apodo, familia y lo que dijo que le preocupa.
-  2. **Dónde estás**: la puntuación explicada como altitud.
+  2. **Dónde estás**: la puntuación y qué áreas la suben o la bajan.
   3. **Lo que más importa**: 1–2 preocupaciones conectadas con la respuesta de la encuesta. **Aquí cambia la profundidad técnica según el perfil**: sin tecnicismos en `simple`, con tablas y cifras detalladas superpuestas en `nerd`.
   4. **Tu primer paso**: una sola acción.
   5. **Qué cambia si lo das**: `score_before` → `score_after` y algo tangible.

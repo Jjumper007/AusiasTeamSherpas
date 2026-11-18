@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseCliOutput } from './claude-cli'
+import { cliArgs, parseCliOutput } from './claude-cli'
 
 describe('parseCliOutput', () => {
   it('returns the text result of claude -p --output-format json', () => {
@@ -12,5 +12,22 @@ describe('parseCliOutput', () => {
     )
     expect(() => parseCliOutput('{}')).toThrow('without a text result')
     expect(() => parseCliOutput('Error: unknown option')).toThrow('did not return JSON')
+  })
+})
+
+describe('cliArgs', () => {
+  it('gives the script call no tools, settings or MCP servers', () => {
+    const args = cliArgs('system')
+    expect(args).toEqual(expect.arrayContaining(['-p', '--strict-mcp-config', '--no-session-persistence']))
+    expect(args[args.indexOf('--tools') + 1]).toBe('')
+    expect(args[args.indexOf('--setting-sources') + 1]).toBe('')
+    expect(args).not.toContain('--allowedTools')
+    expect(args.slice(-2)).toEqual(['--system-prompt', 'system'])
+  })
+
+  it('lets the scenes call read, write and type-check, and nothing else without asking', () => {
+    const args = cliArgs('system', { tools: ['Read', 'Edit', 'Bash'], allowedTools: ['Read', 'Edit', 'Bash(npx tsc:*)'] })
+    expect(args[args.indexOf('--tools') + 1]).toBe('Read,Edit,Bash')
+    expect(args[args.indexOf('--allowedTools') + 1]).toBe('Read,Edit,Bash(npx tsc:*)')
   })
 })

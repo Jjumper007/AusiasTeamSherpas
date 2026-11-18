@@ -30,7 +30,7 @@ describe('script prompt', () => {
   })
 
   it('reads the version from the first line of the template', () => {
-    expect(promptVersion(template)).toBe('1')
+    expect(promptVersion(template)).toBe('2')
   })
 
   it('adds the rejected answer and its problems to a retry', () => {

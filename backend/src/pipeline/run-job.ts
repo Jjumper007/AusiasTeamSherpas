@@ -8,15 +8,16 @@ import { writeScript } from '../script/write-script'
 import { findAdult, type Adult } from '../survey/members'
 import { resolveSurvey } from '../survey/resolve-survey'
 import type { Narrate } from '../voice/narrate'
+import type { WriteScenes } from '../scenes/write-scenes'
 import { buildJobResult } from './job-result'
 import type { RenderVideo } from './render-video'
 import { createRunFolder, type RunFolder } from './run-folder'
 
 /**
- * The pipeline of one job (SPEC §5), as far as #7 goes:
+ * The pipeline of one job (SPEC §5):
  *   [1] brief + facts.ts  →  [2] script by Claude (or without Claude)  →  [3] voice and captions
- *   →  [7] render of the fallback video.
- * Claude's scenes (#9) plug in between voice and render later.
+ *   →  [4–6] scenes by Claude in a copy of the template, validated (or the template's own scenes)
+ *   →  [7] render.
  * Every step is reported over SSE, and everything it produces is written to the run folder.
  */
 
@@ -26,6 +27,8 @@ export interface PipelineDeps {
   readonly renderVideo: RenderVideo
   /** `claude -p` for the script (#6); a fake in tests. */
   readonly runClaude: RunClaude
+  /** Claude's scenes in a copy of the template (#9); a fake in tests. */
+  readonly writeScenes: WriteScenes
   readonly runsDir: string
   readonly now: () => Date
 }
@@ -34,20 +37,24 @@ const STEP_LABEL: Readonly<Record<StepId, string>> = {
   brief: 'Reading your plan',
   script: 'Writing your script',
   voice: 'Recording the narration',
+  scenes: 'Designing your scenes',
   render: 'Rendering your video',
 }
 
-/** Where each step sits on the progress bar, roughly by time: script ~25 s, voice ~10 s, render ~50 s. */
+/** Where each step sits on the progress bar, roughly by time: script ~25 s, voice ~10 s, scenes ~90 s, render ~50 s. */
 const STEP_PROGRESS: Readonly<Record<StepId, readonly [start: number, end: number]>> = {
-  brief: [0, 0.05],
-  script: [0.05, 0.3],
-  voice: [0.3, 0.4],
-  render: [0.4, 1],
+  brief: [0, 0.03],
+  script: [0.03, 0.18],
+  voice: [0.18, 0.25],
+  scenes: [0.25, 0.65],
+  render: [0.65, 1],
 }
 
 /** Progress ticks closer than this are not sent: the renderer reports every frame. */
 const MIN_PROGRESS_STEP = 0.01
 const VIDEO_FILE = 'video.mp4'
+/** Shown on the progress bar and in the step's note when Claude's scenes fail every attempt. */
+const FALLBACK_SCENES_NOTE = 'Using the standard scenes'
 
 interface Inputs {
   readonly adult: Adult
@@ -85,12 +92,14 @@ const createReporter = (job: Job, store: JobStore) => {
     emit({ type: 'progress', progress: value, label })
   }
 
-  const step = async <T>(id: StepId, work: () => T | Promise<T>): Promise<T> => {
+  /** Runs one step; `noteOf` may attach a note to its `done` event (e.g. that a fallback was used). */
+  const step = async <T>(id: StepId, work: () => T | Promise<T>, noteOf?: (output: T) => string | undefined): Promise<T> => {
     emit({ type: 'step', step: id, label: STEP_LABEL[id], status: 'running' })
     progress(id, 0)
     try {
       const output = await work()
-      emit({ type: 'step', step: id, label: STEP_LABEL[id], status: 'done' })
+      const note = noteOf?.(output)
+      emit({ type: 'step', step: id, label: STEP_LABEL[id], status: 'done', ...(note ? { note } : {}) })
       return output
     } catch (error) {
       emit({ type: 'step', step: id, label: STEP_LABEL[id], status: 'failed', note: errorMessage(error) })
@@ -123,11 +132,22 @@ export const runJob = async (job: Job, deps: PipelineDeps): Promise<void> => {
     const props = VideoPropsSchema.parse({ brief: inputs.brief, script, facts: inputs.facts, scenes: timings })
     folder.writeJson('video-props.json', props)
 
+    const scenes = await step(
+      'scenes',
+      () =>
+        deps.writeScenes(props, inputs.folder, (attempt, maxAttempts) => {
+          if (attempt > 1) progress('scenes', (attempt - 1) / maxAttempts, `${STEP_LABEL.scenes} (try ${attempt} of ${maxAttempts})`)
+        }),
+      (outcome) => (outcome.source === 'fallback' ? FALLBACK_SCENES_NOTE : undefined),
+    )
+    if (scenes.source === 'fallback') progress('scenes', 1, FALLBACK_SCENES_NOTE)
+
     await step('render', async () => {
-      await deps.renderVideo(props, inputs.folder.path(VIDEO_FILE), (fraction, label) =>
-        progress('render', fraction, label),
-      )
-      inputs.folder.log(`[render] ${VIDEO_FILE} written`)
+      const serveUrl = scenes.source === 'claude' ? scenes.serveUrl : undefined
+      await deps.renderVideo(props, inputs.folder.path(VIDEO_FILE), (fraction, label) => progress('render', fraction, label), {
+        serveUrl,
+      })
+      inputs.folder.log(`[render] ${VIDEO_FILE} written with ${scenes.source === 'claude' ? "Claude's scenes" : 'the standard scenes'}`)
     })
 
     const result = buildJobResult({

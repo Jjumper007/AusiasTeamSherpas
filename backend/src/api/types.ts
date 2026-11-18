@@ -38,7 +38,7 @@ export interface JobRequest {
   readonly answers: SurveyAnswers
 }
 
-export const STEP_IDS = ['brief', 'script', 'voice', 'render'] as const
+export const STEP_IDS = ['brief', 'script', 'voice', 'scenes', 'render'] as const
 export type StepId = (typeof STEP_IDS)[number]
 export type StepStatus = 'running' | 'done' | 'failed'
 
@@ -62,6 +62,14 @@ export interface FactDetail {
   readonly value: string
 }
 
+/** What the first step does to the score, from the facts `SCORE_NOW` and `SCORE_AFTER_<MOVE>`, as displayed. */
+export interface ScoreChange {
+  /** "52" */
+  readonly now: string
+  /** "57" */
+  readonly after: string
+}
+
 /** What the player page needs once the video is rendered. */
 export interface JobResult {
   /** runs/ subfolder: "<caseId>/<member>/<timestamp>". */
@@ -76,6 +84,11 @@ export interface JobResult {
   readonly durationSec: number
   readonly chapters: ReadonlyArray<ChapterMark>
   readonly cta: Cta
+  /** Title, action and effort of the first step. Its figures come from `firstStepScore` and `waitGap`. */
   readonly firstStep: TopMove
+  /** null when the first step does not raise the score: the card says it closes a gap the plan flags. */
+  readonly firstStepScore: ScoreChange | null
+  /** "What waiting costs": the gap the first step leaves open, from an existing fact. null when no fact names it. */
+  readonly waitGap: FactDetail | null
   readonly detail: ReadonlyArray<FactDetail>
 }

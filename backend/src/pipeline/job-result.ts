@@ -1,5 +1,6 @@
 import { fmt, type Brief, type Facts, type Part, type Script, type VideoProps } from '@sherpas/shared'
 import type { ChapterMark, FactDetail, JobResult } from '../api/types'
+import { firstStepScore, waitGap } from './first-step-figures'
 
 export interface JobResultInput {
   readonly runId: string
@@ -30,7 +31,8 @@ export const factDetails = (script: Script, facts: Facts): FactDetail[] =>
     .map((name) => ({ name, label: facts[name].label, value: fmt.fact(facts[name]) }))
 
 export const buildJobResult = (input: JobResultInput): JobResult => {
-  const { brief, script, timings } = input
+  const { brief, facts, script, timings } = input
+  const move = brief.topMoves[0]
   const starts = sceneStarts(timings)
   const chapters: ChapterMark[] = script.chapters.map((chapter, index) => ({ ...chapter, startSec: starts[index] }))
   return {
@@ -44,7 +46,9 @@ export const buildJobResult = (input: JobResultInput): JobResult => {
     durationSec: roundToTenth(timings.reduce((sum, timing) => sum + timing.durationSec, 0)),
     chapters,
     cta: script.cta,
-    firstStep: brief.topMoves[0],
-    detail: factDetails(script, input.facts),
+    firstStep: move,
+    firstStepScore: firstStepScore(move, facts),
+    waitGap: waitGap(move, facts),
+    detail: factDetails(script, facts),
   }
 }

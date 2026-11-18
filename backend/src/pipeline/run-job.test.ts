@@ -8,6 +8,7 @@ import type { JobEvent, JobRequest, JobResult } from '../api/types'
 import { createJobStore } from '../jobs/job-store'
 import type { RunClaude } from '../script/claude-cli'
 import { estimateSceneTimings } from '../script/scene-timing'
+import type { WriteScenes } from '../scenes/write-scenes'
 import type { Narrate } from '../voice/narrate'
 import type { RenderVideo } from './render-video'
 import { runJob } from './run-job'
@@ -43,22 +44,30 @@ const fakeNarrate: Narrate = async (script, folder, onProgress) => {
   })) as ReturnType<typeof estimateSceneTimings>
 }
 
+/** Claude's scenes are not reachable in tests either: every job renders the template's own scenes. */
+const fallbackScenes: WriteScenes = async (_props, folder) => ({
+  source: 'fallback',
+  attempts: 3,
+  sandboxDir: folder.path('video-template'),
+})
+
 interface Fakes {
   readonly renderVideo?: RenderVideo
   readonly runClaude?: RunClaude
   readonly narrate?: Narrate
+  readonly writeScenes?: WriteScenes
 }
 
 const run = async (
   request: JobRequest,
-  { renderVideo = fakeRender, runClaude = offlineClaude, narrate = fakeNarrate }: Fakes = {},
+  { renderVideo = fakeRender, runClaude = offlineClaude, narrate = fakeNarrate, writeScenes = fallbackScenes }: Fakes = {},
 ) => {
   const store = createJobStore()
   const runsDir = tempRunsDir()
   const job = store.create(request)
   const events: JobEvent[] = []
   store.subscribe(job.id, (event) => events.push(event))
-  await runJob(job, { store, narrate, renderVideo, runClaude, runsDir, now: () => FIXED_NOW })
+  await runJob(job, { store, narrate, renderVideo, runClaude, writeScenes, runsDir, now: () => FIXED_NOW })
   return { store, job: store.get(job.id), events, runsDir }
 }
 
@@ -69,7 +78,7 @@ const emily: JobRequest = {
 }
 
 describe('runJob', () => {
-  it('runs brief → script → voice → render and ends with the result', async () => {
+  it('runs brief → script → voice → scenes → render and ends with the result', async () => {
     const { events, job } = await run(emily)
     const steps = events.filter((event) => event.type === 'step').map((event) => `${event.step}:${event.status}`)
     expect(steps).toEqual([
@@ -79,6 +88,8 @@ describe('runJob', () => {
       'script:done',
       'voice:running',
       'voice:done',
+      'scenes:running',
+      'scenes:done',
       'render:running',
       'render:done',
     ])
@@ -159,6 +170,41 @@ describe('runJob', () => {
       message: 'Recording the narration failed: LLM_PROXY_KEY is not set',
     })
     expect(rendered).toBe(false)
+  })
+
+  it("renders Claude's scenes from their own bundle when they pass the checks", async () => {
+    let serveUrl: string | undefined
+    const render: RenderVideo = async (_props, outputFile, _progress, options) => {
+      serveUrl = options?.serveUrl
+      writeFileSync(outputFile, 'mp4')
+    }
+    const claudeScenes: WriteScenes = async (_props, folder) => ({
+      source: 'claude',
+      attempts: 1,
+      sandboxDir: folder.path('video-template'),
+      serveUrl: 'file:///bundle',
+    })
+    const { events, job } = await run(emily, { renderVideo: render, writeScenes: claudeScenes })
+    expect(serveUrl).toBe('file:///bundle')
+    expect(events).toContainEqual({ type: 'step', step: 'scenes', label: 'Designing your scenes', status: 'done' })
+    expect(job?.status).toBe('done')
+  })
+
+  it('renders the standard scenes when Claude fails, and says so over SSE', async () => {
+    let serveUrl: string | undefined = 'unset'
+    const render: RenderVideo = async (_props, outputFile, _progress, options) => {
+      serveUrl = options?.serveUrl
+      writeFileSync(outputFile, 'mp4')
+    }
+    const { events } = await run(emily, { renderVideo: render })
+    expect(serveUrl).toBeUndefined()
+    expect(events).toContainEqual({
+      type: 'step',
+      step: 'scenes',
+      label: 'Designing your scenes',
+      status: 'done',
+      note: 'Using the standard scenes',
+    })
   })
 
   it('passes the voice timings to the render', async () => {

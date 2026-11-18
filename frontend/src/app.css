@@ -54,7 +54,6 @@
 .ch-text b { color: var(--ink); font-weight: 600; font-size: 15px; }
 
 .first-step { display: grid; gap: 12px; }
-.fs-kicker { margin: 0; font-size: 13px; font-weight: 600; color: var(--blue); }
 .fs-title { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 24px; letter-spacing: -0.02em; line-height: 1.15; }
 .fs-meta { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; }
 .fs-meta .lift { background: color-mix(in srgb, var(--app-success, #1DAE53) 14%, transparent); color: #127A3A; border-radius: var(--r-tag); padding: 4px 10px; font-weight: 600; }

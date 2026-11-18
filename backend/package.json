@@ -9,7 +9,8 @@
     "typecheck": "tsc -p tsconfig.json",
     "brief": "tsx src/brief/cli.ts",
     "script": "tsx src/script/cli.ts",
-    "voice:audition": "tsx src/voice/audition.ts"
+    "voice:audition": "tsx src/voice/audition.ts",
+    "scenes": "tsx src/scenes/cli.ts"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.545",

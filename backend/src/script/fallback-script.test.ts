@@ -75,7 +75,7 @@ describe('buildFallbackScript', () => {
 
   it('opens with the nickname and the topic', () => {
     expect(daniel('simple').script.scenes[0].narration).toBe(
-      'Dan, here is your plan as a mountain route, starting with retiring when you plan to.',
+      'Dan, here is your plan in about a minute, starting with retiring when you plan to.',
     )
   })
 

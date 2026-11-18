@@ -1,60 +1,61 @@
 // "Your first step" (SPEC §1, §3): the main move from top_moves, shaped by how this person decides.
-//   just_do_it      one big button, "takes about 10 minutes"
-//   research_first  "Why this number?" with the exact figures behind the video
-//   ask_trusted     "Send this to <partner>" / "to someone you trust"
-//   wait            what waiting costs (from the plan) and a reminder
+// What it shows per decision style lives in ../first-step-card.ts; this file only renders it.
 // "I did it" and "Remind me" are kept in this browser, with a simulated nudge.
 import { useState } from "react";
 import { Bell, Check, ChevronRight, Send } from "lucide-react";
 import { store } from "../api";
+import { firstStepCard, toastFor, type PrimaryAction, type StepMark } from "../first-step-card";
 import type { JobResult } from "../types";
+
+const PRIMARY_ICON: Record<PrimaryAction["kind"], typeof Send> = { start: ChevronRight, share: Send, remind: Bell };
 
 export function FirstStep({ result, onSeek }: { result: JobResult; onSeek(t: number): void }) {
   const { firstStep: m, cta, caseId, member } = result;
-  const lift = m.scoreAfter - m.scoreBefore;
-  const [status, setStatus] = useState<string | null>(() => store.get<string>(caseId, member, "step"));
+  const [status, setStatus] = useState<StepMark | null>(() => store.get<StepMark>(caseId, member, "step"));
+  const card = firstStepCard(result, status);
   const [toast, setToast] = useState<string | null>(null);
 
-  const mark = (s: "done" | "remind") => {
+  const mark = (s: StepMark) => {
     store.set(caseId, member, "step", s);
     setStatus(s);
-    setToast(s === "done" ? "Nice. That's the next step on the trail. We'll check in on day 30." : "We'll nudge you on day 3.");
+    setToast(toastFor(s));
   };
 
   async function share() {
-    const to = result.partner ?? "someone you trust";
     const data = { title: `${result.name}'s plan, in a minute`, text: `Can you watch this with me? First step: ${m.title}.`, url: location.href };
     try {
-      if (navigator.share) { await navigator.share(data); setToast(`Sent. Decide it together with ${to}.`); return; }
+      if (navigator.share) { await navigator.share(data); setToast(`Sent. Decide it together with ${card.shareTo}.`); return; }
       await navigator.clipboard.writeText(`${data.text} ${data.url}`);
-      setToast(`Link copied. Send it to ${to}.`);
-    } catch {
-      /* the share sheet was closed */
+      setToast(`Link copied. Send it to ${card.shareTo}.`);
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return; // the share sheet was closed
+      setToast(`Couldn't share from this browser. Copy the page address and send it to ${card.shareTo}.`);
     }
   }
 
+  const act = (kind: PrimaryAction["kind"]) => {
+    if (kind === "share") void share();
+    else mark(kind === "start" ? "done" : "remind");
+  };
   const matters = result.chapters[2];
 
   return (
-    <section className={`panel first-step cta-${cta.type}`} aria-labelledby="fs-title">
-      <p className="fs-kicker">Your first step</p>
-      <h2 className="fs-title" id="fs-title">{m.title}</h2>
+    <section className={`panel first-step cta-${card.variant}`} aria-labelledby="fs-title">
+      <h2 className="fs-title" id="fs-title">{card.heading}</h2>
       <p className="fs-meta">
-        {lift > 0 ? <span className="lift">Score {m.scoreBefore} → {m.scoreAfter}</span> : <span className="lift neutral">Closes a gap the plan flags</span>}
+        <span className={`lift${card.lifts ? "" : " neutral"}`}>{card.scoreLine}</span>
         <span className="effort">{m.effort} effort</span>
       </p>
       <p className="fs-action">{m.action}</p>
 
-      {cta.type === "just_do_it" && (
-        <>
-          <button type="button" className="cta-big" onClick={() => mark("done")}>
-            <span>Start now</span><ChevronRight className="ic" />
-          </button>
-          <p className="fs-note">Takes about 10 minutes.</p>
-        </>
+      {card.waitCost && (
+        <div className="wait-cost">
+          <p>{card.waitCost.score}</p>
+          {card.waitCost.gap && <p>{card.waitCost.gap.label}: <b>{card.waitCost.gap.value}</b></p>}
+        </div>
       )}
 
-      {cta.type === "research_first" && (
+      {card.variant === "research_first" && matters && (
         <details className="why" open>
           <summary>Why this number?</summary>
           <p>{matters.body}</p>
@@ -71,22 +72,8 @@ export function FirstStep({ result, onSeek }: { result: JobResult; onSeek(t: num
         </details>
       )}
 
-      {cta.type === "ask_trusted" && (
-        <button type="button" className="cta-big" onClick={share}>
-          <Send className="ic" /><span>Send this to {result.partner ?? "someone you trust"}</span>
-        </button>
-      )}
-
-      {cta.type === "wait" && (
-        <div className="wait-cost">
-          <p>
-            {lift > 0
-              ? <>Waiting keeps your score at <b>{m.scoreBefore}</b>. Taking this step lifts it to <b>{m.scoreAfter}</b>.</>
-              : <>Waiting leaves the gap open: this step doesn't change the score, but the plan flags it.</>}
-          </p>
-          <button type="button" className="cta-big" onClick={() => mark("remind")}><Bell className="ic" /><span>Remind me</span></button>
-        </div>
-      )}
+      {card.primary && <PrimaryButton action={card.primary} onClick={act} />}
+      {card.note && <p className="fs-note">{card.note}</p>}
 
       <p className="fs-cta-text">{cta.text}</p>
 
@@ -94,7 +81,7 @@ export function FirstStep({ result, onSeek }: { result: JobResult; onSeek(t: num
         <button type="button" className={`pill${status === "done" ? " on" : ""}`} onClick={() => mark("done")} aria-pressed={status === "done"}>
           <Check className="ic" /> I did it
         </button>
-        {cta.type !== "wait" && (
+        {card.remindPill && (
           <button type="button" className={`pill${status === "remind" ? " on" : ""}`} onClick={() => mark("remind")} aria-pressed={status === "remind"}>
             <Bell className="ic" /> Remind me
           </button>
@@ -102,5 +89,17 @@ export function FirstStep({ result, onSeek }: { result: JobResult; onSeek(t: num
       </div>
       {toast && <p className="toast" role="status">{toast}</p>}
     </section>
+  );
+}
+
+/** The card's big button. "Start now" reads label then arrow; the others lead with their icon. */
+function PrimaryButton({ action, onClick }: { action: PrimaryAction; onClick(kind: PrimaryAction["kind"]): void }) {
+  const Icon = PRIMARY_ICON[action.kind];
+  const icon = <Icon className="ic" />;
+  const label = <span>{action.label}</span>;
+  return (
+    <button type="button" className="cta-big" onClick={() => onClick(action.kind)} aria-pressed={action.kind === "remind" ? action.pressed : undefined}>
+      {action.kind === "start" ? <>{label}{icon}</> : <>{icon}{label}</>}
+    </button>
   );
 }

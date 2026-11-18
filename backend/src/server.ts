@@ -3,8 +3,9 @@ import { createApp } from './api/app'
 import { loadEnvFile } from './env'
 import { createJobStore } from './jobs/job-store'
 import { RUNS_DIR, SPEECH_CACHE_DIR } from './paths'
-import { renderWithRemotion } from './pipeline/render-video'
+import { renderCheckFrames, renderWithRemotion } from './pipeline/render-video'
 import { runJob } from './pipeline/run-job'
+import { createScenesWriter } from './scenes/write-scenes'
 import { runClaudeCli } from './script/claude-cli'
 import { createNarrator } from './voice/narrate'
 
@@ -30,6 +31,7 @@ const deps = {
   narrate,
   renderVideo: renderWithRemotion,
   runClaude: runClaudeCli,
+  writeScenes: createScenesWriter({ runClaude: runClaudeCli, checkFrames: renderCheckFrames }),
   runsDir: RUNS_DIR,
   now: () => new Date(),
 }

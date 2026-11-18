@@ -1,5 +1,8 @@
 import { fmt, type Brief, type Fact, type Facts } from '@sherpas/shared'
 import { partnerOf, SCORE_FACT, scoreAfterFactName } from './fallback-script'
+import { fillPlaceholders } from './prompt-template'
+
+export { promptVersion } from './prompt-template'
 
 /**
  * Fills `prompts/script.md` for one person (SPEC §5.2). Pure: the template is read by the caller,
@@ -7,7 +10,6 @@ import { partnerOf, SCORE_FACT, scoreAfterFactName } from './fallback-script'
  */
 
 const JSON_INDENT = 2
-const PLACEHOLDER = /\{\{([A-Z_]+)\}\}/g
 
 /** "$1.4M" or "$1,427,456": the spellings the number guard accepts for a fact, short one first. */
 export const sayItAs = (fact: Fact): string[] => [...new Set([fmt.round(fact), fmt.fact(fact)])]
@@ -31,7 +33,7 @@ const scoreChange = (brief: Brief, facts: Facts): string => {
   const [move] = brief.topMoves
   const afterFact = scoreAfterFactName(move)
   if (move.scoreAfter > move.scoreBefore && afterFact in facts) {
-    return `the score climbs from ${move.scoreBefore} to ${move.scoreAfter}. \`factsUsed\` must start with \`${SCORE_FACT}\` then \`${afterFact}\`, in that order.`
+    return `the score goes from ${move.scoreBefore} to ${move.scoreAfter}. \`factsUsed\` must start with \`${SCORE_FACT}\` then \`${afterFact}\`, in that order.`
   }
   return 'this move does not raise the score, so do not promise a score change; say which gap it closes instead.'
 }
@@ -46,19 +48,9 @@ const placeholderValues = (brief: Brief, facts: Facts): Readonly<Record<string, 
   DECISION_STYLE: brief.survey.decisionStyle,
 })
 
-/** Replaces every `{{NAME}}` in the template. Throws on a placeholder it does not know, so a typo never reaches Claude. */
-export const fillScriptPrompt = (template: string, brief: Brief, facts: Facts): string => {
-  const values = placeholderValues(brief, facts)
-  return template.replace(PLACEHOLDER, (match, name: string) => {
-    const value = values[name]
-    if (value === undefined) throw new Error(`prompts/script.md has an unknown placeholder ${match}`)
-    return value
-  })
-}
-
-/** The first line of the template names its version, e.g. "prompt: script · version: 1". */
-export const promptVersion = (template: string): string =>
-  /version:\s*([\w.-]+)/.exec(template.split('\n', 1)[0])?.[1] ?? 'unknown'
+/** Fills `prompts/script.md`. Throws on a placeholder it does not know, so a typo never reaches Claude. */
+export const fillScriptPrompt = (template: string, brief: Brief, facts: Facts): string =>
+  fillPlaceholders(template, placeholderValues(brief, facts), 'prompts/script.md')
 
 /** The prompt for a retry: the original one, plus the rejected answer and why it was rejected. */
 export const retryPrompt = (prompt: string, previousAnswer: string, problems: ReadonlyArray<string>): string =>

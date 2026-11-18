@@ -1,5 +1,7 @@
-<!-- prompt: script · version: 1 · used by backend/src/script/write-script.ts. Placeholders in double braces are filled per job. -->
-You are writing the narration script of a 60–90 second personal video for one client of Sherpas Wealth, a financial planning firm. The video turns their financial plan into a mountain route: the score is the altitude the family is at, each top move is a stretch of the trail, missing protection or cash is gear missing from the backpack, retirement is the summit, and the first step is the next step on the trail.
+<!-- prompt: script · version: 2 · used by backend/src/script/write-script.ts. Placeholders in double braces are filled per job. -->
+You are writing the narration script of a 60–90 second personal video for one client of Sherpas Wealth, a financial planning firm. In the video, a presenter in an office talks the person through their own plan while a screen on the wall shows it: their score and its five areas, the figures that matter for what is on their mind, the plan's top moves with the first one highlighted, and the score before and after that first step.
+
+Talk about the plan in its own plain terms. Do not use metaphors or imagery: no mountains, summits, altitude, climbing, trails, routes, backpacks, gear, ropes or journeys. A score is a score ("52 out of 100"), a gap is a gap, and the first step is simply the first step.
 
 Write warm, plain, spoken American English, addressed to the person as "you". Sound like a good guide who knows them, not like a bank or an advert. No hype, no promises about returns, no advice beyond what the plan says.
 
@@ -47,18 +49,18 @@ Do not mention topics the plan does not cover, and never invent figures, dates, 
 ## The five parts, always in this order
 
 1. `hook` — at most 18 words (about 8 seconds). Name them by their nickname and name what is on their mind (`topOfMind`) in their own terms. Mention the family if it fits. No figures.
-2. `where_you_are` — the score as altitude: "52 out of 100" is how high they are on the mountain. `factsUsed` must start with `SCORE_NOW`.
+2. `where_you_are` — their financial health score, "52 out of 100", and what is behind it: which areas of the score are strong and which are weak. `factsUsed` must start with `SCORE_NOW`.
 3. `what_matters` — their `topOfMind`, connected to one or two of the plan's concerns about it. This is where the explain level changes the most. `factsUsed` lists the facts it says, most important first: the video shows the first 1 (`simple`), the first 3 (`straight`) or all of them (`nerd`) on screen.
 4. `first_step` — one single action: the first step above, in plain words, and why it matters for this family. Say how much effort it is.
 5. `what_changes` — what changes if they take it: {{SCORE_CHANGE}} Add something tangible for the family. End with one sentence that hands over to the card under the video, in their decision style.
 
-Each scene's `factsUsed` lists the names of the facts that scene says or shows, and only names from the list. `visualIdea` is one short sentence describing what the scene shows inside the mountain-route metaphor (altimeter, trail map, backpack, summit, the family hiking).
+Each scene's `factsUsed` lists the names of the facts that scene says or shows, and only names from the list. `visualIdea` is one short sentence describing what the screen in the office shows during the scene, in plain terms (a score card counting up to 52, the five areas of the score as bars, the gap and the yearly saving side by side, the top moves as numbered cards with the first one highlighted, the score before and after). No metaphors here either.
 
 The whole narration is 150–220 words. Narration is spoken, so write figures the way they will be read aloud and avoid parentheses, lists, abbreviations and symbols other than $ and %.
 
 ## Explain level (mostly part 3, but it colours every part)
 
-- `simple`: everyday words only, short sentences, one figure in part 3, rounded ("$1.4M"). No terms like "withdrawal rate", "liquidity" or "allocation"; explain ideas with the mountain instead.
+- `simple`: everyday words only, short sentences, one figure in part 3, rounded ("$1.4M"). No terms like "withdrawal rate", "liquidity" or "allocation"; explain the idea in everyday words instead ("money you can reach quickly").
 - `straight`: clear and direct, two or three figures in part 3, rounded. Common financial terms are fine ("emergency fund", "life insurance").
 - `nerd`: precise. Four or five figures in part 3, exact ("$1,427,456"), with the terms the plan uses and how the figures relate (the gap versus what is set aside, months of reserve versus the target). Still spoken, still warm.
 
