@@ -1,0 +1,200 @@
+{
+  "caseId": "daniel-emily-johnson",
+  "member": {
+    "firstName": "Daniel",
+    "role": "client",
+    "age": 44,
+    "retirementAge": 62,
+    "riskProfile": "Growth"
+  },
+  "household": [
+    {
+      "firstName": "Daniel",
+      "role": "client",
+      "age": 44
+    },
+    {
+      "firstName": "Emily",
+      "role": "co-client",
+      "age": 42
+    },
+    {
+      "firstName": "Oliver",
+      "role": "child",
+      "age": 11
+    },
+    {
+      "firstName": "Sophia",
+      "role": "child",
+      "age": 9
+    }
+  ],
+  "score": {
+    "value": 52,
+    "band": "vulnerable",
+    "pillars": [
+      {
+        "name": "Savings and cash flow",
+        "points": 16.0,
+        "maxPoints": 30.0
+      },
+      {
+        "name": "Debt",
+        "points": 15.0,
+        "maxPoints": 20.0
+      },
+      {
+        "name": "Investments",
+        "points": 8.0,
+        "maxPoints": 15.0
+      },
+      {
+        "name": "Liquidity and emergency fund",
+        "points": 13.0,
+        "maxPoints": 15.0
+      },
+      {
+        "name": "Insurance and protection",
+        "points": 0.0,
+        "maxPoints": 20.0
+      }
+    ]
+  },
+  "topMoves": [
+    {
+      "title": "Raise mortality coverage",
+      "action": "Add $1,166,000 of life cover to reach the next mortality-coverage anchor",
+      "effort": "low",
+      "scoreBefore": 52,
+      "scoreAfter": 57
+    },
+    {
+      "title": "Add umbrella cover",
+      "action": "Add $1M of umbrella to raise the liability shield",
+      "effort": "low",
+      "scoreBefore": 52,
+      "scoreAfter": 56
+    },
+    {
+      "title": "Raise annual savings",
+      "action": "Redirect $15,032/year of free cash flow into savings to raise retirement-directed savings toward the next band",
+      "effort": "medium",
+      "scoreBefore": 52,
+      "scoreAfter": 55
+    }
+  ],
+  "goals": [
+    {
+      "type": "RETIREMENT",
+      "text": "Both Daniel and Emily want to retire in 2044 at ages 62 and 60."
+    },
+    {
+      "type": "VACATION",
+      "text": "Going on a $4,500 vacation every year.",
+      "amount": 4500
+    },
+    {
+      "type": "COLLEGE",
+      "text": "Finance education for 2 children ($60,000 in total for each child).",
+      "amount": 60000
+    }
+  ],
+  "narrative": {
+    "summary_main": "- You have a solid base to work from. Two salaries bring in $280,000 a year, your net worth is $511,000, and you have $330,000 in investable assets. Your home is about two-thirds of your assets, but only $190,000 of it is equity against a $560,000 mortgage. Bills are being met, and about $15,032 a year is left over after your outflows.\n- The central tension is that several needs draw on that same $15,032: retirement saving, a larger cash reserve, protection cover and college funding. Nothing here ranks them, so it is a tradeoff for the two of you to weigh together, calmly and without blame.\n- Retirement is the largest gap. Nothing is going into your two 401(k)s today, and each of you could contribute up to $24,500 a year. Closing the gap would take about $34,165 more a year, which is more than twice your free cash flow. As a projection to age 91, income covers about 49% of a $124,071 yearly need, savings pay about $62,932 a year, and your savings last with about $260,272 left at the end.\n- Your cushion and your family's protection are thinner than they could be. Accessible cash of $19,000 is about $92,360 short of the cash target once your near-term vacation goal is included. Life cover is $250,000 for Daniel and $200,000 for Emily, well below the recommended ranges. There is no umbrella policy, against a recommended $1,000,000.\n- You do have strengths to build on. Your debt payments are manageable, with housing and debt together about 27% of income. The 529 holds $30,000 with $8,000 going in each year, though a $106,552 college funding gap remains. The $18,000 card at 24.9% is on track to be cleared by January 2034 at current payments.\n- A realistic direction is to decide together how the $15,032 is shared among the cash reserve, life and umbrella cover, retirement contributions and the 529. Checking whether your employers offer a 401(k) match is a good first look, since none is recorded today.",
+    "summary_recommendations": "- Start by strengthening your protection, since it matters most to you: review life cover for both of you, which sits well below the recommended ranges, and look at adding umbrella liability cover, since none is in place today.\n- Build your cash reserve toward the recommended 8 to 9 months of essential expenses, because accessible cash currently covers only a small fraction of that.\n- Raise your retirement saving, which is currently $0 in contributions, and confirm with each employer whether a match exists so you know what your deferrals could earn.\n- Treat the 24.9% credit card as the costliest debt, and look at whether a higher monthly payment fits alongside your other goals.\n- Talk through together how protection, cash, retirement and the 529 compete for the same yearly free cash flow, so that the trade-offs are a shared choice rather than a default.",
+    "retirement_short_observations": "- Your plan projects that your money lasts to age 91, with $260,272 of savings left in today's dollars. That is a projection over the plan horizon, not a certainty, and it depends on savings covering about half of your retirement spending.\n- Income is projected to cover 49% of your $124,071 yearly retirement spending need, and Social Security supplies nearly all of it. The rest, about $62,932 a year on average, would come from savings, so what you build before retiring matters a great deal.\n- Drawing an average of 5.5% of your savings at the start of retirement is a meaningful pace. It holds through age 91 in the projection, but the cushion at the end is modest, and no long-term care cost is included.\n- Nothing is going into retirement contributions today. You could each contribute up to $24,500 a year to a 401(k), and each of you currently contributes $0. Whether an employer match is available isn't confirmed.\n- Emily plans to stop work at 60 and Daniel at 62, and your risk comfort differs (Daniel Growth, Emily Moderate). Since the plan leans on savings, it is worth checking that reliance against each of your comfort levels.",
+    "protection_life_insurance_short_observations": "- Daniel has $250,000 of life insurance against a recommended $1,600,000 to $2,400,000, a shortfall of $1,350,000. Emily has $200,000 against $1,200,000 to $1,800,000, a shortfall of $1,000,000. You both hold some cover and neither of you is over-covered, but the gaps are large for a household with two children, a mortgage and college costs ahead.\n- Your household relies on both paychecks: $160,000 from Daniel and $120,000 from Emily. If either income were lost, the remaining one would have to carry the household's costs.\n- Obligations that would remain include a $560,000 mortgage, a vehicle loan, a student loan and an $18,000 credit card balance. College costs of $120,000 for Oliver and Sophia are also ahead, and the funding gap after current 529 balances is $107,000 (rounded)."
+  },
+  "classification": {
+    "D0": "EMERGING",
+    "D1": "MID ACCUMULATION",
+    "D2": "MODERATE",
+    "D3": "SIGNIFICANT GAPS",
+    "D4": "MISALIGNED",
+    "D5": "DUAL",
+    "D6": "PROTECTION"
+  },
+  "concerns": [
+    {
+      "id": "O1",
+      "title": "Retirement",
+      "severity": "SIGNIFICANT",
+      "text": "The gap is $1,427,456 and about $34,165 a year more is needed, while free cash flow is $15,032 a year. Nothing goes into either 401(k). No employer match is recorded; the plan estimates about $6,400 for Daniel and $4,800 for Emily, unconfirmed. Contributing the full $49,000 would cut tax by about $11,760 a year at their 24% marginal rate."
+    },
+    {
+      "id": "O2",
+      "title": "Life insurance",
+      "severity": "SIGNIFICANT",
+      "text": "Shortfalls of $1,350,000 for Daniel and $1,000,000 for Emily. Adding $1,166,000 of cover is worth 5 points of score (52 to 57)."
+    },
+    {
+      "id": "O3",
+      "title": "No umbrella cover",
+      "severity": "MODERATE",
+      "text": "A $1,000,000 gap. Adding it is worth 4 points (52 to 56). With life cover, the two together lift it to 60."
+    },
+    {
+      "id": "O4",
+      "title": "Cash reserve",
+      "severity": "SIGNIFICANT",
+      "text": "Accessible cash of $19,000 against a target of $111,360 to $124,717.50, a gap of $92,360."
+    },
+    {
+      "id": "O5",
+      "title": "Debt load and the 24.9% card",
+      "severity": "MODERATE",
+      "text": "Debt-only DTI is 23.23%, monthly debt payments are $5,420, and the $18,000 card is the most expensive debt by a wide margin. The mortgage is $560,000 at 6.5% ($4,100 a month), the Toyota Highlander loan $28,000 at 7.9% ($620) and Daniel's student loan $12,000 at 5.2% ($250)."
+    },
+    {
+      "id": "O6",
+      "title": "Income dependence",
+      "severity": "MINOR",
+      "text": "Annual salary is 54.79% of net worth, so the household relies heavily on two paychecks. Worth keeping in view, with no action needed today."
+    },
+    {
+      "id": "O7",
+      "title": "Thin margin",
+      "severity": "MODERATE",
+      "text": "Free cash flow of $15,032 a year is 5.37% of income, small next to the needs above. Raising annual savings alone lifts the score from 52 to 55."
+    },
+    {
+      "id": "O8",
+      "title": "College funding",
+      "severity": "MODERATE",
+      "text": "A $106,552 gap remains after the $30,000 already in the 529, even though $8,000 a year goes in."
+    }
+  ],
+  "tensions": [
+    {
+      "id": "T1",
+      "level": "HIGH",
+      "text": "O1 and O4, together with O2 and O3, compete for the same $15,032 of yearly free cash flow. Retirement needs about $34,165 a year and the cash gap is $92,360. They must weigh the trade-off together."
+    },
+    {
+      "id": "T2",
+      "level": "MEDIUM",
+      "text": "O2, O3 and D4c. The protection gaps stay open while the household carries high exposure and a thin cushion, and closing them costs cash flow that O1 and O4 also need."
+    },
+    {
+      "id": "T3",
+      "level": "LOW",
+      "text": "D4a against D4c. They state a Moderate orientation and hold a moderate portfolio, but their overall exposure is closer to aggressive, which suggests drift. Any plan also has to work for both a Growth and a Moderate partner."
+    },
+    {
+      "id": "T4",
+      "level": "MEDIUM",
+      "text": "O5 against the current saving pattern. The household saves $26,000 a year ($12,000 to brokerage, $8,000 to the 529 and $6,000 to cash) while carrying an $18,000 balance at 24.9% and sending $0 to the 401(k)s."
+    },
+    {
+      "id": "T5",
+      "level": "MEDIUM",
+      "text": "O8 against O1. The 529 receives $8,000 a year while retirement receives nothing, though retirement is the larger gap."
+    }
+  ],
+  "survey": {
+    "nickname": "Dan",
+    "explainLevel": "nerd",
+    "topOfMind": "retirement",
+    "decisionStyle": "research_first"
+  }
+}
