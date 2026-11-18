@@ -1,0 +1,20 @@
+{
+  "name": "video-2-0",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@remotion/cli": "4.0.544",
+    "@remotion/google-fonts": "4.0.544",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.544"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio codigo-general/index.ts",
+    "render": "remotion render codigo-general/index.ts MichaelAdvisorV2 video.mp4 --crf=16"
+  }
+}

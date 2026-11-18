@@ -1,0 +1,369 @@
+import React from "react";
+import { AbsoluteFill, Easing, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { Advisor, ADVISOR_POSES, AdvisorExpr, AdvisorPose, ArmSet } from "./characters/Advisor";
+import { FPS, s, C, FONT, clamp, tw, useSpring, VW, VH } from "./Escenas/comun";
+import { SCENE_COMPONENTS } from "./Escenas";
+
+// V2: faster, punchier cut of Michael's report. Camera cuts (wide / close-up / screen), chapter wipes,
+// kinetic callouts, karaoke subtitles, "how we help" chips and a closing call to action.
+// Subtitles only, no narration. Tone follows persona.md: collaborator, motivated by freedom, Growth profile.
+// Scene code lives in ./Escenas (one file per scene).
+
+const SCENES = [0, 6, 12, 22, 33, 44, 56, 66, 75, 84, 96];
+const CHAPTERS = ["", "YOUR REPORT", "WHERE YOU STAND", "CASH FLOW", "JANUARY 2027", "RETIREMENT", "PROTECTION", "INVESTMENTS", "WHERE TO START", "YOUR NEXT STEP"];
+export const MICHAEL_ADVISOR_V2_DURATION = s(SCENES[SCENES.length - 1]);
+
+type Sub = { from: number; to: number; text: string; pose: AdvisorPose; expr: AdvisorExpr };
+const SUBS: Sub[] = [
+  { from: 0.8, to: 3.2, text: "Michael, you want to retire at 58 and travel every year.", pose: "welcome", expr: "happy" },
+  { from: 3.2, to: 5.8, text: "Will your money last that long? Let's find out.", pose: "present", expr: "happy" },
+  { from: 6.3, to: 9, text: "Your report checks six areas of your financial life.", pose: "explain", expr: "happy" },
+  { from: 9, to: 11.8, text: "Here's what each one says, in under two minutes.", pose: "point", expr: "happy" },
+  { from: 12.3, to: 15, text: "Good news first: you're starting strong.", pose: "thumbsUp", expr: "happy" },
+  { from: 15, to: 18.5, text: "$247K in assets, and $145K of it invested.", pose: "point", expr: "happy" },
+  { from: 18.5, to: 21.8, text: "You save $43K a year, full employer match included.", pose: "thumbsUp", expr: "happy" },
+  { from: 22.3, to: 25.5, text: "But one $180K income is doing five jobs.", pose: "explain", expr: "neutral" },
+  { from: 25.5, to: 29, text: "Taxes, rent, living, debt and savings: more than you earn.", pose: "point", expr: "neutral" },
+  { from: 29, to: 32.8, text: "About $8,300 a year short. A question of order, not effort.", pose: "explain", expr: "happy" },
+  { from: 33.3, to: 36.5, text: "January 2027: a $113,300 home and a $3,500 trip.", pose: "present", expr: "neutral" },
+  { from: 36.5, to: 40, text: "Your $30K in cash covers about 3 months. Aim for 5 to 6.", pose: "point", expr: "concerned" },
+  { from: 40, to: 43.8, text: "With both goals, you'd need $163K to $173K in cash.", pose: "count", expr: "concerned" },
+  { from: 44.3, to: 47.5, text: "At 58, you'd have about $1.07M in liquid savings.", pose: "present", expr: "neutral" },
+  { from: 47.5, to: 51, text: "Social Security covers just 34% of your yearly need.", pose: "point", expr: "neutral" },
+  { from: 51, to: 55.8, text: "So savings run out at 85, six years before the plan ends at 91.", pose: "think", expr: "concerned" },
+  { from: 56.3, to: 59.5, text: "Your protection has gaps too.", pose: "explain", expr: "concerned" },
+  { from: 59.5, to: 62.8, text: "Life cover is $720K below the suggested minimum. No umbrella policy.", pose: "point", expr: "concerned" },
+  { from: 62.8, to: 65.8, text: "And that $3,500 card at 20% is your priciest debt.", pose: "count", expr: "neutral" },
+  { from: 66.3, to: 69.5, text: "Your investments? Solid: about 13.6% a year.", pose: "thumbsUp", expr: "happy" },
+  { from: 69.5, to: 74.8, text: "The proposed 67/33 mix sits closer to your Growth profile.", pose: "point", expr: "neutral" },
+  { from: 75.3, to: 78.5, text: "Everything competes for the same dollars.", pose: "explain", expr: "neutral" },
+  { from: 78.5, to: 83.8, text: "So: cushion first, then the card, then retirement.", pose: "count", expr: "happy" },
+  { from: 84.3, to: 88, text: "This plan works best when we build it together.", pose: "welcome", expr: "happy" },
+  { from: 88, to: 91.8, text: "Book your plan review, and we'll set the order with you.", pose: "point", expr: "happy" },
+  { from: 91.8, to: 95.6, text: "Your freedom at 58 starts with one conversation.", pose: "thumbsUp", expr: "happy" },
+];
+
+// Camera shots. "close" = presenter close-up, "screen" = presentation full frame.
+type Shot = "wide" | "close" | "screen";
+const SHOTS: { at: number; shot: Shot }[] = [
+  { at: 0, shot: "close" },
+  { at: 3.2, shot: "wide" },
+  { at: 6, shot: "wide" },
+  { at: 9, shot: "screen" },
+  { at: 12, shot: "close" },
+  { at: 15, shot: "screen" },
+  { at: 18.5, shot: "wide" },
+  { at: 22, shot: "close" },
+  { at: 25.5, shot: "screen" },
+  { at: 29, shot: "wide" },
+  { at: 33, shot: "wide" },
+  { at: 36.5, shot: "screen" },
+  { at: 44, shot: "screen" },
+  { at: 51, shot: "close" },
+  { at: 56, shot: "close" },
+  { at: 59.5, shot: "screen" },
+  { at: 62.8, shot: "wide" },
+  { at: 66, shot: "close" },
+  { at: 69.5, shot: "screen" },
+  { at: 75, shot: "wide" },
+  { at: 78.5, shot: "screen" },
+  { at: 84, shot: "close" },
+  { at: 87, shot: "screen" },
+  { at: 91.8, shot: "wide" },
+];
+const SHOT_PARAMS: Record<Shot, { cx: number; cy: number; sc: number }> = {
+  wide: { cx: 960, cy: 540, sc: 1 },
+  close: { cx: 560, cy: 440, sc: 1.75 },
+  screen: { cx: 1215, cy: 530, sc: 1.22 },
+};
+
+const BURSTS: { at: number; text: string; color: string }[] = [
+  { at: 3.6, text: "WILL IT LAST?", color: "#FFC23D" },
+  { at: 19.2, text: "FULL MATCH ✓", color: "#22A57E" },
+  { at: 41, text: "≈$133K SHORT", color: "#E5484D" },
+  { at: 52, text: "EMPTY AT 85", color: "#E5484D" },
+  { at: 60.2, text: "$720K GAP", color: "#E5484D" },
+  { at: 67, text: "+13.6% / YR", color: "#22A57E" },
+];
+
+const HELP: { from: number; to: number; text: string }[] = [
+  { from: 29.4, to: 32.9, text: "We give every dollar one clear job" },
+  { from: 40.4, to: 43.9, text: "We plan your home cash, step by step" },
+  { from: 51.6, to: 55.9, text: "We model ways to make it last to 91" },
+  { from: 62.6, to: 65.9, text: "We compare cover that fits your budget" },
+  { from: 70, to: 74.9, text: "We rebalance toward your Growth profile" },
+];
+// ---------------- Office ----------------
+const SCREEN = { x: 610, y: 96, w: 1250, h: 770 };
+const INNER = { x: 635, y: 121, w: 1200, h: 720 }; // virtual 1500x900 scaled 0.8
+const buildings = Array.from({ length: 9 }, (_, i) => ({ x: i * 64 - 10, w: 52 + ((i * 37) % 24), h: 180 + ((i * 97) % 220) }));
+
+const Office: React.FC = () => {
+  const f = useCurrentFrame();
+  const cloudX = (f * 0.35) % 700;
+  return (
+    <>
+      <div style={{ position: "absolute", left: -300, top: -200, width: 2520, height: 1100, background: "linear-gradient(180deg, #EEF2F8 0%, #DFE6EF 100%)" }} />
+      {[300, 1230].map((x) => (
+        <div key={x} style={{ position: "absolute", left: x - 400, top: -300, width: 800, height: 600, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(255,255,255,0.9), rgba(255,255,255,0))" }} />
+      ))}
+      <div style={{ position: "absolute", left: 50, top: 90, width: 500, height: 640, borderRadius: 10, overflow: "hidden", background: "linear-gradient(180deg, #9FC9F2 0%, #D7E8F7 60%, #F6E6D0 100%)", boxShadow: "inset 0 0 0 14px #FFFFFF, 0 6px 18px rgba(30,40,70,0.12)" }}>
+        {[0, 1].map((k) => (
+          <div key={k} style={{ position: "absolute", left: cloudX - 260 + k * 420, top: 18 + k * 44, width: 140, height: 36, borderRadius: 30, background: "rgba(255,255,255,0.85)" }} />
+        ))}
+        <svg width={500} height={640} style={{ position: "absolute", left: 0, top: 0 }}>
+          {buildings.map((b, i) => (
+            <g key={i}>
+              <rect x={b.x} y={640 - b.h} width={b.w} height={b.h} fill={i % 2 ? "#7F93B5" : "#93A6C4"} />
+              {Array.from({ length: Math.floor(b.h / 34) }, (_, r) =>
+                [0, 1].map((c) => (
+                  <rect key={`${r}-${c}`} x={b.x + 10 + c * (b.w / 2 - 4)} y={640 - b.h + 14 + r * 34} width={b.w / 2 - 16} height={14} fill="#DCE6F4" opacity={(i + r + c + Math.floor(f / 45)) % 4 === 0 ? 0.95 : 0.45} />
+                )),
+              )}
+            </g>
+          ))}
+        </svg>
+        <div style={{ position: "absolute", left: 243, top: 0, width: 14, height: 640, background: "#FFFFFF" }} />
+        <div style={{ position: "absolute", left: 0, top: 300, width: 500, height: 12, background: "#FFFFFF" }} />
+      </div>
+      <div style={{ position: "absolute", left: -300, top: 900, width: 2520, height: 400, background: "linear-gradient(180deg, #C29A70, #A87F57)" }} />
+      <svg width={2520} height={400} style={{ position: "absolute", left: -300, top: 900 }}>
+        {Array.from({ length: 22 }, (_, i) => (
+          <line key={i} x1={i * 130} y1={0} x2={i * 130 - 120} y2={400} stroke="#9A734C" strokeWidth={2} opacity={0.5} />
+        ))}
+      </svg>
+      <div style={{ position: "absolute", left: -300, top: 892, width: 2520, height: 12, background: "#F4F1EC" }} />
+      <svg width={160} height={260} viewBox="0 0 160 260" style={{ position: "absolute", left: 1780, top: 700 }}>
+        {[-40, -18, 0, 20, 42].map((a, i) => (
+          <ellipse key={i} cx={80} cy={90} rx={18} ry={70} fill={i % 2 ? "#3E9B6E" : "#2F8560"} transform={`rotate(${a + Math.sin(f / 40 + i) * 2} 80 160)`} />
+        ))}
+        <path d="M44 160 L116 160 L106 250 L54 250 Z" fill="#E8DCCB" />
+      </svg>
+    </>
+  );
+};
+const Swipe: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, children }) => {
+  const f = useCurrentFrame();
+  const inP = tw(f, 0, 12, 0, 1);
+  const outP = tw(f, dur - 8, dur, 0, 1, Easing.in(Easing.cubic));
+  return <AbsoluteFill style={{ opacity: inP * (1 - outP), translate: `${(1 - inP) * 160 - outP * 160}px 0px` }}>{children}</AbsoluteFill>;
+};
+
+const Screen: React.FC = () => {
+  const f = useCurrentFrame();
+  const on = tw(f, s(0.4), s(0.8), 0, 1);
+  const chapter = SCENES.findIndex((t, i) => f >= s(t) && f < s(SCENES[i + 1] ?? 999));
+  const progress = f / MICHAEL_ADVISOR_V2_DURATION;
+  return (
+    <>
+      <div style={{ position: "absolute", left: SCREEN.x, top: SCREEN.y, width: SCREEN.w, height: SCREEN.h, borderRadius: 26, background: "#1B1F33", boxShadow: "0 24px 60px rgba(20,25,50,0.28)" }} />
+      <div style={{ position: "absolute", left: INNER.x, top: INNER.y, width: INNER.w, height: INNER.h, borderRadius: 12, overflow: "hidden", background: on > 0 ? C.panel : "#0E1120" }}>
+        <div style={{ width: VW, height: VH, scale: "0.8", transformOrigin: "0 0", position: "absolute", left: 0, top: 0, opacity: on }}>
+          {SCENE_COMPONENTS.map((Comp, i) => {
+            const from = s(SCENES[i]);
+            const dur = s(SCENES[i + 1]) - from;
+            return (
+              <Sequence key={i} from={from} durationInFrames={dur} name={`Scene ${i + 1}`} layout="none">
+                <Swipe dur={dur}>
+                  <Comp />
+                </Swipe>
+              </Sequence>
+            );
+          })}
+          <div style={{ position: "absolute", left: 0, top: VH - 10, width: VW, height: 10, background: C.grey }} />
+          <div style={{ position: "absolute", left: 0, top: VH - 10, width: VW * progress, height: 10, background: C.blue }} />
+          <div style={{ position: "absolute", right: 40, top: 40, display: "flex", gap: 10 }}>
+            {SCENE_COMPONENTS.map((_, i) => (
+              <div key={i} style={{ width: i === chapter ? 34 : 12, height: 12, borderRadius: 6, background: i <= chapter ? C.blue : C.grey }} />
+            ))}
+          </div>
+        </div>
+        <div style={{ position: "absolute", inset: 0, background: "#FFFFFF", opacity: interpolate(f, [s(0.4), s(0.5), s(1)], [0, 0.9, 0], clamp) }} />
+      </div>
+      <div style={{ position: "absolute", left: INNER.x, top: INNER.y, width: INNER.w, height: INNER.h, borderRadius: 12, background: "linear-gradient(120deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 35%)" }} />
+    </>
+  );
+};
+
+// ---------------- Presenter ----------------
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+const lerpPt = (a: [number, number], b: [number, number], t: number): [number, number] => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+const blendArms = (a: ArmSet, b: ArmSet, t: number): ArmSet => ({ le: lerpPt(a.le, b.le, t), lh: lerpPt(a.lh, b.lh, t), re: lerpPt(a.re, b.re, t), rh: lerpPt(a.rh, b.rh, t) });
+const leanOf = (p: AdvisorPose) => (p === "point" || p === "present" ? 3 : p === "think" ? -2 : 0);
+
+const Presenter: React.FC = () => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const t = f / FPS;
+  let idx = -1;
+  for (let i = 0; i < SUBS.length; i++) if (t >= SUBS[i].from - 0.15) idx = i;
+  const cur = idx >= 0 ? SUBS[idx] : null;
+  const prevPose: AdvisorPose = idx > 0 ? SUBS[idx - 1].pose : "idle";
+  const curPose: AdvisorPose = cur ? cur.pose : "idle";
+  const startF = cur ? s(cur.from - 0.15) : 0;
+  const blend = cur ? spring({ frame: f - startF, fps, config: { damping: 14, stiffness: 170 } }) : 1;
+  let arms = blendArms(ADVISOR_POSES[prevPose], ADVISOR_POSES[curPose], blend);
+  const speaking = cur !== null && t < cur.to - 0.2;
+  if (speaking) {
+    const dx = Math.sin(f / 7) * 6;
+    const dy = Math.sin(f / 5.5) * 7;
+    if (curPose === "explain" || curPose === "welcome") arms = { ...arms, lh: [arms.lh[0] - dx, arms.lh[1] + dy], rh: [arms.rh[0] + dx, arms.rh[1] - dy] };
+    else if (curPose === "point" || curPose === "present") arms = { ...arms, rh: [arms.rh[0] + Math.sin(f / 4.5) * 5, arms.rh[1] + Math.sin(f / 6) * 4] };
+    else if (curPose === "count" || curPose === "thumbsUp") arms = { ...arms, rh: [arms.rh[0], arms.rh[1] - Math.abs(Math.sin(f / 6)) * 8] };
+  }
+  const mouth = speaking ? Math.max(0, Math.sin(f * 0.9) * 0.6 + Math.sin(f * 0.33 + 1) * 0.4) : 0;
+  const blink = f % 97 < 4 || f % 163 < 3;
+  const breath = Math.sin((f / FPS) * Math.PI) * 2;
+  const headTilt = Math.sin(f / 23) * 2 + (speaking ? Math.sin(f / 8) * 2 : 0);
+  const lean = lerp(leanOf(prevPose), leanOf(curPose), blend);
+  const look = curPose === "point" || curPose === "present" ? 3 : 1;
+  const enter = spring({ frame: f, fps, config: { damping: 18, stiffness: 80 } });
+  const x = interpolate(enter, [0, 1], [-520, 70]);
+  const bob = enter < 0.98 ? Math.abs(Math.sin(f / 3)) * -10 : 0;
+  const hop = cur && curPose === "thumbsUp" ? -Math.max(0, Math.sin(Math.min(1, (f - startF) / 12) * Math.PI)) * 22 : 0;
+  return (
+    <div style={{ position: "absolute", left: x, top: 222 + bob + hop }}>
+      <Advisor arms={arms} handStyle={blend > 0.5 ? curPose : prevPose} expr={cur ? cur.expr : "happy"} mouth={mouth} blink={blink} breath={breath} headTilt={headTilt} lean={lean} look={look} width={470} />
+    </div>
+  );
+};
+
+// ---------------- Overlays (screen space) ----------------
+const Subtitles: React.FC = () => {
+  const f = useCurrentFrame();
+  const t = f / FPS;
+  const cur = SUBS.find((x) => t >= x.from && t < x.to);
+  if (!cur) return null;
+  const a = s(cur.from);
+  const b = s(cur.to);
+  const o = interpolate(f, [a, a + 4, b - 4, b], [0, 1, 1, 0], clamp);
+  const words = cur.text.split(" ");
+  const total = cur.text.length;
+  const span = cur.to - cur.from - 0.4;
+  let chars = 0;
+  return (
+    <div style={{ position: "absolute", left: 0, width: 1920, bottom: 40, display: "flex", justifyContent: "center" }}>
+      <div style={{ maxWidth: 1560, padding: "14px 34px", borderRadius: 18, background: "rgba(16,18,38,0.86)", fontSize: 42, fontWeight: 700, lineHeight: 1.3, textAlign: "center", opacity: o, translate: `0px ${(1 - o) * 14}px`, scale: interpolate(o, [0, 1], [0.96, 1]) }}>
+        {words.map((w, i) => {
+          const ws = cur.from + (chars / total) * span;
+          chars += w.length + 1;
+          const said = t >= ws;
+          const isNum = /[$%0-9]/.test(w);
+          const pop = said ? interpolate(t - ws, [0, 0.12, 0.25], [1, 1.12, 1], clamp) : 1;
+          return (
+            <span key={i} style={{ display: "inline-block", marginRight: 12, color: isNum ? "#FFD84D" : "#FFFFFF", opacity: said ? 1 : 0.4, scale: `${pop}` }}>
+              {w}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const Bursts: React.FC = () => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  return (
+    <>
+      {BURSTS.map((b) => {
+        const st = s(b.at);
+        const end = st + s(1.9);
+        if (f < st || f > end) return null;
+        const sp = spring({ frame: f - st, fps, config: { damping: 9, stiffness: 220 } });
+        const out = interpolate(f, [end - 8, end], [1, 0], clamp);
+        return (
+          <div key={b.at} style={{ position: "absolute", right: 70, top: 100, rotate: `${interpolate(sp, [0, 1], [-18, -5])}deg`, scale: interpolate(sp, [0, 1], [0.2, 1]) * (0.6 + 0.4 * out), opacity: out }}>
+            <div style={{ padding: "18px 40px", borderRadius: 20, background: b.color, color: b.color === "#FFC23D" ? C.ink : "#fff", fontSize: 64, fontWeight: 900, letterSpacing: 2, boxShadow: "0 18px 40px rgba(20,20,40,0.35)", border: "6px solid #fff", whiteSpace: "nowrap" }}>
+              {b.text}
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+const HelpChip: React.FC = () => {
+  const f = useCurrentFrame();
+  const t = f / FPS;
+  const cur = HELP.find((h) => t >= h.from && t < h.to);
+  if (!cur) return null;
+  const a = s(cur.from);
+  const b = s(cur.to);
+  const inP = tw(f, a, a + 12, 0, 1);
+  const outP = tw(f, b - 8, b, 0, 1);
+  return (
+    <div style={{ position: "absolute", left: 50, top: 50, translate: `${(1 - inP) * -700 - outP * 700}px 0px`, display: "flex", alignItems: "stretch", borderRadius: 18, overflow: "hidden", boxShadow: "0 14px 30px rgba(20,20,40,0.3)" }}>
+      <div style={{ background: C.yellow, color: C.ink, fontSize: 28, fontWeight: 900, letterSpacing: 3, padding: "16px 22px", display: "flex", alignItems: "center" }}>HOW WE HELP</div>
+      <div style={{ background: C.ink, color: "#fff", fontSize: 34, fontWeight: 700, padding: "16px 28px", whiteSpace: "nowrap" }}>{cur.text}</div>
+    </div>
+  );
+};
+
+const ChapterWipe: React.FC = () => {
+  const f = useCurrentFrame();
+  return (
+    <>
+      {SCENES.slice(1, -1).map((sec, i) => {
+        const mid = s(sec);
+        const a = mid - 11;
+        const b = mid + 11;
+        if (f < a || f > b) return null;
+        const p = interpolate(f, [a, b], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+        const x = interpolate(p, [0, 1], [-2700, 2700]);
+        const label = CHAPTERS[i + 1];
+        return (
+          <div key={sec} style={{ position: "absolute", left: x - 400, top: -100, width: 2720, height: 1280, transform: "skewX(-14deg)", display: "flex" }}>
+            <div style={{ width: 120, background: C.yellow }} />
+            <div style={{ flex: 1, background: C.blue, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ transform: "skewX(14deg)", color: "#fff", fontSize: 96, fontWeight: 900, letterSpacing: 6, display: "flex", gap: 30, alignItems: "baseline" }}>
+                <span style={{ color: C.yellow }}>{String(i + 1).padStart(2, "0")}</span>
+                {label}
+              </div>
+            </div>
+            <div style={{ width: 120, background: C.purple }} />
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+// ---------------- Camera ----------------
+const shotAt = (f: number) => {
+  let i = 0;
+  for (let k = 0; k < SHOTS.length; k++) if (f >= s(SHOTS[k].at)) i = k;
+  const cur = SHOT_PARAMS[SHOTS[i].shot];
+  const prev = SHOT_PARAMS[SHOTS[Math.max(0, i - 1)].shot];
+  const start = s(SHOTS[i].at);
+  const p = i === 0 ? 1 : interpolate(f, [start, start + 14], [0, 1], { ...clamp, easing: Easing.bezier(0.65, 0, 0.35, 1) });
+  const sinceCut = f - start;
+  return {
+    cx: lerp(prev.cx, cur.cx, p),
+    cy: lerp(prev.cy, cur.cy, p),
+    sc: lerp(prev.sc, cur.sc, p) * (1 + Math.min(sinceCut, 150) * 0.00018),
+  };
+};
+
+export const MichaelAdvisorV2: React.FC = () => {
+  const f = useCurrentFrame();
+  const cam = shotAt(f);
+  const driftX = Math.sin(f / 47) * 5;
+  const driftY = Math.cos(f / 61) * 4;
+  const tx = 960 - cam.cx * cam.sc + driftX;
+  const ty = 540 - cam.cy * cam.sc + driftY;
+  return (
+    <AbsoluteFill style={{ fontFamily: FONT, background: "#DFE6EF", overflow: "hidden" }}>
+      <AbsoluteFill style={{ transformOrigin: "0 0", translate: `${tx}px ${ty}px`, scale: `${cam.sc}` }}>
+        <Office />
+        <Screen />
+        <Presenter />
+      </AbsoluteFill>
+      <HelpChip />
+      <Bursts />
+      <Subtitles />
+      <ChapterWipe />
+    </AbsoluteFill>
+  );
+};
