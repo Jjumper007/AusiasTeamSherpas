@@ -4,12 +4,15 @@
 import { useState } from "react";
 import { Bell, Check, ChevronRight, Send } from "lucide-react";
 import { store } from "../api";
-import { firstStepCard, toastFor, type PrimaryAction, type StepMark } from "../first-step-card";
+import { firstStepCard, toastFor, type FirstStepSource, type PrimaryAction, type StepMark } from "../first-step-card";
 import type { JobResult } from "../types";
 
 const PRIMARY_ICON: Record<PrimaryAction["kind"], typeof Send> = { start: ChevronRight, share: Send, remind: Bell };
 
-export function FirstStep({ result, onSeek, remember = true }: { result: JobResult; onSeek(t: number): void; remember?: boolean }) {
+/** What the card shows: a rendered video's `JobResult`, or a Live run's `live-ready` and `page` together. */
+export type FirstStepResult = FirstStepSource & Pick<JobResult, "caseId" | "member" | "name" | "chapters" | "detail">;
+
+export function FirstStep({ result, onSeek, remember = true }: { result: FirstStepResult; onSeek(t: number): void; remember?: boolean }) {
   const { firstStep: m, cta, caseId, member } = result;
   const [status, setStatus] = useState<StepMark | null>(() => (remember ? store.get<StepMark>(caseId, member, "step") : null));
   const card = firstStepCard(result, status);

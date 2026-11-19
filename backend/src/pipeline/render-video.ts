@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { join } from 'node:path'
 import { bundle } from '@remotion/bundler'
-import { renderMedia, renderStill, selectComposition } from '@remotion/renderer'
+import { makeCancelSignal, renderMedia, renderStill, selectComposition, type CancelSignal } from '@remotion/renderer'
 import type { VideoProps } from '@sherpas/shared'
 import { VIDEO_TEMPLATE_DIR } from '../paths'
 
@@ -14,6 +14,13 @@ export interface RenderOptions {
    * shared `video-template/` bundle renders the fallback video.
    */
   readonly serveUrl?: string
+  /**
+   * The Live run's MP4 (#17): aborting it stops the render (Remotion's cancel signal) and the promise
+   * rejects; a render still waiting in the queue does not start. The normal pipeline passes none.
+   */
+  readonly signal?: AbortSignal
+  /** Chrome tabs rendering at once; Remotion's default (half the cores, at most 8) when absent. */
+  readonly concurrency?: number
 }
 
 /** Renders `props` to an MP4 at `outputFile`. Swappable so the pipeline can be tested without Chrome. */
@@ -62,7 +69,22 @@ export const inRenderQueue = <T>(work: () => Promise<T>): Promise<T> => {
   return next
 }
 
+/** Remotion's cancel signal, fired when `signal` aborts (or at once if it already has). */
+const cancelSignalOf = (signal: AbortSignal): CancelSignal => {
+  const { cancelSignal, cancel } = makeCancelSignal()
+  if (signal.aborted) cancel()
+  else signal.addEventListener('abort', cancel, { once: true })
+  return cancelSignal
+}
+
+/** Only what a caller asked for: without `signal` and `concurrency` the render is called exactly as before. */
+const optionalRenderSettings = ({ signal, concurrency }: RenderOptions) => ({
+  ...(signal ? { cancelSignal: cancelSignalOf(signal) } : {}),
+  ...(concurrency === undefined ? {} : { concurrency }),
+})
+
 const renderNow: RenderVideo = async (props, outputFile, onProgress, options = {}) => {
+  options.signal?.throwIfAborted()
   const serveUrl = options.serveUrl ?? (await bundleSharedTemplate(onProgress))
   const composition = await selectComposition({ serveUrl, id: COMPOSITION_ID, inputProps: props })
   await renderMedia({
@@ -72,6 +94,7 @@ const renderNow: RenderVideo = async (props, outputFile, onProgress, options = {
     outputLocation: outputFile,
     inputProps: props,
     onProgress: ({ progress }) => onProgress(BUNDLE_SHARE + progress * (1 - BUNDLE_SHARE), 'Rendering your video'),
+    ...optionalRenderSettings(options),
   })
 }
 

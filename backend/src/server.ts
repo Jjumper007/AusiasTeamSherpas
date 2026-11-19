@@ -7,15 +7,8 @@ import { renderCheckFrames, renderWithRemotion } from './pipeline/render-video'
 import { runJob } from './pipeline/run-job'
 import { createScenesWriter } from './scenes/write-scenes'
 import { runClaudeCli } from './script/claude-cli'
+import { parsePort } from './port'
 import { createNarrator } from './voice/narrate'
-
-const DEFAULT_PORT = 3001
-
-const parsePort = (value: string | undefined): number => {
-  const port = Number(value ?? DEFAULT_PORT)
-  if (!Number.isInteger(port) || port <= 0) throw new Error(`API_PORT must be a port number, got "${value}"`)
-  return port
-}
 
 /** The full pipeline: script and scenes by Claude, voice by ElevenLabs, render by Remotion. */
 const pipelineStarter = (store: JobStore, port: number): ((job: Job) => void) => {

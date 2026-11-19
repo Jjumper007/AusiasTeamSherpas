@@ -1,4 +1,13 @@
-import { ScriptSchema, validateNarration, type Brief, type Facts, type Script } from '@sherpas/shared'
+import {
+  ScriptSchema,
+  validateNarration,
+  type Brief,
+  type Chapter,
+  type Cta,
+  type Facts,
+  type Scene,
+  type Script,
+} from '@sherpas/shared'
 import { SCORE_FACT, scoreAfterFactName } from './fallback-script'
 
 /**
@@ -24,9 +33,13 @@ export const scriptTexts = (script: Script): string[] => [
   script.cta.text,
 ]
 
+/** The number guard over one text: figures that do not come from facts. */
+const textFigureProblems = (text: string, facts: Facts): string[] =>
+  validateNarration(text, facts).errors.map((error) => error.message)
+
 /** The number guard over the whole script: figures that do not come from facts. */
 export const figureProblems = (script: Script, facts: Facts): string[] =>
-  scriptTexts(script).flatMap((text) => validateNarration(text, facts).errors.map((error) => error.message))
+  scriptTexts(script).flatMap((text) => textFigureProblems(text, facts))
 
 /** Index just after the object that opens at `start`, skipping braces inside strings; -1 if it never closes. */
 const objectEnd = (text: string, start: number): number => {
@@ -66,32 +79,16 @@ const parseAnswer = (answer: string): { script?: Script; problems: string[] } =>
   }
 }
 
-const unknownFacts = (script: Script, facts: Facts): string[] =>
-  script.scenes.flatMap((scene) =>
-    scene.factsUsed
-      .filter((name) => !(name in facts))
-      .map((name) => `Scene "${scene.part}" declares ${name} in factsUsed, which is not in the list of facts.`),
-  )
+/**
+ * One rule over one scene. A scene names its own part, so each rule needs only the scene, the brief
+ * and the facts: the Live run checks every scene on its own as it arrives (docs/specs/live-run.md).
+ */
+type SceneRule = (scene: Scene, brief: Brief, facts: Facts) => string[]
 
-/** The video reads the score from the first `points` facts of parts 2 and 5 (scene-facts.ts). */
-const scoreFactProblems = (script: Script, brief: Brief, facts: Facts): string[] => {
-  const [, where, , , changes] = script.scenes
-  const [move] = brief.topMoves
-  const afterFact = scoreAfterFactName(move)
-  const lifts = move.scoreAfter > move.scoreBefore && afterFact in facts
-  const problems: string[] = []
-  if (where.factsUsed[0] !== SCORE_FACT) {
-    problems.push(`Scene "where_you_are" must list ${SCORE_FACT} first in factsUsed.`)
-  }
-  if (lifts && (changes.factsUsed[0] !== SCORE_FACT || changes.factsUsed[1] !== afterFact)) {
-    problems.push(`Scene "what_changes" must start factsUsed with ${SCORE_FACT} then ${afterFact}.`)
-  }
-  return problems
-}
-
-const hookProblems = (script: Script, brief: Brief): string[] => {
+const hookRule: SceneRule = (scene, brief) => {
+  if (scene.part !== 'hook') return []
   const { nickname } = brief.survey
-  const hook = script.scenes[0].narration
+  const hook = scene.narration
   const problems: string[] = []
   if (!hook.toLowerCase().includes(nickname.toLowerCase())) {
     problems.push(`The hook must call them by their nickname, "${nickname}".`)
@@ -102,12 +99,57 @@ const hookProblems = (script: Script, brief: Brief): string[] => {
   return problems
 }
 
+const knownFactsRule: SceneRule = (scene, _brief, facts) =>
+  scene.factsUsed
+    .filter((name) => !(name in facts))
+    .map((name) => `Scene "${scene.part}" declares ${name} in factsUsed, which is not in the list of facts.`)
+
+/** The video reads the score from the first `points` facts of parts 2 and 5 (scene-facts.ts). */
+const scoreFactsRule: SceneRule = (scene, brief, facts) => {
+  if (scene.part === 'where_you_are' && scene.factsUsed[0] !== SCORE_FACT) {
+    return [`Scene "where_you_are" must list ${SCORE_FACT} first in factsUsed.`]
+  }
+  if (scene.part !== 'what_changes') return []
+  const [move] = brief.topMoves
+  const afterFact = scoreAfterFactName(move)
+  const lifts = move.scoreAfter > move.scoreBefore && afterFact in facts
+  if (lifts && (scene.factsUsed[0] !== SCORE_FACT || scene.factsUsed[1] !== afterFact)) {
+    return [`Scene "what_changes" must start factsUsed with ${SCORE_FACT} then ${afterFact}.`]
+  }
+  return []
+}
+
+const figuresRule: SceneRule = (scene, _brief, facts) => textFigureProblems(scene.narration, facts)
+
+/** In the order `checkScript` reports them: every hook problem first, then every unknown fact, and so on. */
+const SCENE_RULES: readonly SceneRule[] = [hookRule, knownFactsRule, scoreFactsRule, figuresRule]
+
+/** What is wrong with one scene alone: hook, `factsUsed`, score facts and the number guard. */
+export const sceneProblems = (scene: Scene, brief: Brief, facts: Facts): string[] =>
+  SCENE_RULES.flatMap((rule) => rule(scene, brief, facts))
+
+/** What is wrong with one chapter alone: figures in its title or body that do not come from facts. */
+export const chapterProblems = (chapter: Chapter, facts: Facts): string[] =>
+  [chapter.title, chapter.body].flatMap((text) => textFigureProblems(text, facts))
+
+/** What is wrong with the call to action alone: figures that do not come from facts. */
+export const ctaProblems = (cta: Cta, facts: Facts): string[] => textFigureProblems(cta.text, facts)
+
+/** A whole-script rule: the parts can each be fine and still add up to a video that is too long. */
 const lengthProblems = (script: Script): string[] => {
   const words = script.scenes.reduce((total, scene) => total + wordCount(scene.narration), 0)
   return words > MAX_NARRATION_WORDS
     ? [`The narration has ${words} words in total; keep it between 150 and 220.`]
     : []
 }
+
+/** The per-part checks over the whole script, grouped by rule across the scenes, then the total length. */
+const scriptProblems = (script: Script, brief: Brief, facts: Facts): string[] => [
+  ...SCENE_RULES.flatMap((rule) => script.scenes.flatMap((scene) => rule(scene, brief, facts))),
+  ...script.chapters.flatMap((chapter) => chapterProblems(chapter, facts)),
+  ...ctaProblems(script.cta, facts),
+  ...lengthProblems(script),
+]
 
 /**
  * Parses and checks Claude's answer. The call to action always takes the survey's decision style,
@@ -118,12 +160,6 @@ export const checkScript = (answer: string, brief: Brief, facts: Facts): ScriptC
   if (!parsed) return { ok: false, problems: parseProblems }
 
   const script: Script = { ...parsed, cta: { ...parsed.cta, type: brief.survey.decisionStyle } }
-  const problems = [
-    ...hookProblems(script, brief),
-    ...unknownFacts(script, facts),
-    ...scoreFactProblems(script, brief, facts),
-    ...figureProblems(script, facts),
-    ...lengthProblems(script),
-  ]
+  const problems = scriptProblems(script, brief, facts)
   return problems.length === 0 ? { ok: true, script } : { ok: false, problems }
 }

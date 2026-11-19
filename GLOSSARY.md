@@ -38,6 +38,14 @@ _Avoid_: Next step, recommendation, task
 One pass of the pipeline for one member and one set of survey answers, with everything it produced.
 _Avoid_: Job (the in-memory handle of a run in progress), generation, render
 
+**Live run**:
+A run made on stage whose video starts playing while its later scenes are still being made; a scene that is not ready when its turn comes plays its standard scene.
+_Avoid_: Live demo, real-time demo, fast mode
+
+**Standard scene**:
+The template's own version of a part, used when Claude's version of that part is not ready in time or fails its checks.
+_Avoid_: Fallback scene, fixed scene, default scene
+
 ### Demo
 
 **Demo**:

@@ -100,6 +100,30 @@ npm run demo:check -w backend -- runs/daniel-emily-johnson/emily/<timestamp>
 npm run demo:add -w backend -- runs/daniel-emily-johnson/emily/<timestamp>
 npm run demo sets DEMO=1 with POSIX shell syntax. On Windows, run it from Git Bash or WSL.
 
+Live mode
+npm run live
+A Live run is for the stage: the member answers the four questions and the video starts playing in the browser about 15 seconds later, instead of waiting minutes for an MP4. It uses the same ports as npm run dev (API_PORT, WEB_PORT), so run one or the other. Open http://localhost:5180 and answer the survey by tapping: those taps are what let the browser start the video with sound.
+
+How it differs from npm run dev:
+
+The script is read while Claude writes it, and each narration is recorded as soon as it is complete, all at once. A part that fails its checks is replaced by the no-Claude version of that part. Nothing is retried.
+The video plays in @remotion/player as soon as the five voices exist. Parts 1 and 2 always play their standard scene.
+Claude designs parts 3, 4 and 5 while the video is already playing. A scene that passes its checks and is ready at least 2 seconds before its part starts is swapped in; otherwise that part plays its standard scene.
+The MP4 renders in the background and is kept, with result.json, only if the page stays open until it finishes (about 2.5 minutes after the scenes are ready). Closing the page or pressing "Start over" cancels it. npm run live:mp4 -w backend -- runs/<caseId>/<member>/<timestamp> makes the MP4 of a Live run afterwards, with the live server running.
+Only one Live run at a time: a second one is refused until the first has finished its MP4 or its page has closed.
+If the video has not started 40 seconds after the survey is sent, or the run fails, the page plays that member's demo video and says "Showing the video made earlier". A member without a demo video gets a message and "Try again".
+Each run's log.txt has the time of every step: the script, each voice, each scene and whether it was swapped in, and the first frame.
+
+Before a pitch, check:
+
+Claude Code is signed in: claude -p "say ok" answers in a few seconds.
+The proxy key in .env has ElevenLabs budget left. A Live run costs about $0.08 of it, and the proxy refuses the voice once the team's ElevenLabs budget is used up.
+The demo folder (DEMO_DIR) has the demo video of each member you will show: the safety net needs it.
+One full Live run per member works on this laptop and network, with sound. Press "Start over" before the next one, so the first run's MP4 does not hold the single slot.
+Phone tethering is ready in case the venue's network fails. Claude and the voice proxy both need the network; the demo (npm run demo) does not.
+
+npm run live:scene -w backend -- runs/<caseId>/<member>/<timestamp> runs only the scene design of an existing Live run again, to try changes to prompts/live-scene.md without recording voices.
+
 Other scripts
 Command	What it does
 npm test	Unit tests (Vitest) for the deterministic parts: brief extraction, facts.ts, the number guard, decision style to call to action, schemas

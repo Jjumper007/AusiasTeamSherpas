@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
+    "live": "tsx watch src/live-server.ts",
     "typecheck": "tsc -p tsconfig.json",
     "brief": "tsx src/brief/cli.ts",
     "script": "tsx src/script/cli.ts",
     "voice:audition": "tsx src/voice/audition.ts",
     "scenes": "tsx src/scenes/cli.ts",
+    "live:scene": "tsx src/live/live-scene-cli.ts",
+    "live:mp4": "tsx src/live/live-mp4-cli.ts",
     "demo:check": "tsx src/demo/cli.ts check",
     "demo:add": "tsx src/demo/cli.ts add",
     "demo:site": "tsx src/demo/cli.ts site"
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^26.6.6"
+    "@types/node": "^26.6.6",
+    "esbuild": "^0.28.2"
   }
 }

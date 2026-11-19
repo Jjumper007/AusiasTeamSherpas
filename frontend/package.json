@@ -9,13 +9,16 @@
     "preview": "vite preview",
     "build:demo": "tsc -p tsconfig.json && VITE_DEMO=1 vite build --outDir ../demo-site --emptyOutDir",
     "demo:serve": "vite preview --outDir ../demo-site",
+    "live": "VITE_LIVE=1 vite",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@remotion/player": "4.0.545",
     "@sherpas/shared": "*",
     "lucide-react": "^1.75.0",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "remotion": "4.0.545"
   },
   "devDependencies": {
     "@sherpas/backend": "*",

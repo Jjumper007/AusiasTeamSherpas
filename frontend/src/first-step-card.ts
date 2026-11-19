@@ -58,8 +58,14 @@ const primaryFor = (variant: DecisionStyle, shareTo: string, mark: StepMark | nu
   }
 }
 
+/**
+ * What the card reads of a result: a rendered video's `JobResult`, or what a Live run's page has
+ * (no video URL yet). Any other `JobResult` field may come along.
+ */
+export type FirstStepSource = Pick<JobResult, 'cta' | 'firstStep' | 'firstStepScore' | 'waitGap' | 'partner'> & Partial<JobResult>
+
 /** `mark` is what this browser remembers for the step ("I did it" / "Remind me"), if anything. */
-export const firstStepCard = (result: JobResult, mark: StepMark | null = null): FirstStepCard => {
+export const firstStepCard = (result: FirstStepSource, mark: StepMark | null = null): FirstStepCard => {
   const variant = result.cta.type
   // Results this browser saved before these fields existed have neither: the card then shows no figures.
   const score = result.firstStepScore ?? null

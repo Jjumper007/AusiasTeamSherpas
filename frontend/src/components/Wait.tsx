@@ -9,11 +9,11 @@ import type { JobResult, Progress } from "../types";
 const reduced = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 /** Where the progress comes from: starts it and returns a function that stops listening. */
-export type ProgressSource = (on: JobListeners) => () => void;
+export type ProgressSource<R = JobResult> = (on: JobListeners<R>) => () => void;
 
-interface Props {
+interface Props<R> {
   /** Started again by "Try again" after an error. */
-  source: ProgressSource;
+  source: ProgressSource<R>;
   name: string;
   /** The line shown once the video is ready; "Your video is ready" by default. */
   doneLabel?: string;
@@ -21,10 +21,12 @@ interface Props {
   remember?: boolean;
   /** Where the curtain opens from, in the stage's coordinates. */
   origin: { x: number; y: number } | null;
-  onReady(r: JobResult): void;
+  /** The yak has run off and the wait starts fading out (the Live run starts its video under the fade). */
+  onExit?(): void;
+  onReady(r: R): void;
 }
 
-export function Wait({ source, name, doneLabel = "Your video is ready", remember = true, origin, onReady }: Props) {
+export function Wait<R = JobResult>({ source, name, doneLabel = "Your video is ready", remember = true, origin, onExit, onReady }: Props<R>) {
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [progress, setProgress] = useState<Progress>({ progress: 0, label: "Reading your plan" });
@@ -62,6 +64,7 @@ export function Wait({ source, name, doneLabel = "Your video is ready", remember
         setProgress({ progress: 1, label: doneLabel });
         setReady(true);
         await game.current?.exit();
+        if (alive) onExit?.();
         if (!reduced()) await root.current?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, delay: 350, easing: "ease-out", fill: "forwards" }).finished;
         if (alive) onReady(r);
       },

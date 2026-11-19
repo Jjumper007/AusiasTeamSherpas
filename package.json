@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
     "demo": "npm run demo:build && npm run demo:serve -w frontend",
+    "live": "concurrently -n api,web -c blue,magenta \"npm run live -w backend\" \"npm run live -w frontend\"",
     "demo:build": "npm run build:demo -w frontend && npm run demo:site -w backend -- demo-site",
     "start": "npm run start -w backend",
     "build": "npm run build -w frontend",

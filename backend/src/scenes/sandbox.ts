@@ -46,8 +46,8 @@ export const standaloneTsconfig = (templateDir: string): string => {
   return `${JSON.stringify(merged, null, 2)}\n`
 }
 
-/** Copies the template's sources and a standalone tsconfig to `sandboxDir`, with the run's props. */
-export const createSandbox = (templateDir: string, sandboxDir: string, props: VideoProps): void => {
+/** Copies the template's sources (without tests) and a standalone tsconfig to a fresh `sandboxDir`. */
+export const copyTemplate = (templateDir: string, sandboxDir: string): void => {
   rmSync(sandboxDir, { recursive: true, force: true })
   mkdirSync(sandboxDir, { recursive: true })
   cpSync(join(templateDir, SOURCE_DIR), join(sandboxDir, SOURCE_DIR), {
@@ -55,6 +55,11 @@ export const createSandbox = (templateDir: string, sandboxDir: string, props: Vi
     filter: (source) => !TEST_FILE.test(source),
   })
   writeFileSync(join(sandboxDir, TSCONFIG_FILE), standaloneTsconfig(templateDir))
+}
+
+/** Copies the template's sources and a standalone tsconfig to `sandboxDir`, with the run's props. */
+export const createSandbox = (templateDir: string, sandboxDir: string, props: VideoProps): void => {
+  copyTemplate(templateDir, sandboxDir)
   writeFileSync(join(sandboxDir, PROPS_FILE), `${JSON.stringify(props, null, 2)}\n`)
 }
 

@@ -1,11 +1,15 @@
-import express, { type ErrorRequestHandler, type Express } from 'express'
+import express, { type ErrorRequestHandler, type Express, type Router } from 'express'
 import { BriefError } from '../brief/errors'
+import type { StoreEvent } from '../jobs/job-store'
 import { casesRoutes } from './cases-routes'
 import { jobsRoutes, type JobsRoutesDeps } from './jobs-routes'
+import type { JobEvent } from './types'
 
-export interface AppDeps extends JobsRoutesDeps {
+export interface AppDeps<E extends StoreEvent = JobEvent> extends JobsRoutesDeps<E> {
   /** Folder served under /runs: the MP4 and everything else each job wrote. */
   readonly runsDir: string
+  /** Routes of another server mode (the Live run's), mounted after /api and before /runs. */
+  readonly extraRoutes?: ReadonlyArray<Router>
 }
 
 const MAX_BODY = '16kb'
@@ -37,7 +41,7 @@ const handleErrors: ErrorRequestHandler = (error, req, res, _next) => {
 const STATIC_OPTIONS = { fallthrough: false, dotfiles: 'ignore', index: false } as const
 
 /** The Express app: /api for the web app, /runs for the outputs of each job. The demo is a static site (`npm run demo`). */
-export const createApp = (deps: AppDeps): Express => {
+export const createApp = <E extends StoreEvent = JobEvent>(deps: AppDeps<E>): Express => {
   const app = express()
   app.disable('x-powered-by')
   app.use(express.json({ limit: MAX_BODY }))
@@ -46,6 +50,7 @@ export const createApp = (deps: AppDeps): Express => {
   })
   app.use('/api', casesRoutes())
   app.use('/api', jobsRoutes(deps))
+  deps.extraRoutes?.forEach((routes) => app.use(routes))
   app.use('/runs', express.static(deps.runsDir, STATIC_OPTIONS))
   app.use(handleErrors)
   return app

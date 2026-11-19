@@ -25,6 +25,11 @@ export const createRunFolder = (runsDir: string, caseId: string, member: string,
   const runId = [caseId, member, folderTimestamp(now)].join('/')
   const dir = join(runsDir, caseId, member, folderTimestamp(now))
   mkdirSync(dir, { recursive: true })
+  return openRunFolder(dir, runId)
+}
+
+/** A run folder that already exists, e.g. a Live run's whose MP4 is made again from the command line (#17). */
+export const openRunFolder = (dir: string, runId: string): RunFolder => {
   const path = (fileName: string): string => join(dir, fileName)
   return {
     runId,

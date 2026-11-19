@@ -1,0 +1,35 @@
+/* ---------- live web (npm run live) ---------- */
+
+/* The stage keeps its place from the survey to the video (the watching layout from the start), so the
+   chapters and the first-step card appear under it without moving it. */
+.live-theatre { overflow-y: auto; }
+/* The Player fills the 16:9 stage, under the survey and the wait until they let go of it. */
+.live-player { position: absolute; inset: 0; }
+
+/* ---------- the safety net: the Demo video with its notice, or the message without one ---------- */
+
+/* The notice stays above the Demo video for as long as it plays; the stage gives up its height. */
+.net-notice {
+  width: min(100%, 1120px); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+  padding: 12px 16px; border-radius: var(--r-card); background: var(--blue-wash); border: 1px solid var(--blue-line);
+}
+.net-notice-ic { width: 22px; height: 22px; color: var(--blue); }
+.net-notice-text { flex: 1 1 320px; display: grid; gap: 2px; min-width: 0; }
+.net-notice-text p { margin: 0; }
+.net-notice-title { font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: -0.02em; color: var(--ink); }
+.net-notice-why { font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+.net-notice-detail { font-size: 13px; line-height: 1.45; color: var(--ink-2); overflow-wrap: anywhere; }
+.net-notice-retry { display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.net-notice-retry .ic { width: 16px; height: 16px; }
+.live-theatre:has(.net-notice) .stage { width: min(100%, 1120px, calc((100dvh - 300px) * 16 / 9)); }
+
+.net-message {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: max(8px, 1.8cqmin); padding: 8cqmin; text-align: center;
+}
+.net-message-ic { width: max(28px, 6cqmin); height: max(28px, 6cqmin); color: var(--amber); }
+.net-message-title { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: max(20px, 4.6cqmin); letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance; }
+.net-message-text { margin: 0; color: var(--text); font-size: max(14px, 2.8cqmin); line-height: 1.45; max-width: 52ch; }
+.net-message-detail { margin: 0; color: var(--muted); font-size: max(12px, 2.2cqmin); line-height: 1.45; max-width: 64ch; overflow-wrap: anywhere; }
+/* The primary pill (.cta-big), sized to its text inside the stage. */
+.net-cta { width: auto; margin-top: max(6px, 1.4cqmin); padding: 12px 26px; }

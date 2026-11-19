@@ -3,16 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import type { JobResult } from "../types";
+import { Chapters, clock } from "./Chapters";
 import { FirstStep } from "./FirstStep";
+import { StartCard } from "./StartCard";
 
-const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 const at = (starts: number[], t: number) => Math.max(0, starts.findLastIndex((s) => s <= t + 0.001));
 
 const LOAD_FAILED = "Couldn't load the video. It may have been removed from the server; answer the questions again to make a new one.";
 const DEMO_LOAD_FAILED = "Couldn't load the video. Check your connection and reload the page to try again.";
 
-/** In the demo (`demo`), nothing is kept in this browser and a failed load does not suggest a new video. */
-export function Watch({ result, demo = false }: { result: JobResult; demo?: boolean }) {
+/**
+ * In the demo (`demo`), nothing is kept in this browser and a failed load does not suggest a new video.
+ * `autoStart` (the Live run's safety net, when the browser allows sound) plays at once instead of showing
+ * the start card; if the browser refuses, the start card shows.
+ */
+export function Watch({ result, demo = false, autoStart = false }: { result: JobResult; demo?: boolean; autoStart?: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [t, setT] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -37,6 +42,13 @@ export function Watch({ result, demo = false }: { result: JobResult; demo?: bool
   }
 
   useEffect(() => {
+    const v = video.current;
+    if (!autoStart || !v) return;
+    setStarted(true);
+    v.play().catch(() => setStarted(false));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement).closest?.("input, select, textarea, button, summary, a")) return;
       if (e.key === " ") { e.preventDefault(); toggle(); }
@@ -54,13 +66,7 @@ export function Watch({ result, demo = false }: { result: JobResult; demo?: bool
           onTimeUpdate={(e) => setT(e.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}
           onError={() => setFailed(true)} />
         {failed && <p className="stage-msg">{demo ? DEMO_LOAD_FAILED : LOAD_FAILED}</p>}
-        {!started && !failed && (
-          <button className="start" type="button" onClick={toggle}>
-            <span className="start-play" aria-hidden="true" />
-            <span className="start-title">{result.name}'s video</span>
-            <span className="start-sub">{clock(duration)} · made from your plan and your answers</span>
-          </button>
-        )}
+        {!started && !failed && <StartCard name={result.name} durationSec={duration} onStart={toggle} />}
       </div>
 
       <nav className="controls" aria-label="Playback">
@@ -72,19 +78,7 @@ export function Watch({ result, demo = false }: { result: JobResult; demo?: bool
       </nav>
 
       <div className="below">
-        <section className="panel chapters" aria-label="Chapters">
-          <h2 className="section-title">Chapters</h2>
-          <ol>
-            {result.chapters.map((c, k) => (
-              <li key={k}>
-                <button type="button" className={`chapter${k === chapter && started ? " on" : ""}`} aria-current={k === chapter && started ? "true" : undefined} onClick={() => seek(c.startSec)}>
-                  <span className="ch-time">{clock(c.startSec)}</span>
-                  <span className="ch-text"><b>{c.title}</b><span>{c.body}</span></span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </section>
+        <Chapters chapters={result.chapters} active={started ? chapter : null} onPick={(k) => seek(result.chapters[k].startSec)} />
         <FirstStep result={result} onSeek={seek} remember={!demo} />
       </div>
     </>

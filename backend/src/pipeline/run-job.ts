@@ -63,7 +63,7 @@ export const REVIEW_LABEL = 'Checking how your scenes look'
 /** Where the visual review starts within the scenes step, by time. */
 const REVIEW_SHARE = 0.5
 
-interface Inputs {
+export interface Inputs {
   readonly adult: Adult
   readonly folder: RunFolder
   readonly brief: Brief
@@ -72,8 +72,8 @@ interface Inputs {
 
 const errorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error))
 
-/** [1] Validates the request against the case, then writes survey.json, brief.json and facts.ts. */
-const prepareInputs = (request: JobRequest, deps: PipelineDeps): Inputs => {
+/** [1] Validates the request against the case, then writes survey.json, brief.json and facts.ts. The Live run reuses it. */
+export const prepareInputs = (request: JobRequest, deps: Pick<PipelineDeps, 'runsDir' | 'now'>): Inputs => {
   const caseData = loadCase(request.caseId)
   const adult = findAdult(caseData, request.member)
   const survey = resolveSurvey(caseData, adult, request.answers)

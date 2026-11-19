@@ -46,7 +46,8 @@ const assertPerson = (person: DemoPerson): void => {
 
 const isFile = (path: string): boolean => existsSync(path) && statSync(path).isFile()
 
-const hasDemoVideo = (demoDir: string, person: DemoPerson): boolean =>
+/** All three demo files are there. Ids are not checked: pass slugs. */
+export const hasDemoVideo = (demoDir: string, person: DemoPerson): boolean =>
   DEMO_FILES.every((name) => isFile(join(personDir(demoDir, person), name)))
 
 /** Sub-folders of `dir` whose names are slugs, sorted; none when `dir` does not exist. */

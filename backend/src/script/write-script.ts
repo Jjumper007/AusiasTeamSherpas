@@ -16,8 +16,9 @@ import { fillScriptPrompt, promptVersion, retryPrompt } from './script-prompt'
  */
 
 export const MAX_ATTEMPTS = 3
-const PROMPT_FILE = join(PROMPTS_DIR, 'script.md')
-const SYSTEM_PROMPT =
+/** The prompt and system prompt of the script, also used by the Live run's streamed script. */
+export const PROMPT_FILE = join(PROMPTS_DIR, 'script.md')
+export const SYSTEM_PROMPT =
   'You write short, warm narration scripts for personal financial plan videos. You reply with a single JSON object and nothing else.'
 
 export interface WriteScriptInput {

@@ -37,9 +37,10 @@ export async function startJob(caseId: string, member: string, answers: Answers)
   return (await json<{ id: string }>(res)).id
 }
 
-export interface JobListeners {
+/** `R` is what the job hands over when it is ready: the `JobResult` of a normal job, `LiveReady` in a Live run. */
+export interface JobListeners<R = JobResult> {
   progress(p: Progress): void
-  done(result: JobResult): void
+  done(result: R): void
   error(message: string): void
 }
 
